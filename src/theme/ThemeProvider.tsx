@@ -1,26 +1,47 @@
-import React, { useState } from "react";
-import { ThemeProvider } from "@mui/material";
-import { themeCreator } from "./base";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
+import { LightTheme } from "./schemes/LightTheme";
+import { DarkTheme } from "./schemes/DarkTheme";
+import { ThemeProvider } from "@mui/system";
 
-export const ThemeContext = React.createContext(
-  (themeName: string): void => {}
-);
+interface IThemeContextData {
+  themeName: "light" | "dark";
+  toggleTheme: () => void;
+}
+
+const ThemeContext = createContext({} as IThemeContextData);
+
+export const useThemeContext = () => {
+  return useContext(ThemeContext);
+};
 
 interface IThemeProviderWrapper {
   children: React.ReactNode;
 }
-const ThemeProviderWrapper: React.FC<IThemeProviderWrapper> = (props) => {
-  const curThemeName = localStorage.getItem("appTheme") || "LightTheme";
-  const [themeName, _setThemeName] = useState(curThemeName);
-  const theme = themeCreator(themeName);
-  const setThemeName = (themeName: string): void => {
-    localStorage.setItem("appTheme", themeName);
-    _setThemeName(themeName);
-  };
+const ThemeProviderWrapper: React.FC<IThemeProviderWrapper> = ({
+  children,
+}) => {
+  const [themeName, setThemeName] = useState<"light" | "dark">("light");
+
+  const toggleTheme = useCallback(() => {
+    setThemeName((oldThemeName) =>
+      oldThemeName === "light" ? "dark" : "light"
+    );
+  }, []);
+  const theme = useMemo(() => {
+    if (themeName === "light") return LightTheme;
+
+    return DarkTheme;
+  }, [themeName]);
 
   return (
-    <ThemeContext.Provider value={setThemeName}>
-      <ThemeProvider theme={theme}>{props.children}</ThemeProvider>
+    <ThemeContext.Provider value={{ themeName, toggleTheme }}>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </ThemeContext.Provider>
   );
 };
