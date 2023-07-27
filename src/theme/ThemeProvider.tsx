@@ -7,7 +7,10 @@ export const ThemeContext = React.createContext(
   (themeName: string): void => {}
 );
 
-const ThemeProviderWrapper: React.FC = (props) => {
+interface IThemeProviderWrapper {
+  children: React.ReactNode;
+}
+const ThemeProviderWrapper: React.FC<IThemeProviderWrapper> = (props) => {
   const curThemeName = localStorage.getItem("appTheme") || "LightTheme";
   const [themeName, _setThemeName] = useState(curThemeName);
   const theme = themeCreator(themeName);
