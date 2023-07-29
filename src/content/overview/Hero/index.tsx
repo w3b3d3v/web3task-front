@@ -4,8 +4,6 @@ import { Link as RouterLink } from "react-router-dom";
 
 import { styled } from "@mui/material/styles";
 
-import { useThemeContext } from "src/theme/ThemeProvider";
-
 const TypographyH1 = styled(Typography)(
   ({ theme }) => `
     font-size: ${theme.typography.pxToRem(50)};
@@ -73,8 +71,6 @@ const TsAvatar = styled(Box)(
 );
 
 function Hero() {
-  const { toggleTheme } = useThemeContext();
-
   return (
     <Container maxWidth="lg" sx={{ textAlign: "center" }}>
       <Grid
@@ -113,10 +109,6 @@ function Hero() {
             variant="text"
           >
             Base Layout
-          </Button>
-
-          <Button variant="contained" color="primary" onClick={toggleTheme}>
-            Toggle theme
           </Button>
 
           <Grid container spacing={3} mt={5}>
