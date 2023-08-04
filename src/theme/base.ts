@@ -2,6 +2,7 @@ import React from "react";
 
 import { Theme } from "@mui/material";
 import { LightTheme } from "./schemes/LightTheme";
+import { DarkTheme } from "./schemes/DarkTheme";
 
 export function themeCreator(theme: string): Theme {
   return themeMap[theme];
@@ -129,24 +130,24 @@ declare module "@mui/material/styles" {
 
   interface ThemeOptions {
     colors: {
-      gradients: {
-        blue1: string;
-        blue2: string;
-        blue3: string;
-        blue4: string;
-        blue5: string;
-        orange1: string;
-        orange2: string;
-        orange3: string;
-        purple1: string;
-        purple3: string;
-        pink1: string;
-        pink2: string;
-        green1: string;
-        green2: string;
-        black1: string;
-        black2: string;
-      };
+      // gradients: {
+      //   blue1: string;
+      //   blue2: string;
+      //   blue3: string;
+      //   blue4: string;
+      //   blue5: string;
+      //   orange1: string;
+      //   orange2: string;
+      //   orange3: string;
+      //   purple1: string;
+      //   purple3: string;
+      //   pink1: string;
+      //   pink2: string;
+      //   green1: string;
+      //   green2: string;
+      //   black1: string;
+      //   black2: string;
+      // };
       shadows: {
         success: string;
         error: string;
@@ -249,5 +250,5 @@ declare module "@mui/material/styles" {
 }
 
 const themeMap: { [key: string]: Theme } = {
-  LightTheme,
+  LightTheme, DarkTheme
 };

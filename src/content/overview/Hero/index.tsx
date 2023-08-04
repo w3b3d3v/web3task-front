@@ -90,8 +90,8 @@ function Hero() {
             color="text.secondary"
             fontWeight="normal"
           >
-            React template de alta performance idealizado para o uso com os poderosos componentes
-            Material-UI.
+            React template de alta performance idealizado para o uso com os
+            poderosos componentes Material-UI.
           </TypographyH2>
           <Button
             component={RouterLink}
@@ -110,6 +110,7 @@ function Hero() {
           >
             Base Layout
           </Button>
+
           <Grid container spacing={3} mt={5}>
             <Grid item md={6}>
               <MuiAvatar>
@@ -123,7 +124,8 @@ function Hero() {
                   <b>Powered by MUI (Material-UI)</b>
                 </Box>
                 <Typography component="span" variant="subtitle2">
-                  Uma simples e customizável biblioteca de componentes para construir React apps acessíveis e de forma rápida.
+                  Uma simples e customizável biblioteca de componentes para
+                  construir React apps acessíveis e de forma rápida.
                 </Typography>
               </Typography>
             </Grid>
