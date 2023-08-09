@@ -8,6 +8,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useRef, useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { NavLink } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
@@ -67,6 +68,7 @@ function HeaderMenu() {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const { t } = useTranslation(['layouts-baselayout-header-menu']);
 
   const handleOpen = (): void => {
     setOpen(true);
@@ -95,7 +97,7 @@ function HeaderMenu() {
           >
             <ListItemText
               primaryTypographyProps={{ noWrap: true }}
-              primary="Administração"
+              primary={t('menu.item1.label')}
             />
           </ListItem>
           <ListItem
@@ -106,7 +108,7 @@ function HeaderMenu() {
           >
             <ListItemText
               primaryTypographyProps={{ noWrap: true }}
-              primary="Atividades"
+              primary={t('menu.item2.label')}
             />
           </ListItem>
           <ListItem
@@ -119,7 +121,7 @@ function HeaderMenu() {
               primaryTypographyProps={{ noWrap: true }}
               primary={
                 <Box display="flex" alignItems="center">
-                  Layouts
+                  {t('menu.item3.label')}
                   <Box display="flex" alignItems="center" pl={0.3}>
                     <ExpandMoreTwoToneIcon fontSize="small" />
                   </Box>
@@ -131,10 +133,10 @@ function HeaderMenu() {
       </ListWrapper>
       <Menu anchorEl={ref.current} onClose={handleClose} open={isOpen}>
         <MenuItem sx={{ px: 3 }} component={NavLink} to="/">
-          Base Layout
+          {t('menu.item3.subItens.subItem1.label')}
         </MenuItem>
         <MenuItem sx={{ px: 3 }} component={NavLink} to="/home-side/overview">
-          Sidebar Layout
+          {t('menu.item3.subItens.subItem2.label')}
         </MenuItem>
       </Menu>
     </>

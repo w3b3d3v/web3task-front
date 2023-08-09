@@ -1,5 +1,5 @@
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
-
+import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from "react-router-dom";
 
 import { styled } from "@mui/material/styles";
@@ -71,6 +71,8 @@ const TsAvatar = styled(Box)(
 );
 
 function Hero() {
+  const { t } = useTranslation(['content-overview-hero']);
+
   return (
     <Container maxWidth="lg" sx={{ textAlign: "center" }}>
       <Grid
@@ -82,7 +84,7 @@ function Hero() {
         <Grid item md={10} lg={8} mx="auto">
           <LabelWrapper color="success">Version 1.0.0</LabelWrapper>
           <TypographyH1 sx={{ mb: 2 }} variant="h1">
-            Web3Dev
+          { t('hero.title') }
           </TypographyH1>
           <TypographyH2
             sx={{ lineHeight: 1.5, pb: 4 }}
@@ -90,8 +92,7 @@ function Hero() {
             color="text.secondary"
             fontWeight="normal"
           >
-            React template de alta performance idealizado para o uso com os poderosos componentes
-            Material-UI.
+            { t('hero.text1') }            
           </TypographyH2>
           <Button
             component={RouterLink}
@@ -99,7 +100,7 @@ function Hero() {
             size="large"
             variant="contained"
           >
-            Sidebar Layout
+            { t('hero.button.sidebarLayout.label') }  
           </Button>
           <Button
             sx={{ ml: 2 }}
@@ -108,7 +109,7 @@ function Hero() {
             size="large"
             variant="text"
           >
-            Base Layout
+            { t('hero.button.baseLayout.label') }  
           </Button>
           <Grid container spacing={3} mt={5}>
             <Grid item md={6}>
@@ -120,11 +121,8 @@ function Hero() {
               </MuiAvatar>
               <Typography variant="h4">
                 <Box sx={{ pb: 2 }}>
-                  <b>Powered by MUI (Material-UI)</b>
-                </Box>
-                <Typography component="span" variant="subtitle2">
-                  Uma simples e customizável biblioteca de componentes para construir React apps acessíveis e de forma rápida.
-                </Typography>
+                  <b>{ t('hero.icon1.label') } </b>
+                </Box>                
               </Typography>
             </Grid>
             <Grid item md={6}>
@@ -136,13 +134,13 @@ function Hero() {
               </TsAvatar>
               <Typography variant="h4">
                 <Box sx={{ pb: 2 }}>
-                  <b>Construído com Typescript</b>
+                  <b>{ t('hero.icon2.label') } </b>
                 </Box>
-                <Typography component="span" variant="subtitle2">
-                  Web3Dev
-                </Typography>
-              </Typography>
+              </Typography>              
             </Grid>
+            <Typography component="span" variant="subtitle2">
+              { t('hero.text2') } 
+            </Typography>
           </Grid>
         </Grid>
       </Grid>
