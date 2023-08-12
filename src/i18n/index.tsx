@@ -10,7 +10,8 @@ import PtLayoutsSidebarLayoutHeaderMenu from './locales/pt-BR/layouts-sidebarlay
 import EnLayoutsSidebarLayoutHeaderMenu from './locales/en/layouts-sidebarlayout-header-menu.json';
 import PtLayoutsBaseLayoutHeaderMenu from './locales/pt-BR/layouts-baselayout-header-menu.json';
 import EnLayoutsBaseLayoutHeaderMenu from './locales/en/layouts-baselayout-header-menu.json';
-
+import EnLayoutsSidebarLayoutSidebarMenu from './locales/en/layouts-sidebarlayout-sidebar-sidebarmenu.json';
+import PtLayoutsSidebarLayoutSidebarMenu from './locales/pt-BR/layouts-sidebarlayout-sidebar-sidebarmenu.json';
 i18n
   // load translation using http -> see /public/locales (i.e. https://github.com/i18next/react-i18next/tree/master/example/react/public/locales)
   // learn more: https://github.com/i18next/i18next-http-backend
@@ -39,6 +40,9 @@ i18n
   i18n.addResourceBundle('pt-BR', 'layouts-sidebarlayout-header-menu', PtLayoutsSidebarLayoutHeaderMenu);
   i18n.addResourceBundle('en', 'layouts-baselayout-header-menu', EnLayoutsBaseLayoutHeaderMenu);
   i18n.addResourceBundle('pt-BR', 'layouts-baselayout-header-menu', PtLayoutsBaseLayoutHeaderMenu);
+  i18n.addResourceBundle('en', 'layouts-sidebarlayout-sidebar-sidebarmenu', EnLayoutsSidebarLayoutSidebarMenu);
+  i18n.addResourceBundle('pt-BR', 'layouts-sidebarlayout-sidebar-sidebarmenu', PtLayoutsSidebarLayoutSidebarMenu);
+  
 
   i18n.addResourceBundle('en', 'content-overview', EnContentOverview);
   i18n.addResourceBundle('pt-BR', 'content-overview', PtBrContentOverview);

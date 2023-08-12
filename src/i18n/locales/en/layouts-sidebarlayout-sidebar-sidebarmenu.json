@@ -1,0 +1,16 @@
+{
+  "menu": {
+    "item1": {
+      "label": "Overview"
+    },
+    "item2": {
+      "label": "Dashboard"
+    },
+    "item3": {
+      "label": "Admin"            
+    },
+    "item4": {
+      "label": "Tasks"            
+    }
+  }  
+}

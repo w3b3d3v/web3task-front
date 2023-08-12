@@ -1,0 +1,16 @@
+{
+  "menu": {
+    "item1": {
+      "label": "Visão Geral"
+    },
+    "item2": {
+      "label": "Painel"
+    },
+    "item3": {
+      "label": "Administração"            
+    },
+    "item4": {
+      "label": "Atividades"            
+    }
+  }  
+}
