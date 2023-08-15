@@ -1,5 +1,5 @@
 import { useContext } from "react";
-
+import { useTranslation } from 'react-i18next';
 import {
   ListSubheader,
   alpha,
@@ -177,6 +177,7 @@ const SubMenuWrapper = styled(Box)(
 
 function SidebarMenu() {
   const { closeSidebar } = useContext(SidebarContext);
+  const { t } = useTranslation(['layouts-sidebarlayout-sidebar-sidebarmenu']);
 
   return (
     <>
@@ -192,7 +193,7 @@ function SidebarMenu() {
                   to="/home-side/overview"
                   startIcon={<DesignServicesTwoToneIcon />}
                 >
-                  Overview
+                  {t('menu.item1.label')}
                 </Button>
               </ListItem>
             </List>
@@ -202,7 +203,7 @@ function SidebarMenu() {
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
-              Dashboards
+              {t('menu.item2.label')}
             </ListSubheader>
           }
         >
@@ -216,7 +217,7 @@ function SidebarMenu() {
                   to="/home-side/overview"
                   startIcon={<BrightnessLowTwoToneIcon />}
                 >
-                  Administração
+                  {t('menu.item3.label')}
                 </Button>
               </ListItem>
               <ListItem component="div">
@@ -227,7 +228,7 @@ function SidebarMenu() {
                   to="/home-side/overview"
                   startIcon={<LogoDev />}
                 >
-                  Atividades
+                  {t('menu.item4.label')}
                 </Button>
               </ListItem>
             </List>
