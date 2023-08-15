@@ -5,18 +5,21 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import './i18n';
 import { CssBaseline } from "@mui/material";
-import ThemeProvider from "./theme/ThemeProvider";
+import ThemeProviderWrapper from "./theme/ThemeProvider";
+import { SidebarProvider } from "./contexts/SidebarContext";
 
 function App() {
   const content = useRoutes(router);
 
   return (
-      <ThemeProvider>
+    <ThemeProviderWrapper>
+      <SidebarProvider>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <CssBaseline />
           {content}
         </LocalizationProvider>
-      </ThemeProvider>
+      </SidebarProvider>
+    </ThemeProviderWrapper>
   );
 }
 export default App;

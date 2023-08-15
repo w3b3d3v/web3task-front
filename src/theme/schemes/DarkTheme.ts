@@ -2,8 +2,8 @@ import { alpha, createTheme, lighten, darken } from "@mui/material";
 import "@mui/lab/themeAugmentation";
 
 const themeColors = {
-  primary: "#000000", 
-  secondary: "#000000",
+  primary: "#ffffff",
+  secondary: "#ffffff",
   success: "#57CA22",
   warning: "#FFA319",
   error: "#FF1943",
@@ -50,7 +50,7 @@ const colors = {
   },
   layout: {
     general: {
-      bodyBg: "#f2f5f9",
+      bodyBg: "#000000",
     },
     sidebar: {
       background: themeColors.white,
@@ -129,7 +129,7 @@ const colors = {
   },
 };
 
-export const LightTheme = createTheme({
+export const DarkTheme = createTheme({
   // direction: i18n.dir(),
   colors: {
     // gradients: {
@@ -244,7 +244,7 @@ export const LightTheme = createTheme({
   },
   header: {
     height: "80px",
-    background: colors.alpha.white[100],
+    background: colors.alpha.black[100],
     boxShadow: colors.shadows.cardSm,
     textColor: colors.secondary.main,
   },
@@ -254,7 +254,7 @@ export const LightTheme = createTheme({
       black: colors.alpha.black[100],
       white: colors.alpha.white[100],
     },
-    mode: "light",
+    mode: "dark",
     primary: {
       light: colors.primary.light,
       main: colors.primary.main,
@@ -290,12 +290,12 @@ export const LightTheme = createTheme({
       contrastText: colors.alpha.white[100],
     },
     text: {
-      primary: colors.alpha.black[100],
-      secondary: colors.alpha.black[70],
-      disabled: colors.alpha.black[50],
+      primary: colors.alpha.white[100],
+      secondary: colors.alpha.white[70],
+      disabled: colors.alpha.white[50],
     },
     background: {
-      paper: colors.alpha.white[100],
+      paper: colors.alpha.black[50],
       default: colors.layout.general.bodyBg,
     },
     action: {
@@ -609,7 +609,7 @@ export const LightTheme = createTheme({
     MuiDivider: {
       styleOverrides: {
         root: {
-          background: colors.alpha.black[10],
+          background: colors.alpha.white[10],
           border: 0,
           height: 1,
         },
@@ -630,7 +630,7 @@ export const LightTheme = createTheme({
           },
         },
         wrapper: {
-          background: colors.alpha.white[100],
+          background: colors.alpha.black[100],
           fontWeight: "bold",
           height: 24,
           lineHeight: "24px",
@@ -1205,7 +1205,7 @@ export const LightTheme = createTheme({
       fontWeight: 700,
       fontSize: 25,
       lineHeight: 1.4,
-      color: colors.alpha.black[100],
+      color: colors.alpha.white[100],
     },
     h4: {
       fontWeight: 700,
@@ -1234,12 +1234,12 @@ export const LightTheme = createTheme({
     },
     subtitle1: {
       fontSize: 14,
-      color: colors.alpha.black[70],
+      color: colors.alpha.white[70],
     },
     subtitle2: {
       fontWeight: 400,
       fontSize: 15,
-      color: colors.alpha.black[70],
+      color: colors.alpha.white[70],
     },
     overline: {
       fontSize: 13,

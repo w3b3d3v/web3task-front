@@ -28,7 +28,7 @@ const MainContent = styled(Box)(
 
 const OutlinedInputWrapper = styled(OutlinedInput)(
   ({ theme }) => `
-    background-color: ${theme.colors.alpha.white[100]};
+    background-color: ${theme.colors.secondary[100]};
 `
 );
 
@@ -76,7 +76,7 @@ function Status404() {
                   }
                   startAdornment={
                     <InputAdornment position="start">
-                      <SearchTwoToneIcon />
+                      <SearchTwoToneIcon color="primary" />
                     </InputAdornment>
                   }
                 />

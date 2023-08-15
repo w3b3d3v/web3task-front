@@ -111,6 +111,7 @@ function Hero() {
           >
             { t('hero.button.baseLayout.label') }  
           </Button>
+
           <Grid container spacing={3} mt={5}>
             <Grid item md={6}>
               <MuiAvatar>
