@@ -38,7 +38,7 @@ function Footer() {
         justifyContent="space-between"
         height="400"
       >
-        <Box>PodLabs Icon</Box>
+        <img src="/static/images/logo/pod3labs-logo.png" alt="PodLabsIcon" width={200} height={200} />
 
         <Box>
           <ListItem component={NavLink} to="/sobre-nos">
