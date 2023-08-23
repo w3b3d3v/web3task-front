@@ -54,7 +54,7 @@ const UserBoxLabel = styled(Typography)(
 
 const UserBoxDescription = styled(Typography)(
   ({ theme }) => `
-        color: ${lighten(theme.palette.secondary.main, 0.5)}
+        color: ${theme.palette.secondary.main}
 `
 );
 
@@ -125,6 +125,7 @@ function HeaderUserbox() {
             <ListItemText primary="Messenger" />
           </ListItem>
           <ListItem
+            color="primary"
             button
             to="/management/profile/settings"
             component={NavLink}

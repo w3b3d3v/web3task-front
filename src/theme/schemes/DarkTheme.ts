@@ -700,10 +700,10 @@ export const DarkTheme = createTheme({
             },
           },
           "& .MuiListItem-root.MuiButtonBase-root.Mui-selected": {
-            backgroundColor: alpha(colors.primary.lighter, 0.4),
+            backgroundColor: alpha(colors.primary.light, 0.4),
           },
           "& .MuiMenuItem-root.MuiButtonBase-root:active": {
-            backgroundColor: alpha(colors.primary.lighter, 0.4),
+            backgroundColor: alpha(colors.primary.light, 0.4),
           },
           "& .MuiMenuItem-root.MuiButtonBase-root .MuiTouchRipple-root": {
             opacity: 0.2,
@@ -727,8 +727,7 @@ export const DarkTheme = createTheme({
             color: colors.secondary.main,
 
             "&:hover, &:active, &.active, &.Mui-selected": {
-              color: colors.alpha.black[100],
-              background: lighten(colors.primary.lighter, 0.5),
+              background: darken(colors.primary.lighter, 0.5),
             },
           },
         },

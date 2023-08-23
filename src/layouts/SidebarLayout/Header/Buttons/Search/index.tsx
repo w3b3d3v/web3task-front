@@ -50,7 +50,8 @@ const DialogWrapper = styled(Dialog)(
 const SearchInputWrapper = styled(TextField)(
   ({ theme }) => `
     background: ${theme.colors.alpha.white[100]};
-
+    border-radius: 10px;
+    
     .MuiInputBase-input {
         font-size: ${theme.typography.pxToRem(17)};
     }
