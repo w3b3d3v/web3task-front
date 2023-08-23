@@ -1,0 +1,11 @@
+{
+  "hero": {
+    "title": "Web3Dev",
+    "text1": "High-performance React template designed for use with powerful Material-UI components.",
+    "button.sidebarLayout.label": "Sidebar Layout",
+    "button.baseLayout.label": "Base Layout",
+    "icon1.label": "Powered by MUI (Material UI)",
+    "icon2.label": "Powered by Typescript",
+    "text2": "A simple and customizable library of components to build fast and accessible React apps."
+  }
+}
