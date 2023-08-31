@@ -22,6 +22,7 @@ import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
 import AccountBoxTwoToneIcon from "@mui/icons-material/AccountBoxTwoTone";
 import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone";
 import AccountTreeTwoToneIcon from "@mui/icons-material/AccountTreeTwoTone";
+import MessageIcon from "@mui/icons-material/Message";
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -54,17 +55,11 @@ const UserBoxLabel = styled(Typography)(
 
 const UserBoxDescription = styled(Typography)(
   ({ theme }) => `
-        color: ${theme.palette.secondary.main}
+        color: ${lighten(theme.palette.secondary.main, 0.5)}
 `
 );
 
-function HeaderUserbox() {
-  const user = {
-    name: "Jonas Silva",
-    avatar: "/static/images/avatars/1.jpg",
-    jobtitle: "Developer",
-  };
-
+function HeaderUserConnect() {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
 
@@ -79,13 +74,10 @@ function HeaderUserbox() {
   return (
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
-        <Avatar variant="rounded" alt={user.name} src={user.avatar} />
         <Hidden mdDown>
           <UserBoxText>
-            <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
-            <UserBoxDescription variant="body2">
-              {user.jobtitle}
-            </UserBoxDescription>
+            <UserBoxLabel variant="body1">Connect</UserBoxLabel>
+            <UserBoxDescription variant="body2">Dapp</UserBoxDescription>
           </UserBoxText>
         </Hidden>
         <Hidden smDown>
@@ -105,40 +97,14 @@ function HeaderUserbox() {
           horizontal: "right",
         }}
       >
-        <MenuUserBox sx={{ minWidth: 210 }} display="flex">
-          <Avatar variant="rounded" alt={user.name} src={user.avatar} />
-          <UserBoxText>
-            <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
-            <UserBoxDescription variant="body2">
-              {user.jobtitle}
-            </UserBoxDescription>
-          </UserBoxText>
-        </MenuUserBox>
-        <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
-          <ListItem button to="/management/profile/details" component={NavLink}>
-            <AccountBoxTwoToneIcon fontSize="small" />
-            <ListItemText primary="My Profile" />
-          </ListItem>
-          <ListItem button to="/dashboards/messenger" component={NavLink}>
-            <InboxTwoToneIcon fontSize="small" />
-            <ListItemText primary="Messenger" />
-          </ListItem>
-          <ListItem
-            color="primary"
-            button
-            to="/management/profile/settings"
-            component={NavLink}
-          >
-            <AccountTreeTwoToneIcon fontSize="small" />
-            <ListItemText primary="Account Settings" />
-          </ListItem>
+          {}
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
           <Button color="primary" fullWidth>
-            <LockOpenTwoToneIcon sx={{ mr: 1 }} />
-            Sign out
+            <MessageIcon sx={{ mr: 1 }} />
+            Contact us to add new network.
           </Button>
         </Box>
       </Popover>
@@ -146,4 +112,4 @@ function HeaderUserbox() {
   );
 }
 
-export default HeaderUserbox;
+export default HeaderUserConnect;

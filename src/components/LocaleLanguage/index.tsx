@@ -1,12 +1,13 @@
   import { useEffect } from "react";
   import {
     Button,
-    Tooltip
+    Tooltip,
+    styled,
+    Box
   } from "@mui/material";
   import { useState } from "react";
   import i18next from 'i18next';
   import { useTranslation } from 'react-i18next';
-  import './styles.css';
   import SuspenseLoader from 'src/components/SuspenseLoader';
   
   type LngRet = { [lng: string]: { nativeName: string; }; }
@@ -17,10 +18,10 @@
     const [ loading, setLoading ] = useState<boolean>(true);
   
     const changeLanguage = (event): void => {
-      console.log("event.target.value => ", event.target.value);
-      setLang(event.target.value);
+      console.log("event.target.value => ", event);
+      setLang(event.target.accessKey);
       i18n
-      .changeLanguage(event.target.value)
+      .changeLanguage(event.target.accessKey)
       .then((t) => {
         console.log("t => ", t);
       });
@@ -30,33 +31,27 @@
       if (ready)
         setLoading(false);
     }, []);
-    
-    // useEffect(() => {
-    //   i18next.services.backendConnector.backend.getLanguages((err: any, ret: string) => {
-    //     if (err) return // TODO: handle err...
-    //     console.log("ret =>", ret);
-    //     setLang(ret);
-    //   });
-    // }, [i18next]);
   
     return (      
       <>
         {
           !loading && 
           <Tooltip arrow title="Locale Language">
-              <nav className='language'>
-                  <button
-                      className={lang === 'pt' ? 'pt active' : 'pt'}
-                      onClick={changeLanguage}
-                      value='pt-BR'  
-                  />
-                  <button
-                      className={lang === 'en' ? 'en active' : 'en'}
-                      onClick={changeLanguage}
-                      value='en'
-                  />
-              </nav>
+              <Box>              
+                  <Button onClick={changeLanguage} sx={{  width: '31px' , height: '21px', marginRight: '10px', border: 'none', boxShadow: 'none', outline: 'none', cursor: 'pointer' }}>
+                    <img accessKey="pt-BR"
+                      src="/static/images/lang/pt_flag.jpg"
+                    />
+                  </Button>
+                  <Button onClick={changeLanguage} sx={{  width: '31px', height: '21px', marginRight: '10px', border: 'none', boxShadow: 'none', outline: 'none', cursor: 'pointer' }}>
+                    <img accessKey="en"
+                      src="/static/images/lang/en_flag.jpg"
+                    />
+                  </Button>
+              </Box>
+              
           </Tooltip>
+          
         }        
       </>
     );

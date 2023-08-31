@@ -19,8 +19,7 @@ const ListWrapper = styled(Box)(
         }
         
         .MuiListItem-root {
-            transition: ${theme.transitions.create(["color", "fill"])};
-            
+            transition: ${theme.transitions.create(["color", "fill"])};           
             &.MuiListItem-indicators {
                 padding: ${theme.spacing(1, 2)};
             
@@ -101,12 +100,16 @@ function HeaderMenu() {
           <ListItem
             classes={{ root: "MuiListItem-indicators" }}
             button
-            component={NavLink}
+            component={NavLink} 
             to="/home-side/overview"
           >
             <ListItemText
               primaryTypographyProps={{ noWrap: true }}
-              primary={t('menu.item2.label')}
+              primary={
+                <Box display="flex" alignItems="center">
+                  {t('menu.item2.label')}
+                </Box>
+              }
             />
           </ListItem>
           <ListItem
