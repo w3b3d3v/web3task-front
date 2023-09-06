@@ -64,7 +64,7 @@ const LogoSign = styled(Box)(
 `
 );
 
-const LogoSignInner = styled(Box)(
+const LogoSignInner = styled(Box)(  
   ({ theme }) => `
         width: 16px;
         height: 16px;
@@ -97,27 +97,14 @@ const TooltipWrapper = styled(({ className, ...props }: TooltipProps) => (
 function Logo() {
   const theme = useTheme();
 
+  const logoImage = "/static/images/logo/logo-"+theme.palette.mode+".svg" 
+
   return (
     <TooltipWrapper title="Dashboard Marketplace" arrow>
       <LogoWrapper to="/overview">
-        <Badge
-          sx={{
-            ".MuiBadge-badge": {
-              fontSize: theme.typography.pxToRem(11),
-              right: -2,
-              top: 8,
-            },
-          }}
-          overlap="circular"
-          color="success"
-          badgeContent="2.0"
-        >
-          <LogoSignWrapper>
-            <LogoSign>
-              <LogoSignInner />
-            </LogoSign>
-          </LogoSignWrapper>
-        </Badge>
+        <img width="236" height="60px"
+          src={logoImage}
+        />
       </LogoWrapper>
     </TooltipWrapper>
   );

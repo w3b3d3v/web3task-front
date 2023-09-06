@@ -7,11 +7,13 @@ import {
   styled,
   useTheme,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import LogoSign from "src/components/LogoSign";
 import HeaderButtons from "./Buttons";
 import HeaderUserbox from "./Userbox";
+import HeaderSearch from "./Search";
 import HeaderUserConnect from "./UserConnect";
-import HeaderMenu from "./Menu";
+import { useAccount } from 'wagmi';
 
 const HeaderWrapper = styled(Box)(
   ({ theme }) => `
@@ -33,7 +35,7 @@ const HeaderWrapper = styled(Box)(
 
 function Header() {
   const theme = useTheme();
-  const [isConnected, setConnected] = useState<boolean>(false);
+  const { isConnected } = useAccount();
 
   return (
     <HeaderWrapper
@@ -62,18 +64,25 @@ function Header() {
           alignItems="center"
           spacing={2}
         >
-          <HeaderMenu />
+          <LogoSign />
+          
         </Stack>
+        
         {isConnected ? (
-          <Box display="flex" alignItems="center">
-            <HeaderButtons />
-            {isConnected && <HeaderUserbox />}
-          </Box>
+          <>
+            <HeaderSearch /> 
+            <Box display="flex" alignItems="center">
+              <HeaderUserbox />
+            </Box>            
+          </>                    
         ) : (
-          <Box display="flex" alignItems="center">
-            <HeaderUserConnect />
-          </Box>
-        )}
+          <>
+            <HeaderSearch /> 
+            <Box display="flex" alignItems="center">
+              <HeaderUserConnect />
+            </Box>            
+          </>
+        )}        
       </>
     </HeaderWrapper>
   );
