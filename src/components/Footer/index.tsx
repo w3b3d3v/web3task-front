@@ -1,8 +1,8 @@
 import {
   Box,
   Container,
-  Link,
   ListItem,
+  ListItemText,
   Typography,
   styled,
   useTheme,
@@ -14,6 +14,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { BsGithub, BsYoutube } from "react-icons/bs";
 import { BsDiscord } from "react-icons/bs";
 import { BsTwitch } from "react-icons/bs";
+import { NavLink } from "react-router-dom";
 
 const FooterWrapper = styled(Container)(
   ({ theme }) => `
@@ -37,33 +38,36 @@ function Footer() {
         justifyContent="space-between"
         height="400"
       >
-        <img src="/static/images/logo/web3task1.png" alt="Web3TaskIcon" width={254} height={191} />
+        <Box>PodLabs Icon</Box>
 
         <Box>
-          <ListItem>
-            <Link href="/sobre-nos" underline="none">
-              {'Sobre Nós'}
-            </Link>
+          <ListItem component={NavLink} to="/sobre-nos">
+            <ListItemText
+              primaryTypographyProps={{ noWrap: true }}
+              primary="Sobre Nós"
+            />
           </ListItem>
 
-          <ListItem>
-            <Link href="/comunidade" underline="none">
-              {'Comunidade'}
-            </Link>
+          <ListItem component={NavLink} to="/comunidade">
+            <ListItemText
+              primaryTypographyProps={{ noWrap: true }}
+              primary="Comunidade"
+            />
           </ListItem>
 
-          <ListItem>
-            <Link href="/postagens" underline="none">
-              {'Postagens'}
-            </Link>
+          <ListItem component={NavLink} to="/postagens">
+            <ListItemText
+              primaryTypographyProps={{ noWrap: true }}
+              primary="Postagens"
+            />
           </ListItem>
 
-          <ListItem>
-            <Link href="/perguntas-frequentes" underline="none">
-              {'Perguntas Frequentes'}
-            </Link>
+          <ListItem component={NavLink} to="/perguntas-frequentes">
+            <ListItemText
+              primaryTypographyProps={{ noWrap: true }}
+              primary="Perguntas Frequentes"
+            />
           </ListItem>
-          
         </Box>
 
         <Box>
@@ -98,7 +102,7 @@ function Footer() {
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Typography variant="subtitle1">
-          &copy; 2023 Marketplace de Tarefas Web3Task
+          &copy; 2023 Marketplace de Tarefas Podlabs
         </Typography>
       </Box>
     </FooterWrapper>

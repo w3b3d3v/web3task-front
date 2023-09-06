@@ -4,7 +4,6 @@ import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import SuspenseLoader from "src/components/SuspenseLoader";
 import Footer from 'src/components/Footer';
-import { useAccount } from 'wagmi';
 
 const Loader = (Component) => (props) =>
   (
@@ -22,7 +21,6 @@ interface BaseLayoutProps {
 
 const BaseLayout: FC<BaseLayoutProps> = () => {
   const theme = useTheme();
-  const { isConnected } = useAccount();
 
   return (
     <>
@@ -54,34 +52,18 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
         }}
       >
         <Header />
-        { isConnected ? (  
-          <Box
-            sx={{
-            position: 'relative',
-            zIndex: 5,
-            display: 'block',
-            flex: 1
-            }}
-          >
-            <Box display="block">
-              <Outlet />
-            </Box>
-          </Box>
-        ) : (
-          <Box
+        <Box
           sx={{
-          position: 'relative',
-          zIndex: 5,
-          display: 'block',
-          flex: 1
+            position: "relative",
+            zIndex: 5,
+            display: "block",
+            flex: 1,
           }}
         >
           <Box display="block">
             <Outlet />
           </Box>
         </Box>
-        )        
-        }
         <Footer />
       </Box>
     </>

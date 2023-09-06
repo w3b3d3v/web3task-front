@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 
 import { NavLink } from "react-router-dom";
 
@@ -23,8 +23,6 @@ import AccountBoxTwoToneIcon from "@mui/icons-material/AccountBoxTwoTone";
 import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone";
 import AccountTreeTwoToneIcon from "@mui/icons-material/AccountTreeTwoTone";
 import MessageIcon from "@mui/icons-material/Message";
-import { Address, createWalletClient, custom, http } from 'viem';
-import { useConnect } from 'wagmi';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -61,18 +59,9 @@ const UserBoxDescription = styled(Typography)(
 `
 );
 
-function HeaderUserConnect(props) {
+function HeaderUserConnect() {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
-  const [isConnected, setConnected] = useState<boolean>(false);
-  const [account, setAccount] = useState<Address>();
-  const {
-    connect,
-    connectors,
-    error,
-    isLoading,
-    pendingConnector,
-  } = useConnect();
 
   const handleOpen = (): void => {
     setOpen(true);
@@ -100,23 +89,16 @@ function HeaderUserConnect(props) {
         onClose={handleClose}
         open={isOpen}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
+          vertical: "top",
+          horizontal: "right",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
+          vertical: "top",
+          horizontal: "right",
         }}
-      >        
+      >
         <List sx={{ p: 1 }} component="nav">
-          {
-            connectors
-            .map((connector) => (
-              <ListItem button to="/" key={connector.id} onClick={() => connect({connector})} component={NavLink}>
-                <ListItemText primary={connector.name || (isLoading && connector.id === pendingConnector?.id && ' (connecting)')} />
-              </ListItem>
-            ))
-          }
+          {}
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>

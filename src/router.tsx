@@ -33,14 +33,9 @@ const Loader = (Component) => (props) =>
 // const Transactions = Loader(
 //   lazy(() => import('src/content/applications/Transactions'))
 // );
-const CreateTask = Loader(
-  lazy(() => import('src/content/applications/Tasks/settings/CreateTask'))
-);
-
-const ListTasks = Loader(
-  lazy(() => import('src/content/applications/Tasks/tasks/ListTasks'))
-)
-
+// const UserProfile = Loader(
+//   lazy(() => import('src/content/applications/Users/profile'))
+// );
 // const UserSettings = Loader(
 //   lazy(() => import('src/content/applications/Users/settings'))
 // );
@@ -119,19 +114,6 @@ const routes: RouteObject[] = [
         path: "*",
         element: <Status404 />,
       },
-      {
-        path: 'tasks',
-        children: [
-          {
-            path: 'create-task',
-            element: <CreateTask />
-          },
-          {
-            path: 'list-task',
-            element: <ListTasks />
-          }
-        ]
-      }
     ],
   },
   {
@@ -203,7 +185,23 @@ const routes: RouteObject[] = [
   //         path: 'transactions',
   //         element: <Transactions />
   //       },
-
+  //       {
+  //         path: 'profile',
+  //         children: [
+  //           {
+  //             path: '',
+  //             element: <Navigate to="details" replace />
+  //           },
+  //           {
+  //             path: 'details',
+  //             element: <UserProfile />
+  //           },
+  //           {
+  //             path: 'settings',
+  //             element: <UserSettings />
+  //           }
+  //         ]
+  //       }
   //     ]
   //   },
   //   {
