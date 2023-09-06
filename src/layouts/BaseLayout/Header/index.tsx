@@ -8,13 +8,12 @@ import {
   useTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import LogoSign from "src/components/LogoSign";
 import HeaderButtons from "./Buttons";
 import HeaderUserbox from "./Userbox";
+import HeaderSearch from "./Search";
 import HeaderUserConnect from "./UserConnect";
-import HeaderMenu from "./Menu";
-import { Address, createWalletClient, custom, http } from 'viem';
-import { goerli } from 'viem/chains';
-import 'viem/window';
+import { useAccount } from 'wagmi';
 
 const HeaderWrapper = styled(Box)(
   ({ theme }) => `
@@ -36,37 +35,8 @@ const HeaderWrapper = styled(Box)(
 
 function Header() {
   const theme = useTheme();
-  const [isConnected, setConnected] = useState<boolean>(false);
-  const [account, setAccount] = useState<Address>()
+  const { isConnected } = useAccount();
 
-
-  const connect = async () => {    
-    if(typeof window.ethereum !== "undefined") {
-      console.log("window.ethereum -> ", await window.ethereum);
-      try {
-        const selectedAddress = await window.ethereum.request({ method: 'eth_requestAccounts', params: [] });
-        console.log("selectedAddress ->", selectedAddress)           
-        if (selectedAddress){
-          const walletClient = createWalletClient({
-            transport: custom(window.ethereum!),
-          })
-        
-          const [address] = await walletClient.requestAddresses()
-          setAccount(address);
-          setConnected(true);  
-        }
-      } catch (error) {
-          console.log(error)
-      }           
-    }    
-  }
-
-
-  useEffect(() => {
-    if (!isConnected){
-      connect();
-    }
-  },[])
   return (
     <HeaderWrapper
       display="flex"
@@ -94,21 +64,25 @@ function Header() {
           alignItems="center"
           spacing={2}
         >
-          <HeaderMenu />
+          <LogoSign />
+          
         </Stack>
-        <Box display="flex" alignItems="center">
+        
         {isConnected ? (
           <>
-            <HeaderButtons />
-            <HeaderUserbox />
+            <HeaderSearch /> 
+            <Box display="flex" alignItems="center">
+              <HeaderUserbox />
+            </Box>            
           </>                    
         ) : (
           <>
-            <HeaderButtons />
-            <HeaderUserConnect />
+            <HeaderSearch /> 
+            <Box display="flex" alignItems="center">
+              <HeaderUserConnect />
+            </Box>            
           </>
         )}        
-      </Box>
       </>
     </HeaderWrapper>
   );

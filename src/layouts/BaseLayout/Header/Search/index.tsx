@@ -3,6 +3,7 @@ import {
   Avatar,
   Link,
   Box,
+  Grid,
   Button,
   Divider,
   IconButton,
@@ -11,22 +12,21 @@ import {
   List,
   ListItem,
   ListItemAvatar,
-  TextField,
   Theme,
   Tooltip,
   Typography,
-  Dialog,
   DialogContent,
-  DialogTitle,
   Slide,
   Hidden,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { TransitionProps } from "@mui/material/transitions";
 import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
 import FindInPageTwoToneIcon from "@mui/icons-material/FindInPageTwoTone";
-
 import ChevronRightTwoToneIcon from "@mui/icons-material/ChevronRightTwoTone";
+import { Dialog, TextField, DialogTitle } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import HeaderNotifications from "../Buttons/Notifications";
+import HeaderToggleTheme from "../Buttons/ToggleTheme";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & { children: ReactElement<any, any> },
@@ -37,34 +37,31 @@ const Transition = forwardRef(function Transition(
 
 const DialogWrapper = styled(Dialog)(
   () => `
-    .MuiDialog-container {
-        height: auto;
-    }
-    
-    .MuiDialog-paperScrollPaper {
-        max-height: calc(100vh - 64px)
-    }
-`
+      .MuiDialog-container {
+          height: auto;
+      }
+      
+      .MuiDialog-paperScrollPaper {
+          max-height: calc(100vh - 64px)
+      }
+  `
 );
 
 const SearchInputWrapper = styled(TextField)(
   ({ theme }) => `
-    background: ${theme.colors.alpha.white[100]};
-    .MuiFormControl-root {
+      background: ${theme.colors.alpha.white[100]};
       border-radius: 10px;
-    }
-    
-    .MuiInputBase-input {
-        font-size: ${theme.typography.pxToRem(17)};
-    }
-`
+      .MuiInputBase-input {
+          font-size: ${theme.typography.pxToRem(17)};
+      }
+  `
 );
 
 const DialogTitleWrapper = styled(DialogTitle)(
   ({ theme }) => `
-    background: ${theme.colors.alpha.black[5]};
-    padding: ${theme.spacing(3)}
-`
+      background: ${theme.colors.alpha.black[5]};
+      padding: ${theme.spacing(3)}
+  `
 );
 
 function HeaderSearch() {
@@ -73,12 +70,15 @@ function HeaderSearch() {
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setSearchValue(event.target.value);
+    console.log("search value = ", searchValue);
 
     if (event.target.value) {
       if (!openSearchResults) {
+        setOpen(true);
         setOpenSearchResults(true);
       }
     } else {
+      setOpen(true);
       setOpenSearchResults(false);
     }
   };
@@ -95,12 +95,40 @@ function HeaderSearch() {
 
   return (
     <>
-      <Tooltip arrow title="Search">
-        <IconButton color="primary" onClick={handleClickOpen}>
-          <SearchTwoToneIcon />
-        </IconButton>
-      </Tooltip>
+      <Grid container alignItems="center" rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <Grid item xs={3}>
 
+        </Grid>
+        <Grid item xs={6}>
+          <Box >
+            <Tooltip arrow title="Search">
+                <SearchInputWrapper
+                  value={searchValue}
+                  autoFocus={true}
+                  onChange={handleSearchChange}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchTwoToneIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  placeholder="Search terms here..."
+                  fullWidth
+                />
+            </Tooltip>  
+          </Box>
+        </Grid>
+        <Grid  item xs={3}>
+          <Box sx={{ mr: 1 }}>
+            <Box sx={{ mx: 0.5 }} component="span">
+              <HeaderNotifications />
+              <HeaderToggleTheme />
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+            
       <DialogWrapper
         open={open}
         TransitionComponent={Transition}
@@ -111,21 +139,7 @@ function HeaderSearch() {
         onClose={handleClose}
       >
         <DialogTitleWrapper>
-          <SearchInputWrapper
-            value={searchValue}
-            autoFocus={true}
-            onChange={handleSearchChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchTwoToneIcon />
-                </InputAdornment>
-              ),
-            }}
-            placeholder="Search terms here..."
-            fullWidth
-            label="Search"
-          />
+          Results
         </DialogTitleWrapper>
         <Divider />
 
