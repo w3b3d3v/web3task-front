@@ -13,12 +13,10 @@ function App() {
 
   return (
     <ThemeProviderWrapper>
-      <SidebarProvider>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
           <CssBaseline />
           {content}
-        </LocalizationProvider>
-      </SidebarProvider>
+        </LocalizationProvider>      
     </ThemeProviderWrapper>
   );
 }
