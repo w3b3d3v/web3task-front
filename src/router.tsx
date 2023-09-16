@@ -9,11 +9,11 @@ import SuspenseLoader from "src/components/SuspenseLoader";
 import Overview from "./content/overview";
 
 const Loader = (Component) => (props) =>
-  (
-    <Suspense fallback={<SuspenseLoader />}>
-      <Component {...props} />
-    </Suspense>
-  );
+(
+  <Suspense fallback={<SuspenseLoader />}>
+    <Component {...props} />
+  </Suspense>
+);
 
 // Pages
 
@@ -39,6 +39,10 @@ const CreateTask = Loader(
 
 const ListTasks = Loader(
   lazy(() => import('src/content/applications/Tasks/tasks/ListTasks'))
+)
+
+const HomeTask = Loader(
+  lazy(() => import('src/content/applications/Tasks/tasks/HomeTasks'))
 )
 
 // const UserSettings = Loader(
@@ -121,6 +125,7 @@ const routes: RouteObject[] = [
       },
       {
         path: 'tasks',
+        element: < HomeTask />,
         children: [
           {
             path: 'create-task',
