@@ -125,8 +125,11 @@ const routes: RouteObject[] = [
       },
       {
         path: 'tasks',
-        element: < HomeTask />,
         children: [
+          {
+            path: '',
+            element: < HomeTask />
+          },
           {
             path: 'create-task',
             element: <CreateTask />
