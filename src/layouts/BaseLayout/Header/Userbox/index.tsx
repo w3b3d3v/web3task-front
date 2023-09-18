@@ -124,7 +124,7 @@ function HeaderUserbox() {
 
   return (
     <>
-      <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}  sx={{ ml: 1 }}>
+      <UserBoxButton color="secondary" ref={ref} onClick={handleOpen} sx={{ ml: 1 }}>
         <MuiAvatar variant="rounded" {...stringAvatar(address)} />
         <Hidden mdDown>
           <UserBoxText>
@@ -179,7 +179,7 @@ function HeaderUserbox() {
         <Box sx={{ m: 1 }}>
           <Button onClick={handleDisconnect} color="primary" fullWidth>
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
-            Sair
+            <Typography fontWeight={'bold'}> Sair</Typography>
           </Button>
         </Box>
       </Popover>
