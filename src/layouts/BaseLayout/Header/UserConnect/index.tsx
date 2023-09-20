@@ -87,8 +87,7 @@ function HeaderUserConnect(props) {
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
         <Hidden mdDown>
           <UserBoxText>
-            <UserBoxLabel variant="body1">Connect</UserBoxLabel>
-            <UserBoxDescription variant="body2">Dapp</UserBoxDescription>
+            <UserBoxLabel variant="body1">Entrar</UserBoxLabel>
           </UserBoxText>
         </Hidden>
         <Hidden smDown>
