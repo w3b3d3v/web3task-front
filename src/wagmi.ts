@@ -1,10 +1,23 @@
 import { configureChains, createConfig } from 'wagmi'
-import { goerli, localhost, mainnet } from 'wagmi/chains'
+import { goerli, localhost, mainnet } from 'viem/chains'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-const { chains, publicClient, webSocketPublicClient } = configureChains(
+import { createPublicClient, createWalletClient, custom, http } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
+
+export const publicClient = createPublicClient({
+  chain: localhost,
+  transport: http()
+})
+
+export const walletClient = createWalletClient({
+  chain: mainnet,
+  transport: custom(window.ethereum)
+})
+
+const { chains, webSocketPublicClient } = configureChains(
   [localhost],
   [publicProvider()],
 )
@@ -18,6 +31,6 @@ export const config = createConfig({
   webSocketPublicClient,
 })
 
-
-
+// JSON-RPC Account
+export const [account] = await walletClient.getAddresses()
 
