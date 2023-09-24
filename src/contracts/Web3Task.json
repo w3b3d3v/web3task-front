@@ -1,5 +1,7 @@
-export const Web3TaskContract = {
-  "address": "0xeC20dCBf0380F1C9856Ee345aF41F62Ee45a95a1",
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "Web3Task",
+  "sourceName": "contracts/Web3Task.sol",
   "abi": [
     {
       "inputs": [
@@ -1069,4 +1071,8 @@ export const Web3TaskContract = {
       "type": "function"
     }
   ],
-} as const
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

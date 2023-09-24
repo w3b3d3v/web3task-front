@@ -47,8 +47,8 @@ let newTask :Task = {
     description: '',
     reward: BigInt(0),
     endDate: BigInt(0),
-    authorized: [ ],
-    creator: BigInt(0),
+    authorizedRoles: [ ],
+    creatorRole: BigInt(0),
     assignee: account,
     metadata: ''  
 } 
@@ -68,7 +68,9 @@ const CreateTask = ({data}) => {
   };
 
   const handleReward = (event) => {
-    task.reward = event.target.value;
+    let reward = event.target.value;
+    task.reward = BigInt(reward.replace("$", ""));
+    console.log("task.reward: ", task.reward);
   };
 
   const handleTags = (event) => {
@@ -81,8 +83,10 @@ const CreateTask = ({data}) => {
     //guarda metadata no ipfs e realiza o mint
     try {
       console.log("expireDate: ", expireDate);
-      
-      task.endDate = BigInt(99999999);
+      let leaderId = BigInt(5);
+      task.authorizedRoles = [ leaderId ];
+
+      task.endDate = BigInt(9);
       console.log("task: ", task);
       var response = await createTask(task);
       console.log("response: ", response);

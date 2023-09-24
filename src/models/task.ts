@@ -13,8 +13,8 @@ export interface Task {
     description: string;
     reward: bigint;
     endDate: bigint;
-    authorized: bigint[];
-    creator: bigint
+    authorizedRoles: bigint[];
+    creatorRole: bigint
     assignee: `0x${string}`;
     metadata: string;
   }

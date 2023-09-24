@@ -9,11 +9,10 @@ import { account, publicClient, walletClient } from '../wagmi'
 export function useTaskService () {
 
     async function createTask(task :Task) {
-        console.log("contractAddress", contractAddress)
-        console.log("contractAddress", `0x${contractAddress}`)
         const address = getAddress(contractAddress.Web3Task);
         console.log("address", address)
         console.log("account", account)
+        console.log("task", task)
         try {
             const { request } = await publicClient.simulateContract({
                 ...Web3TaskContract,
