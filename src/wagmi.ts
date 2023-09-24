@@ -8,7 +8,7 @@ import { createPublicClient, createWalletClient, custom, http } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 
 export const publicClient = createPublicClient({
-  chain: localhost,
+  chain: mainnet,
   transport: http()
 })
 
@@ -18,9 +18,12 @@ export const walletClient = createWalletClient({
 })
 
 const { chains, webSocketPublicClient } = configureChains(
-  [localhost],
+  [localhost, goerli, mainnet],
   [publicProvider()],
 )
+
+// JSON-RPC Account
+export const [account] = await walletClient.getAddresses()
 
 export const config = createConfig({
   autoConnect: true,
@@ -31,6 +34,5 @@ export const config = createConfig({
   webSocketPublicClient,
 })
 
-// JSON-RPC Account
-export const [account] = await walletClient.getAddresses()
+
 
