@@ -9,7 +9,6 @@ import { DatePicker, DatePickerProps } from '@mui/x-date-pickers';
 import { useTaskService } from "src/services/tasks-service";
 import { Task, TaskStatus } from "src/models/task";
 import SuspenseLoader from 'src/components/SuspenseLoader';
-import { Buffer } from 'buffer';
 import { account } from 'src/wagmi';
 
 /*
@@ -44,6 +43,10 @@ const CreateTask = ({ data }) => {
   const [expireDate, setExpireDate] = useState<DatePickerProps<Dayjs> | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const handleChange = (event: { target: { value: any; }; }) => {
+    task.description = event.target.value;
+  }
+
   const handleTitle = (event: { target: { value: any; }; }) => {
     task.title = (event.target.value).toString();
   };
@@ -51,8 +54,8 @@ const CreateTask = ({ data }) => {
   const handleAuthorizedRoles = (event: any) => {
 
     let authorizedRoles: string[] = (event.target.value).split(',');
-    const bufferFrom: readonly bigint[] = authorizedRoles.map(str => BigInt(str));
-    task.authorizedRoles = bufferFrom;
+    const splittedRoles: readonly bigint[] = authorizedRoles.map(str => BigInt(str));
+    task.authorizedRoles = splittedRoles;
   };
 
   const handleCreatorRole = (event: { target: { value: any; }; }) => {
@@ -60,7 +63,7 @@ const CreateTask = ({ data }) => {
   };
 
   const handleAssignee = (event: { target: { value: any; }; }) => {
-    task.assignee = event.target.value;
+    task.assignee = event.target.value == '' ? "0x0000000000000000000000000000000000000000" : event.target.value;
   };
 
   const handleMetadata = (event: { target: { value: any; }; }) => {
@@ -74,20 +77,15 @@ const CreateTask = ({ data }) => {
   const handleReward = (event: { target: { value: any; }; }) => {
     let reward = event.target.value;
     task.reward = BigInt(reward);
-    console.log("task.reward: ", task.reward);
   };
 
   const onSubmit = async (event: { preventDefault: () => void; }) => {
-    //guarda metadata no ipfs e realiza o mint
     try {
-      console.log("expireDate: ", expireDate);
-
-
+      console.log("Expire date",(expireDate))
       let data = String(Math.floor(Date.now() / 1000) + 3600)
       task.endDate = BigInt(data);
-      console.log("task: ", task);
+      console.log("task.endDate: ", task.endDate);
       const response: any = await createTask(task);
-      console.log("responseOnSubmit: ", response);
     } catch (error) {
       console.log("Erro: ", error);
     }
@@ -129,92 +127,65 @@ const CreateTask = ({ data }) => {
                 <TextField
                   fullWidth
                   id="outlined-required"
-                  label={data && data.title ? '' : 'Task Title'}
+                  label={'Title'}
                   onBlur={handleTitle}
-                  placeholder={data && data.title ? '' : 'A title about the ativity.'}
-                  disabled={data && data.tokenId >= 0 ? true : false}
-                  value={data && data.title} />
+                  placeholder={'Describe the activity or link to a document'}
+                  />
 
                 <TextField
                   fullWidth
                   id="outlined-required"
-                  label={data && data.authorizedRoles ? '' : 'Authorized Role (separate as in array e.g.: [A,B,C,D]'}
+                  label={'Authorized Roles (separate by `,`)'}
                   onBlur={handleAuthorizedRoles}
-                  placeholder={data && data.authorizedRoles ? '' : 'authorizedRoles'}
-                  disabled={data && data.tokenId >= 0 ? true : false}
-                  value={data && data.authorizedRoles} />
+                  placeholder={'The authorized roles to perform the task'}
+                  />
 
                 <TextField
                   fullWidth
                   id="outlined-required"
-                  label={data && data.creatorRole ? '' : 'Creator Role'}
+                  label={'Creator Role'}
                   onBlur={handleCreatorRole}
-                  placeholder={data && data.creatorRole ? '' : 'creatorRole'}
-                  disabled={data && data.tokenId >= 0 ? true : false}
-                  value={data && data.creatorRole} />
-
+                  placeholder={'0xABCD...01234'}
+                  />
 
                 <TextField
                   fullWidth
                   id="outlined-required"
-                  label={data && data.assignee ? '' : 'Assignee (leave blank for anyone to fetch)'}
+                  label={'Assignee Address (leave blank to allow anyone to perform the task)'}
                   onBlur={handleAssignee}
-                  placeholder={data && data.assignee ? '' : 'assignee.'}
-                  disabled={data && data.tokenId >= 0 ? true : false}
-                  value={data && data.assignee} />
-
+                  placeholder={'Assignee address'}
+                  />
 
                 <TextField
                   fullWidth
                   id="outlined-required"
-                  label={data && data.metadata ? '' : 'Metadata IPFS'}
+                  label={'Metadata (IPFS)'}
                   onBlur={handleMetadata}
-                  placeholder={data && data.metadata ? '' : 'metadata'}
-                  disabled={data && data.tokenId >= 0 ? true : false}
-                  value={data && data.metadata} />
+                  placeholder={'https://ipfs.io/ipfs/QmY5D...7CEh'}
+                  />
 
                 <TextField fullWidth //{...register("description")}                
                   id="outlined-required"
-                  label={data && data.description ? '' : 'Descrição da tarefa'}
+                  label={'Description'}
                   onBlur={handleDescription}
-                  placeholder={data && data.description ? '' : 'A full description about the ativity.'}
+                  placeholder={'A full description about the ativity.'}
                   multiline
-                  rows="6"
-                  disabled={data && data.tokenId >= 0 ? true : false}
                   maxRows="18"
-                  value={data && data.description}
+                  onChange={handleChange}
                 />
 
-                {/* <TextField
-                  fullWidth
-                  id="outlined-required"
-                  label={data && data.title ? '' : 'Tags'}
-                  onBlur={handleTags}
-                  placeholder={data && data.tags ? '' : 'A tag about the ativity.'}
-                  disabled={data && data.tokenId >= 0 ? true : false}
-                  value={data && data.tags} /> */}
-
-
-                <Stack spacing={2} direction={'row'}>
-
+                <Stack spacing={2} direction={'row'} alignItems="center" justifyContent="center">
                   <Box>
-                    <Typography>NFT</Typography>
                     <img src='/static/images/logo/pod3labs-logo.png' width={'100px'} height={'100px'} alt='Pod3LabsRecompensaIcon' />
                   </Box>
-                  <TextField //{...register("valueReward")}
-                    label={data && data.reward ? '' : ''}
-                    value={data && data.reward ? Number(data.reward) : Number(newTask.reward)}
+                  <TextField
+                    label={'Reward in USD'}
                     onBlur={handleReward}
-                    disabled={data && data.tokenId >= 0 ? true : false}
                   />
-
                   <DatePicker
-                    disabled={data && data.tokenId >= 0 ? true : false}
-                    label={data && data.endDate ? '' : 'Data Entrega'}
-                    value={data && data.endDate ? data.endDate : expireDate}
+                    label={'Deliver Date'}
                     onChange={(newValue: any) => setExpireDate(newValue)}
                   />
-
                 </Stack>
 
                 <Button onClick={onSubmit} variant='contained' color='primary'>
