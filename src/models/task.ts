@@ -9,13 +9,12 @@ export enum TaskStatus {
 
 export interface Task {
     status: TaskStatus;
-    title: string;
-    description: string;
-    reward: bigint;
-    endDate: bigint;
-    authorizedRoles: bigint[];
-    creatorRole: bigint
-    assignee: `0x${string}`;
-    metadata: string;
-  }
-  
+    title: Buffer;
+    description: Buffer;
+    reward: Buffer;
+    endDate: Buffer;
+    authorizedRoles: Buffer[];
+    creatorRole: Buffer
+    assignee: Buffer;
+    metadata: Buffer;
+}
