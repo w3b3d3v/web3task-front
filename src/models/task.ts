@@ -7,14 +7,26 @@ export enum TaskStatus {
     Canceled = 5
 }
 
+// export interface Task {
+//     status: TaskStatus;
+//     title: Buffer;
+//     description: Buffer;
+//     reward: Buffer;
+//     endDate: Buffer;
+//     authorizedRoles: Buffer[];
+//     creatorRole: Buffer;
+//     assignee: Buffer;
+//     metadata: Buffer;
+// }
+
 export interface Task {
     status: TaskStatus;
-    title: Buffer;
-    description: Buffer;
-    reward: Buffer;
-    endDate: Buffer;
-    authorizedRoles: Buffer[];
-    creatorRole: Buffer
-    assignee: Buffer;
-    metadata: Buffer;
+    title: string;
+    description: string;
+    reward: bigint;
+    endDate: bigint;
+    authorizedRoles: readonly bigint[];
+    creatorRole: bigint;
+    assignee: `0x${string}`;
+    metadata: string;
 }

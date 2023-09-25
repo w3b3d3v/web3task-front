@@ -10,17 +10,32 @@ import { useTaskService } from "src/services/tasks-service";
 import { Task, TaskStatus } from "src/models/task";
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import { Buffer } from 'buffer';
+import { account } from 'src/wagmi';
+
+/*
+  let newTask: Task = {
+    status: TaskStatus.New,
+    title: Buffer.from(''),
+    description: Buffer.from(''),
+    reward: Buffer.from(''),
+    endDate: Buffer.from(''),
+    authorizedRoles: [Buffer.from('')],
+    creatorRole: Buffer.from(''),
+    assignee: Buffer.from(''),
+    metadata: Buffer.from('')
+  }
+ */
 
 let newTask: Task = {
-  status: TaskStatus.New,
-  title: Buffer.from(''),
-  description: Buffer.from(''),
-  reward: Buffer.from(''),
-  endDate: Buffer.from(''),
-  authorizedRoles: [Buffer.from('')],
-  creatorRole: Buffer.from(''),
-  assignee: Buffer.from(''),
-  metadata: Buffer.from('')
+  status: 0,
+  title: '',
+  description: '',
+  reward: BigInt(''),
+  endDate: BigInt(''),
+  authorizedRoles: [BigInt('')],
+  creatorRole: BigInt(''),
+  assignee: account,
+  metadata: ''
 }
 
 const CreateTask = ({ data }) => {
@@ -30,13 +45,13 @@ const CreateTask = ({ data }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   const handleTitle = (event: { target: { value: any; }; }) => {
-    task.title = event.target.value;
+    task.title = (event.target.value).toString();
   };
 
   const handleAuthorizedRoles = (event: any) => {
 
-    let authorizedRoles: String[] = (event.target.value).split(',');
-    const bufferFrom: Buffer[] = authorizedRoles.map(str => Buffer.from(str));
+    let authorizedRoles: string[] = (event.target.value).split(',');
+    const bufferFrom: readonly bigint[] = authorizedRoles.map(str => BigInt(str));
     task.authorizedRoles = bufferFrom;
   };
 
@@ -58,7 +73,7 @@ const CreateTask = ({ data }) => {
 
   const handleReward = (event: { target: { value: any; }; }) => {
     let reward = event.target.value;
-    task.reward = Buffer.from(reward);
+    task.reward = BigInt(reward);
     console.log("task.reward: ", task.reward);
   };
 
@@ -69,7 +84,7 @@ const CreateTask = ({ data }) => {
 
 
       let data = String(Math.floor(Date.now() / 1000) + 3600)
-      task.endDate = Buffer.from(data);
+      task.endDate = BigInt(data);
       console.log("task: ", task);
       const response: any = await createTask(task);
       console.log("responseOnSubmit: ", response);
@@ -117,7 +132,6 @@ const CreateTask = ({ data }) => {
                   label={data && data.title ? '' : 'Task Title'}
                   onBlur={handleTitle}
                   placeholder={data && data.title ? '' : 'A title about the ativity.'}
-                  defaultValue={'TitleTeste'}
                   disabled={data && data.tokenId >= 0 ? true : false}
                   value={data && data.title} />
 
@@ -127,7 +141,6 @@ const CreateTask = ({ data }) => {
                   label={data && data.authorizedRoles ? '' : 'Authorized Role (separate as in array e.g.: [A,B,C,D]'}
                   onBlur={handleAuthorizedRoles}
                   placeholder={data && data.authorizedRoles ? '' : 'authorizedRoles'}
-                  defaultValue={[5, 10]}
                   disabled={data && data.tokenId >= 0 ? true : false}
                   value={data && data.authorizedRoles} />
 
@@ -137,7 +150,6 @@ const CreateTask = ({ data }) => {
                   label={data && data.creatorRole ? '' : 'Creator Role'}
                   onBlur={handleCreatorRole}
                   placeholder={data && data.creatorRole ? '' : 'creatorRole'}
-                  defaultValue={1}
                   disabled={data && data.tokenId >= 0 ? true : false}
                   value={data && data.creatorRole} />
 
@@ -148,7 +160,6 @@ const CreateTask = ({ data }) => {
                   label={data && data.assignee ? '' : 'Assignee (leave blank for anyone to fetch)'}
                   onBlur={handleAssignee}
                   placeholder={data && data.assignee ? '' : 'assignee.'}
-                  defaultValue={'0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'}
                   disabled={data && data.tokenId >= 0 ? true : false}
                   value={data && data.assignee} />
 
@@ -159,7 +170,6 @@ const CreateTask = ({ data }) => {
                   label={data && data.metadata ? '' : 'Metadata IPFS'}
                   onBlur={handleMetadata}
                   placeholder={data && data.metadata ? '' : 'metadata'}
-                  defaultValue={'ipfs-url'}
                   disabled={data && data.tokenId >= 0 ? true : false}
                   value={data && data.metadata} />
 
@@ -168,7 +178,6 @@ const CreateTask = ({ data }) => {
                   label={data && data.description ? '' : 'Descrição da tarefa'}
                   onBlur={handleDescription}
                   placeholder={data && data.description ? '' : 'A full description about the ativity.'}
-                  defaultValue={'Teste Description'}
                   multiline
                   rows="6"
                   disabled={data && data.tokenId >= 0 ? true : false}
@@ -195,7 +204,6 @@ const CreateTask = ({ data }) => {
                   <TextField //{...register("valueReward")}
                     label={data && data.reward ? '' : ''}
                     value={data && data.reward ? Number(data.reward) : Number(newTask.reward)}
-                    defaultValue={20}
                     onBlur={handleReward}
                     disabled={data && data.tokenId >= 0 ? true : false}
                   />
