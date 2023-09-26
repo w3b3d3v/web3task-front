@@ -8,13 +8,14 @@ import { ethers } from "ethers";
 export function useTaskService() {
 
     async function createTask(task: Task) {
-
-console.log("task", task)
         await contract.createTask(task);
-
     }
 
-    return { createTask };
+    async function getTask(task: Task) {
+        return await contract.getTask(task);
+    }
+
+    return { createTask, getTask };
 
 }
 

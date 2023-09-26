@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, forwardRef } from 'react';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
@@ -10,19 +12,12 @@ import { useTaskService } from "src/services/tasks-service";
 import { Task, TaskStatus } from "src/models/task";
 import SuspenseLoader from 'src/components/SuspenseLoader';
 
-/*
-  let newTask: Task = {
-    status: TaskStatus.New,
-    title: Buffer.from(''),
-    description: Buffer.from(''),
-    reward: Buffer.from(''),
-    endDate: Buffer.from(''),
-    authorizedRoles: [Buffer.from('')],
-    creatorRole: Buffer.from(''),
-    assignee: Buffer.from(''),
-    metadata: Buffer.from('')
-  }
- */
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref,
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 let newTask: Task = {
   status: 0,
@@ -41,6 +36,8 @@ const CreateTask = ({ data }) => {
   const [task, setTask] = useState<Task>();
   const [expireDate, setExpireDate] = useState<DatePickerProps<Dayjs> | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [openInformartion, setOpenInformartion] = useState(false);
+  const [openError, setOpenError] = useState(false);
 
   const handleChange = (event: { target: { value: any; }; }) => {
     task.description = event.target.value;
@@ -84,10 +81,28 @@ const CreateTask = ({ data }) => {
       let data = String(Math.floor(Date.now() / 1000) + 3600)
       task.endDate = BigInt(data);
       console.log("task.endDate: ", task.endDate);
-      const response: any = await createTask(task);
+      await createTask(task);
+      setOpenInformartion(true);      
     } catch (error) {
       console.log("Erro: ", error);
+      setOpenError(true);
     }
+  };
+
+  const handleCloseSnackInformation = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenInformartion(false);
+  };
+
+  const handleCloseSnackError = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenError(false);
   };
 
   useEffect(() => {
@@ -105,7 +120,17 @@ const CreateTask = ({ data }) => {
   }, [setLoading]);
 
   return (
-    <>
+    <Stack spacing={2} sx={{ width: '100%' }}>
+      <Snackbar open={openInformartion} autoHideDuration={6000} onClose={handleCloseSnackInformation}>
+        <Alert onClose={handleCloseSnackInformation} severity="info" sx={{ width: '100%' }}>
+          Task creation initiated with sucess!
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseSnackError}>
+        <Alert onClose={handleCloseSnackError} severity="error" sx={{ width: '100%' }}>
+        Task not created! Try again!
+        </Alert>
+      </Snackbar>
       <Box
         display={'flex'}
         justifyContent={'center'}
@@ -196,7 +221,7 @@ const CreateTask = ({ data }) => {
           )
         }
       </Box>
-    </>
+    </Stack>
 
   );
 }
