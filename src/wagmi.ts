@@ -1,36 +1,57 @@
-import { configureChains, createConfig } from 'wagmi'
-import { goerli, localhost, mainnet } from 'viem/chains'
+import { Web3TaskContract } from "src/contracts/Web3Task";
+import contractAddress from "src/contracts/contract-Web3Task-address.json";
+import { ethers } from "ethers";
+import { WagmiConfig, chain, createClient, defaultChains } from 'wagmi'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 
-import { publicProvider } from 'wagmi/providers/public'
+const alchemyId = process.env.ALCHEMY_API_KEY as string
+const chains = defaultChains
+const defaultChain = chain.mainnet
 
-import { createPublicClient, createWalletClient, custom, http } from 'viem'
-import { privateKeyToAccount } from 'viem/accounts'
-
-export const publicClient = createPublicClient({
-  chain: localhost,
-  transport: http()
-})
-
-export const walletClient = createWalletClient({
-  chain: mainnet,
-  transport: custom(window.ethereum)
-})
-
-const { chains, webSocketPublicClient } = configureChains(
-  [localhost],
-  [publicProvider()],
-)
-
-export const config = createConfig({
+export const client = createClient({
   autoConnect: true,
-  connectors: [
-    new MetaMaskConnector({ chains })
-  ],
-  publicClient,
-  webSocketPublicClient,
+  connectors({ chainId }) {
+    const chain = chains.find((x) => x.id === chainId) ?? defaultChain
+    const rpcUrl = chain.rpcUrls.alchemy
+      ? `${chain.rpcUrls.alchemy}/${alchemyId}`
+      : chain.rpcUrls.default
+    return [
+      new MetaMaskConnector({ chains })
+    ]
+  },
 })
 
-// JSON-RPC Account
-export const [account] = await walletClient.getAddresses()
+let signer = null;
+
+let provider;
+if (window.ethereum == null) {
+
+    // If MetaMask is not installed, we use the default provider,
+    // which is backed by a variety of third-party services (such
+    // as INFURA). They do not have private keys installed so are
+    // only have read-only access
+    console.log("MetaMask not installed; using read-only defaults")
+    provider = ethers.getDefaultProvider(1)
+
+} else {
+
+    // Connect to the MetaMask EIP-1193 object. This is a standard
+    // protocol that allows Ethers access to make all read-only
+    // requests through MetaMask.
+    //await window.ethereum.send('eth_requestAccounts');
+    
+    provider = new ethers.providers.Web3Provider(window.ethereum)
+
+    // It also provides an opportunity to request access to write
+    // operations, which will be performed by the private key
+    // that MetaMask manages for the user.
+    signer = provider.getSigner();
+}
+
+export const contract = new ethers.Contract(
+    contractAddress.Web3Task,
+    Web3TaskContract.abi,
+    signer
+);
+
 

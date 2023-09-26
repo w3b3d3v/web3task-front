@@ -5,13 +5,13 @@ import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter } from "react-router-dom";
 import { createRoot } from "react-dom/client";
 import { WagmiConfig } from 'wagmi';
-import { config } from './wagmi'
+import { client } from './wagmi'
 
 const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(
   <React.StrictMode>
-    <WagmiConfig config={config}>
+    <WagmiConfig client={client}>
       <HelmetProvider>
         <BrowserRouter>
           <Suspense fallback="...is loading">

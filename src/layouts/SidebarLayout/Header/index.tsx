@@ -19,9 +19,6 @@ import HeaderButtons from "./Buttons";
 import HeaderUserbox from "./Userbox";
 import HeaderUserConnect from "./UserConnect";
 import HeaderMenu from "./Menu";
-import { Address, createWalletClient, custom } from 'viem';
-import { goerli } from 'viem/chains';
-import 'viem/window';
 
 
 const HeaderWrapper = styled(Box)(
@@ -47,28 +44,10 @@ function Header() {
   const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
   const theme = useTheme();
   const [isConnected, setConnected] = useState<boolean>(false);
-  const [account, setAccount] = useState<Address>()
-
+  
 
   const connect = async () => {    
-    if(typeof window.ethereum !== "undefined") {
-      console.log("window.ethereum -> ", await window.ethereum);
-      try {
-        const selectedAddress = await window.ethereum.request({ method: 'eth_requestAccounts', params: [] });
-        console.log("selectedAddress ->", selectedAddress)           
-        if (selectedAddress){
-          const walletClient = createWalletClient({
-            transport: custom(window.ethereum!),
-          })
-        
-          const [address] = await walletClient.requestAddresses()
-          setAccount(address);
-          setConnected(true);  
-        }
-      } catch (error) {
-          console.log(error)
-      }           
-    }    
+       
   }
 
   useEffect(() => {

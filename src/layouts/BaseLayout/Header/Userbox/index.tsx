@@ -62,7 +62,8 @@ function stringToColor(string: string) {
   let hash = 0;
   let i;
 
-  /* eslint-disable no-bitwise */
+  if (string != null){
+      /* eslint-disable no-bitwise */
   for (i = 0; i < string.length; i += 1) {
     hash = string.charCodeAt(i) + ((hash << 5) - hash);
   }
@@ -75,7 +76,9 @@ function stringToColor(string: string) {
   }
   /* eslint-enable no-bitwise */
 
-  return color;
+  return color;    
+  }
+  return "#FFFF00"
 }
 
 const MuiAvatar = styled(Avatar)(
@@ -93,7 +96,7 @@ function stringAvatar(name: string) {
   };
 }
 
-function HeaderUserbox() {
+function HeaderUserbox({ disconnect, account }) {
   const [avatar, setAvatar] = useState("/static/images/avatars/1.jpg");
   const user: User = {
     name: "",
@@ -107,9 +110,7 @@ function HeaderUserbox() {
 
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
-  const { disconnect } = useDisconnect();
-  const { address } = useAccount();
-
+  
   const handleOpen = (): void => {
     setOpen(true);
   };
@@ -125,7 +126,7 @@ function HeaderUserbox() {
   return (
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen} sx={{ ml: 1 }}>
-        <MuiAvatar variant="rounded" {...stringAvatar(address)} />
+        <MuiAvatar variant="rounded" {...stringAvatar(account?.address)} />
         <Hidden mdDown>
           <UserBoxText>
             <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
@@ -152,7 +153,7 @@ function HeaderUserbox() {
         }}
       >
         <MenuUserBox sx={{ minWidth: 210 }} display="flex">
-          <MuiAvatar variant="rounded" {...stringAvatar(address)} />
+          <MuiAvatar variant="rounded" {...stringAvatar(account?.address)} />
           <UserBoxText>
             <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
             <UserBoxDescription variant="body2">

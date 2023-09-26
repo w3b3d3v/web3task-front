@@ -1,159 +1,227 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, forwardRef } from 'react';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Dayjs } from 'dayjs';
+import { DatePicker, DatePickerProps } from '@mui/x-date-pickers';
 import { useTaskService } from "src/services/tasks-service";
-import { Task, TaskStatus }  from "src/models/task";
-import { account } from 'src/wagmi'
+import { Task, TaskStatus } from "src/models/task";
+import SuspenseLoader from 'src/components/SuspenseLoader';
 
-const CreateTask = ({data}) => {
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref,
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+let newTask: Task = {
+  status: 0,
+  title: '',
+  description: '',
+  reward: BigInt(''),
+  endDate: BigInt(''),
+  authorizedRoles: [BigInt('')],
+  creatorRole: BigInt(''),
+  assignee: "0x0000000000000000000000000000000000000000",
+  metadata: ''
+}
+
+const CreateTask = ({ data }) => {
   const { createTask } = useTaskService();
-  const [initialDate, setInitialDate] = useState();
-  const [finalDate, setFinalDate] = useState();
   const [task, setTask] = useState<Task>();
+  const [expireDate, setExpireDate] = useState<DatePickerProps<Dayjs> | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [openInformartion, setOpenInformartion] = useState(false);
+  const [openError, setOpenError] = useState(false);
 
-  const prepareNewTask = () : Task => {
-    var newTask = {
-      status: TaskStatus.New,
-      title: '',
-      description: '',
-      reward: BigInt(0),
-      endDate: BigInt(0),
-      authorized: [ ],
-      creator: BigInt(0),
-      assignee: account,
-      metadata: ''
-    }
-    return newTask;
-  } 
+  const handleChange = (event: { target: { value: any; }; }) => {
+    task.description = event.target.value;
+  }
 
-  const handleChangeDescription = (event) => {
-    console.log("task", task)
+  const handleTitle = (event: { target: { value: any; }; }) => {
+    task.title = (event.target.value).toString();
+  };
+
+  const handleAuthorizedRoles = (event: any) => {
+
+    let authorizedRoles: string[] = (event.target.value).split(',');
+    const splittedRoles: readonly bigint[] = authorizedRoles.map(str => BigInt(str));
+    task.authorizedRoles = splittedRoles;
+  };
+
+  const handleCreatorRole = (event: { target: { value: any; }; }) => {
+    task.creatorRole = event.target.value;
+  };
+
+  const handleAssignee = (event: { target: { value: any; }; }) => {
+    task.assignee = event.target.value == '' ? "0x0000000000000000000000000000000000000000" : event.target.value;
+  };
+
+  const handleMetadata = (event: { target: { value: any; }; }) => {
+    task.metadata = event.target.value;
+  };
+
+  const handleDescription = (event: { target: { value: any; }; }) => {
     task.description = event.target.value;
   };
 
-  const onSubmit = async(event: { preventDefault: () => void; }) => {    
-    //guarda metadata no ipfs e realiza o mint
+  const handleReward = (event: { target: { value: any; }; }) => {
+    let reward = event.target.value;
+    task.reward = BigInt(reward);
+  };
+
+  const onSubmit = async (event: { preventDefault: () => void; }) => {
     try {
-      
-      var response = await createTask(task);
-      console.log("response: ", response);
+      console.log("Expire date",(expireDate))
+      let data = String(Math.floor(Date.now() / 1000) + 3600)
+      task.endDate = BigInt(data);
+      console.log("task.endDate: ", task.endDate);
+      await createTask(task);
+      setOpenInformartion(true);      
     } catch (error) {
       console.log("Erro: ", error);
+      setOpenError(true);
     }
   };
 
+  const handleCloseSnackInformation = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenInformartion(false);
+  };
+
+  const handleCloseSnackError = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenError(false);
+  };
+
   useEffect(() => {
-    if (data != undefined){
+    if (loading && data != undefined) {
       setTask(data);
+      console.log('data = ', data);
+      setLoading(false);
     }
     else {
-      setTask(prepareNewTask())    
+      if (loading) {
+        setTask(newTask)
+        setLoading(false);
+      }
     }
-  },[]);
+  }, [setLoading]);
 
   return (
-    <>
-    <Box
-      display={'flex'}
-      justifyContent={'center'}
-      alignItems={'center'}
-      height={'100%'}
-      flexDirection={'column'}>
-
+    <Stack spacing={2} sx={{ width: '100%' }}>
+      <Snackbar open={openInformartion} autoHideDuration={6000} onClose={handleCloseSnackInformation}>
+        <Alert onClose={handleCloseSnackInformation} severity="info" sx={{ width: '100%' }}>
+          Task creation initiated with sucess!
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseSnackError}>
+        <Alert onClose={handleCloseSnackError} severity="error" sx={{ width: '100%' }}>
+        Task not created! Try again!
+        </Alert>
+      </Snackbar>
       <Box
-        width={'100%'}>
-        <img src='/static/images/task/create-task-cover.png' alt='CreateTaskCover' width={'100%'} height={'100%'}/>
+        display={'flex'}
+        justifyContent={'center'}
+        alignItems={'center'}
+        height={'100%'}
+        flexDirection={'column'}>
 
-      </Box>
-        <Box marginTop= {2} >
-          <Stack spacing={2} alignItems={'center'} >
+        <Box
+          width={'100%'}>
+          <img src='/static/images/task/create-task-cover.png' alt='CreateTaskCover' width={'100%'} height={'100%'} />
 
-            {/* <Typography>Nome da Task</Typography> */}
-            <TextField
-              fullWidth
-              
-              label='Nome da Task' />
+        </Box>
+        {
+          loading ? <SuspenseLoader /> : (
+            <Box marginTop={2} >
+              <Stack spacing={2} alignItems={'center'} >
 
-            {/* <Typography>Cargo</Typography> */}
-            <TextField
-              fullWidth
-              
-              label='Cargo' />
+                <TextField
+                  fullWidth
+                  id="outlined-required"
+                  label={'Title'}
+                  onBlur={handleTitle}
+                  placeholder={'Describe the activity or link to a document'}
+                  />
 
-            {/* <Typography>Nome da empresa?*</Typography> */}
-            <TextField
-              fullWidth
-              
-              label='Nome da empresa?' />
+                <TextField
+                  fullWidth
+                  id="outlined-required"
+                  label={'Authorized Roles (separate by `,`)'}
+                  onBlur={handleAuthorizedRoles}
+                  placeholder={'The authorized roles to perform the task'}
+                  />
 
-            {/* <Typography>Descrição da tarefa?*</Typography> */}
-            <TextField
-              fullWidth
-              
-              label='Descrição da tarefa?' />
+                <TextField
+                  fullWidth
+                  id="outlined-required"
+                  label={'Creator Role'}
+                  onBlur={handleCreatorRole}
+                  placeholder={'0xABCD...01234'}
+                  />
 
-            {/* <Typography>Tag?*</Typography> */}
-            <TextField
-              fullWidth
-              
-              label='Tag' />
+                <TextField
+                  fullWidth
+                  id="outlined-required"
+                  label={'Assignee Address (leave blank to allow anyone to perform the task)'}
+                  onBlur={handleAssignee}
+                  placeholder={'Assignee address'}
+                  />
 
-            {/* <Typography>Detalhes da empresa:*</Typography> */}
-            <TextField
-              fullWidth
-              
-              label='Detalhes da empresa:' />
+                <TextField
+                  fullWidth
+                  id="outlined-required"
+                  label={'Metadata (IPFS)'}
+                  onBlur={handleMetadata}
+                  placeholder={'https://ipfs.io/ipfs/QmY5D...7CEh'}
+                  />
 
-            <Stack spacing={2} direction={'row'}>
-              <Box>
-                <Typography>Recompensa</Typography>
-                <img src='/static/images/logo/pod3labs-logo.png' width={'100px'} height={'100px'} alt='Pod3LabsRecompensaIcon'/>
                 <TextField fullWidth //{...register("description")}                
                   id="outlined-required"
-                  label={data && data.description ? '' : 'Descrição da NFT'}
-                  onChange={handleChangeDescription}
-                  placeholder={data && data.description ? '' : 'A full description about the ativity.'}
+                  label={'Description'}
+                  onBlur={handleDescription}
+                  placeholder={'A full description about the ativity.'}
                   multiline
-                  rows="6"
-                  disabled={data && data.tokenId >= 0 ? true : false}
                   maxRows="18"
-                  value={data && data.description}
+                  onChange={handleChange}
                 />
 
-              </Box>
+                <Stack spacing={2} direction={'row'} alignItems="center" justifyContent="center">
+                  <Box>
+                    <img src='/static/images/logo/pod3labs-logo.png' width={'100px'} height={'100px'} alt='Pod3LabsRecompensaIcon' />
+                  </Box>
+                  <TextField
+                    label={'Reward in USD'}
+                    onBlur={handleReward}
+                  />
+                  <DatePicker
+                    label={'Deliver Date'}
+                    onChange={(newValue: any) => setExpireDate(newValue)}
+                  />
+                </Stack>
 
-            </Stack>
+                <Button onClick={onSubmit} variant='contained' color='primary'>
+                  Enviar
+                </Button>
 
-            <Stack spacing={2} display={'flex'} direction={'row'}>
-
-              <DatePicker
-                label="Data Inicial"
-                value={initialDate}
-              />
-
-              <DatePicker
-                label="Data Entrega"
-                value={finalDate}
-              />
-
-              <TextField
-                
-                label='Valor' />
-
-            </Stack>
-
-            <Button onClick={onSubmit} variant='contained' color='primary'>
-              Enviar
-            </Button>
-            
-          </Stack>
-        </Box>
+              </Stack>
+            </Box>
+          )
+        }
       </Box>
-    </>
+    </Stack>
 
   );
 }
