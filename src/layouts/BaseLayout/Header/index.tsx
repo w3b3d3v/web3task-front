@@ -35,7 +35,7 @@ const HeaderWrapper = styled(Box)(
 
 function Header() {
   const theme = useTheme();
-  const { isConnected } = useAccount();
+  const { isSuccess } = useAccount();
 
   return (
     <HeaderWrapper
@@ -68,7 +68,7 @@ function Header() {
           
         </Stack>
         
-        {isConnected ? (
+        {isSuccess ? (
           <>
             <HeaderSearch /> 
             <Box display="flex" alignItems="center">

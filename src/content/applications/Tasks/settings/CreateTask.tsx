@@ -9,7 +9,6 @@ import { DatePicker, DatePickerProps } from '@mui/x-date-pickers';
 import { useTaskService } from "src/services/tasks-service";
 import { Task, TaskStatus } from "src/models/task";
 import SuspenseLoader from 'src/components/SuspenseLoader';
-import { account } from 'src/wagmi';
 
 /*
   let newTask: Task = {
@@ -33,7 +32,7 @@ let newTask: Task = {
   endDate: BigInt(''),
   authorizedRoles: [BigInt('')],
   creatorRole: BigInt(''),
-  assignee: account,
+  assignee: "0x0000000000000000000000000000000000000000",
   metadata: ''
 }
 

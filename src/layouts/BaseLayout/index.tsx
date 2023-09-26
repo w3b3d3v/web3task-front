@@ -22,7 +22,7 @@ interface BaseLayoutProps {
 
 const BaseLayout: FC<BaseLayoutProps> = () => {
   const theme = useTheme();
-  const { isConnected } = useAccount();
+  const { isSuccess } = useAccount();
 
   return (
     <>
@@ -54,7 +54,7 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
         }}
       >
         <Header />
-        { isConnected ? (  
+        { isSuccess ? (  
           <Box
             sx={{
             position: 'relative',

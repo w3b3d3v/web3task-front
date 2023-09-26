@@ -23,7 +23,6 @@ import AccountBoxTwoToneIcon from "@mui/icons-material/AccountBoxTwoTone";
 import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone";
 import AccountTreeTwoToneIcon from "@mui/icons-material/AccountTreeTwoTone";
 import MessageIcon from "@mui/icons-material/Message";
-import { Address, createWalletClient, custom, http } from 'viem';
 import { useConnect } from 'wagmi';
 
 const UserBoxButton = styled(Button)(
@@ -64,13 +63,12 @@ const UserBoxDescription = styled(Typography)(
 function HeaderUserConnect(props) {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
-  const [isConnected, setConnected] = useState<boolean>(false);
-  const [account, setAccount] = useState<Address>();
+
   const {
     connect,
     connectors,
     error,
-    isLoading,
+    isConnecting,
     pendingConnector,
   } = useConnect();
 
@@ -112,7 +110,7 @@ function HeaderUserConnect(props) {
             connectors
             .map((connector) => (
               <ListItem button to="/" key={connector.id} onClick={() => connect({connector})} component={NavLink}>
-                <ListItemText primary={connector.name || (isLoading && connector.id === pendingConnector?.id && ' (connecting)')} />
+                <ListItemText primary={connector.name || (isConnecting && connector.id === pendingConnector?.id && ' (connecting)')} />
               </ListItem>
             ))
           }
