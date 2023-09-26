@@ -96,7 +96,7 @@ function stringAvatar(name: string) {
   };
 }
 
-function HeaderUserbox() {
+function HeaderUserbox({ disconnect, account }) {
   const [avatar, setAvatar] = useState("/static/images/avatars/1.jpg");
   const user: User = {
     name: "",
@@ -110,9 +110,7 @@ function HeaderUserbox() {
 
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
-  const { disconnect } = useDisconnect();
-  const { data: accountData } = useAccount();
-
+  
   const handleOpen = (): void => {
     setOpen(true);
   };
@@ -128,7 +126,7 @@ function HeaderUserbox() {
   return (
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen} sx={{ ml: 1 }}>
-        <MuiAvatar variant="rounded" {...stringAvatar(accountData?.address)} />
+        <MuiAvatar variant="rounded" {...stringAvatar(account?.address)} />
         <Hidden mdDown>
           <UserBoxText>
             <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
@@ -155,7 +153,7 @@ function HeaderUserbox() {
         }}
       >
         <MenuUserBox sx={{ minWidth: 210 }} display="flex">
-          <MuiAvatar variant="rounded" {...stringAvatar(accountData?.address)} />
+          <MuiAvatar variant="rounded" {...stringAvatar(account?.address)} />
           <UserBoxText>
             <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
             <UserBoxDescription variant="body2">

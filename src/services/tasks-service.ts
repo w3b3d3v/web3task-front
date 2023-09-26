@@ -9,7 +9,7 @@ export function useTaskService() {
 
     async function createTask(task: Task) {
 
-
+console.log("task", task)
         await contract.createTask(task);
 
     }

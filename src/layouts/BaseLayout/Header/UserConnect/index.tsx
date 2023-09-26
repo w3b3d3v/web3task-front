@@ -60,17 +60,11 @@ const UserBoxDescription = styled(Typography)(
 `
 );
 
-function HeaderUserConnect(props) {
+function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting, pendingConnector }) {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
 
-  const {
-    connect,
-    connectors,
-    error,
-    isConnecting,
-    pendingConnector,
-  } = useConnect();
+
 
   const handleOpen = (): void => {
     setOpen(true);
