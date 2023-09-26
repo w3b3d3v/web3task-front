@@ -11,8 +11,8 @@ export function useTaskService() {
         await contract.createTask(task);
     }
 
-    async function getTask(task: Task) {
-        return await contract.getTask(task);
+    async function getTask(taskId: bigint) {
+        return await contract.getTask(taskId);
     }
 
     return { createTask, getTask };
