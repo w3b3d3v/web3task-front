@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
 import { Dayjs } from 'dayjs';
@@ -10,20 +9,6 @@ import { useTaskService } from "src/services/tasks-service";
 import { Task, TaskStatus } from "src/models/task";
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import { account } from 'src/wagmi';
-
-/*
-  let newTask: Task = {
-    status: TaskStatus.New,
-    title: Buffer.from(''),
-    description: Buffer.from(''),
-    reward: Buffer.from(''),
-    endDate: Buffer.from(''),
-    authorizedRoles: [Buffer.from('')],
-    creatorRole: Buffer.from(''),
-    assignee: Buffer.from(''),
-    metadata: Buffer.from('')
-  }
- */
 
 let newTask: Task = {
   status: 0,
