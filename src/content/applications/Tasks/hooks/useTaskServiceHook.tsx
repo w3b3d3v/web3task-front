@@ -1,29 +1,77 @@
 import { useState } from 'react';
 import { Task, TaskFront } from 'src/models/task';
 
+/**
+ * Interface for the Task Service, defining methods to interact with tasks.
+ */
 interface TaskService {
     getTask: (taskId: number) => Promise<Task>;
     getMultiTasks: (start: number, end: number) => Promise<Task[]>;
 }
 
+/**
+ * Hook for managing task-related data and interactions.
+ * 
+ * @param task - An instance of the TaskService interface.
+ * @returns An object containing task-related state and functions.
+ */
 export const useTaskServiceHook = (task: TaskService) => {
     const [taskData, setTaskData] = useState(null);
     const [multiTasksData, setMultiTasksData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    /**
+     * handleTask
+     *
+     * Fetches data obtained from the Solidity contract function getTask().
+     *
+     * @async
+     * @function
+     * @param taskId - The ID of the task to fetch.
+     * @returns - A promise that resolves when data is fetched.
+     */
+
     const handleTask = async (taskId: number) => {
+
         try {
             setLoading(true);
             setError(null);
-            const result = await task.getTask(taskId);
-            setTaskData(result);
+
+            const result: any = await task.getTask(taskId);
+
+            let nft: TaskFront = {
+                status: result.status,
+                title: result.title,
+                description: result.description,
+                reward: result.reward.toString(),
+                endDate: result.endDate.toString(),
+                authorizedRoles: result.authorizedRoles.toString(),
+                creatorRole: result.creatorRole.toString(),
+                assignee: result.assignee,
+                metadata: result.metadata
+            }
+
+            setTaskData(nft);
         } catch (error) {
             setError('Erro ao buscar tarefa');
         } finally {
             setLoading(false);
         }
     };
+
+
+    /**
+     * handleMultiTask
+     *
+     * Fetches data obtained from the Solidity contract function getMultiTasks().
+     *
+     * @async
+     * @function
+     * @param start - The start index for fetching multiple tasks.
+     * @param end - The end index for fetching multiple tasks.
+     * @returns  - A promise that resolves when data is fetched.
+     */
 
     const handleMultiTask = async (start: number, end: number) => {
 

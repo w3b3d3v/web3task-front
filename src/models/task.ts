@@ -25,10 +25,10 @@ export interface TaskFront {
     status: TaskStatus;
     title: string;
     description: string;
-    reward: bigint;
-    endDate: bigint;
-    authorizedRoles: bigint[];
-    creatorRole: bigint;
-    assignee: `0x${string}`;
-    metadata: string;
+    reward: string;
+    endDate: string;
+    authorizedRoles: string;
+    creatorRole: string;
+    assignee: string;
+    metadata: string
 }

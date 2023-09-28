@@ -2,6 +2,17 @@ import { Grid, CardMedia, CardContent, Typography, Card } from '@mui/material'
 import SuspenseLoader from 'src/components/SuspenseLoader'
 import { TaskFront } from 'src/models/task';
 
+/**
+ * CardMultiTasks Component
+ *
+ * A component that displays a grid of multiple cards for NFTs representing tasks.
+ *
+ * @component
+ * @param multiTasksData - An array of TaskFront objects representing task data for multiple cards obtained from the Solidity contract function getMultiTasks().
+ * @param loading - A boolean indicating whether the data is still loading.
+ * @returns Multiple Card NFTs Grid to display 
+ */
+
 export const CardMultiTasks = ({ multiTasksData, loading }) => {
 
     return (
@@ -26,10 +37,10 @@ export const CardMultiTasks = ({ multiTasksData, loading }) => {
                                                 {item.title}
                                             </Typography>
                                             <Typography gutterBottom variant="h5" component="div">
-                                                {item.reward.toString()} MATIC
+                                                {item.reward} MATIC
                                             </Typography>
                                             <Typography gutterBottom variant="h5" component="div" textAlign={'right'}>
-                                                #{item.creatorRole.toString()}
+                                                #{item.creatorRole}
                                             </Typography>
                                         </CardContent>
                                     </Card>
