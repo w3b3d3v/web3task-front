@@ -163,7 +163,7 @@ function HeaderUserbox({ disconnect, account }) {
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
-          <ListItem button to="/dapp/profile" component={NavLink}>
+          <ListItem button to="/profile" component={NavLink}>
             <ListItemText primary="Perfil" />
           </ListItem>
           <ListItem button to="/tasks/create-task" component={NavLink}>

@@ -23,6 +23,10 @@ const ListTasks = Loader(
   lazy(() => import('src/content/applications/Tasks/tasks/ListTasks'))
 )
 
+const ProfileTasks = Loader(
+  lazy(() => import('src/content/applications/Tasks/tasks/ProfileTasks'))
+)
+
 const HomeTask = Loader(
   lazy(() => import('src/content/applications/Tasks/tasks/HomeTasks'))
 )
@@ -69,7 +73,16 @@ const routes: RouteObject[] = [
         path: "*",
         element: <Status404 />,
       },
-      {
+      {        
+        path: 'profile',
+        children: [
+          {
+            path: '',
+            element: <ProfileTasks />
+          }
+        ]
+      },
+      {        
         path: 'tasks',
         children: [
           {

@@ -15,6 +15,45 @@ export function useTaskService() {
         return await contract.getTask(taskId);
     }
 
+    async function getMultiUserTasks(address: any) {
+        /// Prepare the encoding of data and submit it to the contract
+        const payloadArray = [];
+        /// Decode the results
+        let decodedResults = [];
+        let taskIds: bigint[] = await contract.getUserTasks(address);
+        
+        console.log("taskIds", taskIds);
+        
+        if (taskIds && taskIds.length > 0) {
+            for (var i = 1; i <= taskIds.length; i++) {
+                payloadArray.push(TasksManagerContract.interface.encodeFunctionData("getTask", [taskIds[i]]));
+            }
+            
+            const response = await TasksManagerContract.multicallRead(payloadArray);
+    
+            /// Get the sighash of the function
+            let getTaskID = TasksManagerContract.interface.getSighash("getTask(uint256)");
+            /// Map the results to the function name and the decoded arguments
+            decodedResults = response.map((res: any) => {
+                try {
+                    const decodedArgs = TasksManagerContract.interface.decodeFunctionResult(
+                        getTaskID,
+                        res
+                    );
+                    return {
+                        name: TasksManagerContract.interface.getFunction(getTaskID).name,
+                        args: decodedArgs,
+                    };
+                } catch (error) {
+                    console.log("Could not decode result", error);
+                }
+            });
+        }                
+
+        return decodedResults;
+
+    }
+
     async function getMultiTasks(min: number, max: number) {
         /// Prepare the encoding of data and submit it to the contract
         const payloadArray = [];
@@ -41,12 +80,13 @@ export function useTaskService() {
             } catch (error) {
                 console.log("Could not decode result", error);
             }
-        });
+        });        
 
         return decodedResults;
 
     }
 
-    return { createTask, getTask, getMultiTasks };
+
+    return { createTask, getTask, getMultiTasks, getMultiUserTasks };
 
 }
