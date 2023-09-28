@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Task } from 'src/models/task';
+import { Task, TaskFront } from 'src/models/task';
 
 interface TaskService {
     getTask: (taskId: number) => Promise<Task>;
@@ -8,7 +8,7 @@ interface TaskService {
 
 export const useTaskServiceHook = (task: TaskService) => {
     const [taskData, setTaskData] = useState(null);
-    const [multiTasksData, setultiTasksData] = useState(null);
+    const [multiTasksData, setMultiTasksData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -26,13 +26,35 @@ export const useTaskServiceHook = (task: TaskService) => {
     };
 
     const handleMultiTask = async (start: number, end: number) => {
+
+        const result: any = await task.getMultiTasks(start, end);
+
+        let multiTask = [];
         try {
             setLoading(true);
             setError(null);
-            const result = await task.getMultiTasks(start, end);
-            setultiTasksData(result);
+
+            for (let i = 0; i < result.length; i++) {
+                const args = result[i].args[0];
+                let nft: TaskFront = {
+                    status: args.status,
+                    title: args.title,
+                    description: args.description,
+                    reward: args.reward.toString(),
+                    endDate: args.endDate.toString(),
+                    authorizedRoles: args.authorizedRoles.toString(),
+                    creatorRole: args.creatorRole.toString(),
+                    assignee: args.assignee,
+                    metadata: args.metadata
+                }
+
+                if (Number(nft.creatorRole) != 0) {
+                    multiTask.push(nft);
+                    setMultiTasksData(multiTask);
+                }
+            }
         } catch (error) {
-            setError('Erro ao buscar tarefas múltiplas');
+            setError('Erro ao buscar tarefas múltiplas' + error);
         } finally {
             setLoading(false);
         }

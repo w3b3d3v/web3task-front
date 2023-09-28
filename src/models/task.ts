@@ -7,18 +7,7 @@ export enum TaskStatus {
     Canceled = 5
 }
 
-// export interface Task {
-//     status: TaskStatus;
-//     title: Buffer;
-//     description: Buffer;
-//     reward: Buffer;
-//     endDate: Buffer;
-//     authorizedRoles: Buffer[];
-//     creatorRole: Buffer;
-//     assignee: Buffer;
-//     metadata: Buffer;
-// }
-
+// Interface Equals Solidity
 export interface Task {
     status: TaskStatus;
     title: string;
@@ -26,6 +15,19 @@ export interface Task {
     reward: bigint;
     endDate: bigint;
     authorizedRoles: readonly bigint[];
+    creatorRole: bigint;
+    assignee: `0x${string}`;
+    metadata: string;
+}
+
+// Interface Equals Front
+export interface TaskFront {
+    status: TaskStatus;
+    title: string;
+    description: string;
+    reward: bigint;
+    endDate: bigint;
+    authorizedRoles: bigint[];
     creatorRole: bigint;
     assignee: `0x${string}`;
     metadata: string;
