@@ -9,7 +9,7 @@ import SuspenseLoader from 'src/components/SuspenseLoader'
  * @component
  * @param taskData - An array of TaskFront objects representing task data obtained from the Solidity contract function getTask().
  * @param loading - A boolean indicating whether the data is still loading.
- * @returns Multiple Card NFTs Grid to display 
+ * @returns Card NFT to display
  */
 
 export const CardTasks = ({ taskData, loading }: any) => {

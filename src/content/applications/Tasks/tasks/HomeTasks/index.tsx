@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import TuneIcon from '@mui/icons-material/Tune';
 import { useTaskService } from "src/services/tasks-service";
 import { useTaskServiceHook } from "src/content/applications/Tasks/hooks/useTaskServiceHook";
@@ -81,25 +81,25 @@ const HomeTask = () => {
                     </Box>
 
                 </Box>
+
+
+
                 <Box>
                     <Box height={40} bgcolor={'#8EFFC2'} />
+
+
                     <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={'max-content'} >
-                        <Box >
-                            <TuneIcon /> Filtro
-                            <Typography>Title</Typography>
-                            <Typography>Role</Typography>
-                            <Typography>Reward</Typography>
-                            <Typography>Due Data</Typography>
+                        <Box>
 
                         </Box>
-                        <Box display={'flex'} ml={20} mt={10}>
-                            <CardMultiTasks multiTasksData={multiTasksData} loading={loading} />
-                        </Box>
 
+                        <CardMultiTasks multiTasksData={multiTasksData} loading={loading} />
                     </Box >
                 </Box>
 
             </Box >
+
+
 
 
 

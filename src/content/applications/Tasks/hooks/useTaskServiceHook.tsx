@@ -64,7 +64,7 @@ export const useTaskServiceHook = (task: TaskService) => {
     /**
      * handleMultiTask
      *
-     * Fetches data obtained from the Solidity contract function getMultiTasks().
+     * Fetches data obtained from the Solidity contract function getTask() + Multicall.
      *
      * @async
      * @function
