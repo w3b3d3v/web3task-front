@@ -1,7 +1,19 @@
 import { CardMedia, CardContent, Typography, Card } from '@mui/material'
 import SuspenseLoader from 'src/components/SuspenseLoader'
 
+/**
+ * CardTasks Component
+ *
+ * A component that displays a card for an NFT representing a task.
+ *
+ * @component
+ * @param taskData - An array of TaskFront objects representing task data obtained from the Solidity contract function getTask().
+ * @param loading - A boolean indicating whether the data is still loading.
+ * @returns Card NFT to display
+ */
+
 export const CardTasks = ({ taskData, loading }: any) => {
+
 
     return (
         <>
@@ -10,18 +22,22 @@ export const CardTasks = ({ taskData, loading }: any) => {
                     <SuspenseLoader />
                 ) : (
                     <>
-                        {taskData && taskData[8] ? (
+                        {taskData ? (
                             <>
                                 <CardMedia
                                     sx={{ width: 254, height: 248 }}
                                     component="img"
-                                    image={taskData[8]}
-                                    alt={taskData[1]} /><CardContent>
+                                    image={taskData.metadata}
+                                    alt={'taskData'} />
+                                <CardContent>
                                     <Typography gutterBottom variant="h5" component="div">
-                                        Name: {taskData[1]}
+                                        {taskData.title}
                                     </Typography>
                                     <Typography gutterBottom variant="h5" component="div">
-                                        {taskData[2]}
+                                        {taskData.reward} MATIC
+                                    </Typography>
+                                    <Typography gutterBottom variant="h5" component="div" textAlign={'right'}>
+                                        #{taskData.creatorRole}
                                     </Typography>
                                 </CardContent>
                             </>

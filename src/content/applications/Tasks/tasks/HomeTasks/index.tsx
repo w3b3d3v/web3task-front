@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import TuneIcon from '@mui/icons-material/Tune';
 import { useTaskService } from "src/services/tasks-service";
 import { useTaskServiceHook } from "src/content/applications/Tasks/hooks/useTaskServiceHook";
@@ -17,7 +17,7 @@ const HomeTask = () => {
         const fetchData = async () => {
             // Chama as operações assíncronas ao montar o componente
             await handleTask(1);
-            await handleMultiTask(0, 2);
+            await handleMultiTask(0, 10);
         };
 
         fetchData();
@@ -34,6 +34,7 @@ const HomeTask = () => {
 
     return (
         <>
+
             <Box>
                 <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={304} flexDirection={"row"} >
 
@@ -80,17 +81,26 @@ const HomeTask = () => {
                     </Box>
 
                 </Box>
+
+
+
                 <Box>
                     <Box height={40} bgcolor={'#8EFFC2'} />
-                    <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={'max-content'}>
-                        <TuneIcon /> Filtro
+
+
+                    <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={'max-content'} >
                         <Box>
-                            <CardTasks taskData={taskData} loading={loading} />
-                            <CardMultiTasks multiTasksData={multiTasksData} loading={loading} />
+
                         </Box>
+
+                        <CardMultiTasks multiTasksData={multiTasksData} loading={loading} />
                     </Box >
                 </Box>
+
             </Box >
+
+
+
 
 
         </>
