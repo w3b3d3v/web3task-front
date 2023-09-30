@@ -37,7 +37,7 @@ function Footer() {
         justifyContent="space-between"
         height="400"
       >
-        <img src="/static/images/logo/web3task1.png" alt="Web3TaskIcon" width={254} height={191} />
+        <img src="/static/images/logo/web3task1-2.svg" alt="Web3TaskIcon" width={254} height={191} />
 
         <Box>
           <ListItem>
@@ -63,7 +63,7 @@ function Footer() {
               {'Perguntas Frequentes'}
             </Link>
           </ListItem>
-          
+
         </Box>
 
         <Box>
