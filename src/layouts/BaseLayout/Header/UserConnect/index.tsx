@@ -23,7 +23,6 @@ import AccountBoxTwoToneIcon from "@mui/icons-material/AccountBoxTwoTone";
 import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone";
 import AccountTreeTwoToneIcon from "@mui/icons-material/AccountTreeTwoTone";
 import MessageIcon from "@mui/icons-material/Message";
-import { Address, createWalletClient, custom, http } from 'viem';
 import { useConnect } from 'wagmi';
 
 const UserBoxButton = styled(Button)(
@@ -61,18 +60,11 @@ const UserBoxDescription = styled(Typography)(
 `
 );
 
-function HeaderUserConnect(props) {
+function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting, pendingConnector }) {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
-  const [isConnected, setConnected] = useState<boolean>(false);
-  const [account, setAccount] = useState<Address>();
-  const {
-    connect,
-    connectors,
-    error,
-    isLoading,
-    pendingConnector,
-  } = useConnect();
+
+
 
   const handleOpen = (): void => {
     setOpen(true);
@@ -87,8 +79,7 @@ function HeaderUserConnect(props) {
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
         <Hidden mdDown>
           <UserBoxText>
-            <UserBoxLabel variant="body1">Connect</UserBoxLabel>
-            <UserBoxDescription variant="body2">Dapp</UserBoxDescription>
+            <UserBoxLabel variant="body1">Entrar</UserBoxLabel>
           </UserBoxText>
         </Hidden>
         <Hidden smDown>
@@ -113,7 +104,7 @@ function HeaderUserConnect(props) {
             connectors
             .map((connector) => (
               <ListItem button to="/" key={connector.id} onClick={() => connect({connector})} component={NavLink}>
-                <ListItemText primary={connector.name || (isLoading && connector.id === pendingConnector?.id && ' (connecting)')} />
+                <ListItemText primary={connector.name || (isConnecting && connector.id === pendingConnector?.id && ' (connecting)')} />
               </ListItem>
             ))
           }

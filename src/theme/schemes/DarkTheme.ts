@@ -1068,6 +1068,17 @@ export const DarkTheme = createTheme({
       },
     },
 
+    MuiTreeView: {
+      styleOverrides: {
+        root: {
+          "& .MuiTreeItem-content:hover": {
+            color: colors.alpha.white[100],
+            backgroundColor: "grey"
+          },        
+        }
+      }
+    },
+
     MuiTimelineConnector: {
       styleOverrides: {
         root: {

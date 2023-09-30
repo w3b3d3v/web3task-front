@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 import { useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useTranslation } from 'react-i18next';
 import { styled } from "@mui/material/styles";
 import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
 
@@ -65,8 +64,7 @@ const ListWrapper = styled(Box)(
 function HeaderMenu() {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
-  const { t } = useTranslation(['layouts-sidebarlayout-header-menu']);
-
+  
   const handleOpen = (): void => {
     setOpen(true);
   };
@@ -94,7 +92,7 @@ function HeaderMenu() {
           >
             <ListItemText
               primaryTypographyProps={{ noWrap: true }}
-              primary={t('menu.item1.label')}
+              primary={'menu.item1.label'}
             />
           </ListItem>
           <ListItem
@@ -107,7 +105,7 @@ function HeaderMenu() {
               primaryTypographyProps={{ noWrap: true }}
               primary={
                 <Box display="flex" alignItems="center">
-                  {t('menu.item2.label')}
+                  {'menu.item2.label'}
                 </Box>
               }
             />
@@ -122,7 +120,7 @@ function HeaderMenu() {
               primaryTypographyProps={{ noWrap: true }}
               primary={
                 <Box display="flex" alignItems="center">
-                  {t('menu.item3.label')}
+                  {'menu.item3.label'}
                   <Box display="flex" alignItems="center" pl={0.3}>
                     <ExpandMoreTwoToneIcon fontSize="small" />
                   </Box>
@@ -134,10 +132,10 @@ function HeaderMenu() {
       </ListWrapper>
       <Menu anchorEl={ref.current} onClose={handleClose} open={isOpen}>
         <MenuItem sx={{ px: 3 }} component={NavLink} to="/">
-          {t('menu.item3.subItens.subItem1.label')}
+          {'menu.item3.subItens.subItem1.label'}
         </MenuItem>
         <MenuItem sx={{ px: 3 }} component={NavLink} to="/home-side/overview">
-          {t('menu.item3.subItens.subItem2.label')}
+          {'menu.item3.subItens.subItem2.label'}
         </MenuItem>
       </Menu>
     </>

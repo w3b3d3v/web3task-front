@@ -13,7 +13,7 @@ import HeaderButtons from "./Buttons";
 import HeaderUserbox from "./Userbox";
 import HeaderSearch from "./Search";
 import HeaderUserConnect from "./UserConnect";
-import { useAccount } from 'wagmi';
+import { useConnect, useDisconnect } from 'wagmi';
 
 const HeaderWrapper = styled(Box)(
   ({ theme }) => `
@@ -33,9 +33,17 @@ const HeaderWrapper = styled(Box)(
 `
 );
 
-function Header() {
+function Header({data}) {
   const theme = useTheme();
-  const { isConnected } = useAccount();
+  const {
+    activeConnector,
+    connect,
+    connectors,
+    error,
+    isConnecting,
+    pendingConnector,
+  } = useConnect();
+  const { disconnect } = useDisconnect();
 
   return (
     <HeaderWrapper
@@ -68,18 +76,23 @@ function Header() {
           
         </Stack>
         
-        {isConnected ? (
+        {data ? (
           <>
             <HeaderSearch /> 
             <Box display="flex" alignItems="center">
-              <HeaderUserbox />
+              <HeaderUserbox disconnect={  disconnect } account={data} />
             </Box>            
           </>                    
         ) : (
           <>
             <HeaderSearch /> 
             <Box display="flex" alignItems="center">
-              <HeaderUserConnect />
+              <HeaderUserConnect
+                connectors={ connectors } 
+                activeConnector={ activeConnector } 
+                connect={ connect } 
+                isConnecting={ isConnecting } 
+                pendingConnector={ pendingConnector } />
             </Box>            
           </>
         )}        
