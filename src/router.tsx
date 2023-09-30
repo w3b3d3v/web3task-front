@@ -15,6 +15,10 @@ const Loader = (Component) => (props) =>
   </Suspense>
 );
 
+const AdminOptions = Loader(
+  lazy(() => import('src/content/applications/Tasks/settings/AdminOptions'))
+)
+
 const CreateTask = Loader(
   lazy(() => import('src/content/applications/Tasks/settings/CreateTask'))
 );
@@ -85,7 +89,11 @@ const routes: RouteObject[] = [
             element: <ListTasks />
           }
         ]
-      }
+      },
+      {
+        path: 'settings',
+        element: <AdminOptions />
+      },
     ],
   },
   {
