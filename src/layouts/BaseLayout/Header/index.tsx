@@ -8,7 +8,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import LogoSign from "src/components/LogoSign";
+import Logo from "src/components/LogoSign";
 import HeaderButtons from "./Buttons";
 import HeaderUserbox from "./Userbox";
 import HeaderSearch from "./Search";
@@ -33,8 +33,10 @@ const HeaderWrapper = styled(Box)(
 `
 );
 
-function Header({data}) {
+function Header({ data }) {
   const theme = useTheme();
+  const logoImage = "/static/images/logo/logo-" + theme.palette.mode + ".svg";
+
   const {
     activeConnector,
     connect,
@@ -53,16 +55,16 @@ function Header({data}) {
         boxShadow:
           theme.palette.mode === "dark"
             ? `0 1px 0 ${alpha(
-                lighten(theme.colors.primary.main, 0.7),
-                0.15
-              )}, 0px 2px 8px -3px rgba(0, 0, 0, 0.2), 0px 5px 22px -4px rgba(0, 0, 0, .1)`
+              lighten(theme.colors.primary.main, 0.7),
+              0.15
+            )}, 0px 2px 8px -3px rgba(0, 0, 0, 0.2), 0px 5px 22px -4px rgba(0, 0, 0, .1)`
             : `0px 2px 8px -3px ${alpha(
-                theme.colors.alpha.black[100],
-                0.2
-              )}, 0px 5px 22px -4px ${alpha(
-                theme.colors.alpha.black[100],
-                0.1
-              )}`,
+              theme.colors.alpha.black[100],
+              0.2
+            )}, 0px 5px 22px -4px ${alpha(
+              theme.colors.alpha.black[100],
+              0.1
+            )}`,
       }}
     >
       <>
@@ -72,30 +74,30 @@ function Header({data}) {
           alignItems="center"
           spacing={2}
         >
-          <LogoSign />
-          
+          <Logo logoImage={logoImage} />
+
         </Stack>
-        
+
         {data ? (
           <>
-            <HeaderSearch /> 
+            <HeaderSearch />
             <Box display="flex" alignItems="center">
-              <HeaderUserbox disconnect={  disconnect } account={data} />
-            </Box>            
-          </>                    
+              <HeaderUserbox disconnect={disconnect} account={data} />
+            </Box>
+          </>
         ) : (
           <>
-            <HeaderSearch /> 
+            <HeaderSearch />
             <Box display="flex" alignItems="center">
               <HeaderUserConnect
-                connectors={ connectors } 
-                activeConnector={ activeConnector } 
-                connect={ connect } 
-                isConnecting={ isConnecting } 
-                pendingConnector={ pendingConnector } />
-            </Box>            
+                connectors={connectors}
+                activeConnector={activeConnector}
+                connect={connect}
+                isConnecting={isConnecting}
+                pendingConnector={pendingConnector} />
+            </Box>
           </>
-        )}        
+        )}
       </>
     </HeaderWrapper>
   );

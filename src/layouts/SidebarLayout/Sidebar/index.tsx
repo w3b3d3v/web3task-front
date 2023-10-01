@@ -34,6 +34,7 @@ function Sidebar() {
   const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
   const closeSidebar = () => toggleSidebar();
   const theme = useTheme();
+  const logoImage = "/static/images/logo/logo-" + theme.palette.mode + ".svg"
 
   return (
     <>
@@ -62,7 +63,7 @@ function Sidebar() {
                 width: 52,
               }}
             >
-              <Logo />
+              <Logo logoImage={logoImage} />
             </Box>
           </Box>
           <Divider
@@ -119,7 +120,7 @@ function Sidebar() {
                   width: 52,
                 }}
               >
-                <Logo />
+                <Logo logoImage={logoImage} />
               </Box>
             </Box>
             <Divider
