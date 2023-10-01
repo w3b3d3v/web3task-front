@@ -14,6 +14,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { BsGithub, BsYoutube } from "react-icons/bs";
 import { BsDiscord } from "react-icons/bs";
 import { BsTwitch } from "react-icons/bs";
+import Logo from "../LogoSign";
 
 const FooterWrapper = styled(Container)(
   ({ theme }) => `
@@ -23,6 +24,7 @@ const FooterWrapper = styled(Container)(
 
 function Footer() {
   const theme = useTheme();
+  const logoImage = "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
 
   return (
     <FooterWrapper
@@ -37,8 +39,7 @@ function Footer() {
         justifyContent="space-between"
         height="400"
       >
-        <img src="/static/images/logo/web3task1-2.svg" alt="Web3TaskIcon" width={254} height={191} />
-
+        <Logo logoImage={logoImage} />
         <Box>
           <ListItem>
             <Link href="/sobre-nos" underline="none">

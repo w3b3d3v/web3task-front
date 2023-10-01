@@ -15,10 +15,8 @@ const LogoWrapper = styled(Link)(
 `
 );
 
-function Logo() {
+function Logo({ logoImage }) {
   const theme = useTheme();
-
-  const logoImage = "/static/images/logo/logo-" + theme.palette.mode + "2.svg"
 
   return (
     <LogoWrapper to="/overview">
