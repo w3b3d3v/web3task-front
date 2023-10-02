@@ -1,7 +1,7 @@
 import { Web3TaskContract } from "src/contracts/Web3Task";
 import contractAddress from "src/contracts/contract-Web3Task-address.json";
 import { Task } from 'src/models/task';
-import { contract, TasksManagerContract } from '../wagmi'
+import { contract, tasksManagerContract } from '../wagmi'
 import { ethers } from "ethers";
 
 
@@ -19,23 +19,23 @@ export function useTaskService() {
         /// Prepare the encoding of data and submit it to the contract
         const payloadArray = [];
         for (var i = 1; i <= 10; i++) {
-            payloadArray.push(TasksManagerContract.interface.encodeFunctionData("getTask", [i]));
+            payloadArray.push(tasksManagerContract.interface.encodeFunctionData("getTask", [i]));
         }
-        const response = await TasksManagerContract.multicallRead(payloadArray);
+        const response = await tasksManagerContract.multicallRead(payloadArray);
 
         /// Decode the results
         let decodedResults = [];
         /// Get the sighash of the function
-        let getTaskID = TasksManagerContract.interface.getSighash("getTask(uint256)");
+        let getTaskID = tasksManagerContract.interface.getSighash("getTask(uint256)");
         /// Map the results to the function name and the decoded arguments
         decodedResults = response.map((res: any) => {
             try {
-                const decodedArgs = TasksManagerContract.interface.decodeFunctionResult(
+                const decodedArgs = tasksManagerContract.interface.decodeFunctionResult(
                     getTaskID,
                     res
                 );
                 return {
-                    name: TasksManagerContract.interface.getFunction(getTaskID).name,
+                    name: tasksManagerContract.interface.getFunction(getTaskID).name,
                     args: decodedArgs,
                 };
             } catch (error) {
@@ -47,6 +47,16 @@ export function useTaskService() {
 
     }
 
-    return { createTask, getTask, getMultiTasks };
+    async function setRole(roleId: any, authorizedAddress: any, isAuthorized: boolean) {
+
+        return await tasksManagerContract.setRole(roleId, authorizedAddress, isAuthorized);
+    }
+
+    async function setOperator(interfaceId: any, roleId: any, isAuthorized: boolean) {
+
+        return await tasksManagerContract.setOperator(interfaceId, roleId, isAuthorized);
+    }
+
+    return { createTask, getTask, getMultiTasks, setRole, setOperator };
 
 }
