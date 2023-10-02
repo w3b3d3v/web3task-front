@@ -7,6 +7,8 @@ import { Task, TaskFront } from 'src/models/task';
 interface TaskService {
     getTask: (taskId: number) => Promise<Task>;
     getMultiTasks: (start: number, end: number) => Promise<Task[]>;
+    setRole: (roleId: any, authorizedAddress: any, isAuthorized: boolean) => Promise<any>
+    setOperator: (interfaceId: any, roleId: any, isAuthorized: boolean) => Promise<any>
 }
 
 /**
@@ -60,7 +62,6 @@ export const useTaskServiceHook = (task: TaskService) => {
         }
     };
 
-
     /**
      * handleMultiTask
      *
@@ -108,6 +109,22 @@ export const useTaskServiceHook = (task: TaskService) => {
         }
     };
 
+    const handleRole = async (roleId: any, authorizedAddress: any, isAuthorized: boolean) => {
+        console.log('roleId ', roleId)
+        console.log('authorizedAddress ', authorizedAddress)
+        console.log('isAuthorized ', isAuthorized)
+
+        return await task.setRole(roleId, authorizedAddress, isAuthorized);
+    };
+
+    const handleOperator = async (interfaceId: any, roleId: any, isAuthorized: boolean) => {
+        console.log('interfaceId ', interfaceId)
+        console.log('roleId ', roleId)
+        console.log('isAuthorized ', isAuthorized)
+
+        return await task.setOperator(interfaceId, roleId, isAuthorized);
+    };
+
     return {
         taskData,
         multiTasksData,
@@ -115,5 +132,7 @@ export const useTaskServiceHook = (task: TaskService) => {
         error,
         handleTask,
         handleMultiTask,
+        handleRole,
+        handleOperator
     };
 };
