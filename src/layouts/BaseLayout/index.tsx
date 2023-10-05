@@ -5,6 +5,7 @@ import Header from "./Header";
 import SuspenseLoader from "src/components/SuspenseLoader";
 import Footer from 'src/components/Footer';
 import { useAccount } from 'wagmi';
+import HomeTask from "src/content/applications/Tasks/tasks/HomeTasks";
 
 const Loader = (Component) => (props) =>
   (

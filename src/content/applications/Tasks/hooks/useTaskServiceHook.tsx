@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Task, TaskFront } from 'src/models/task';
+import { Task, TaskStatus, TaskFront } from 'src/models/task';
+import { useWeb3Utils } from 'src/hooks/Web3Utils';
 
 /**
  * Interface for the Task Service, defining methods to interact with tasks.
@@ -22,6 +23,40 @@ export const useTaskServiceHook = (task: TaskService) => {
     const [multiTasksData, setMultiTasksData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const { shortenAddressFromAddress } = useWeb3Utils();
+
+    /**
+     * getStatus
+     *
+     * Return status string according enum TaskStatus
+     *
+     * @async
+     * @function
+     * @param taskId - The ID of the task to fetch.
+     * @returns - A promise that resolves when data is fetched.
+     */
+    function getStatus(status: TaskStatus) : string {
+        switch (status) {
+            case TaskStatus.Created:
+                return "Created"
+                break;
+            case TaskStatus.Canceled:
+                return "Canceled"
+                break;
+            case TaskStatus.Review:
+                return "In Review"
+                break;
+            case TaskStatus.Progress:
+                return "In Progress"
+                break;
+            case TaskStatus.Completed:
+                return "Completed"
+                break;
+            default:
+                break;
+        }
+        return "";
+    }
 
     /**
      * handleTask
@@ -33,17 +68,16 @@ export const useTaskServiceHook = (task: TaskService) => {
      * @param taskId - The ID of the task to fetch.
      * @returns - A promise that resolves when data is fetched.
      */
-
     const handleTask = async (taskId: number) => {
-
+    
         try {
             setLoading(true);
             setError(null);
-
+    
             const result: any = await task.getTask(taskId);
-
+            
             let nft: TaskFront = {
-                status: result.status,
+                status: getStatus(result.status),
                 title: result.title,
                 description: result.description,
                 reward: result.reward.toString(),
@@ -53,7 +87,17 @@ export const useTaskServiceHook = (task: TaskService) => {
                 assignee: result.assignee,
                 metadata: result.metadata
             }
-
+    
+            const shortenedAddressOrName = shortenAddressFromAddress(nft.assignee);
+            nft.assignee = shortenedAddressOrName;
+            //const d = new Date(Number(nft.endDate));
+            //nft.endDate = d.toDateString();
+    
+    
+            const timeInSeconds = Math.floor(Number(nft.endDate)*1000);
+            const date = new Date(timeInSeconds);
+            const dateFormatted = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+            nft.endDate = dateFormatted;
             setTaskData(nft);
         } catch (error) {
             setError('Erro ao buscar tarefa');

@@ -1,10 +1,9 @@
 export enum TaskStatus {
-    New = 0,
-    Created = 1,
-    Progress = 2,
-    Review = 3,
-    Completed = 4,
-    Canceled = 5
+    Created = 0,
+    Progress = 1,
+    Review = 2,
+    Completed = 3,
+    Canceled = 4
 }
 
 // Interface Equals Solidity
@@ -22,7 +21,7 @@ export interface Task {
 
 // Interface Equals Front
 export interface TaskFront {
-    status: TaskStatus;
+    status: string;
     title: string;
     description: string;
     reward: string;

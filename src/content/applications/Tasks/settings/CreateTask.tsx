@@ -81,7 +81,9 @@ const CreateTask = ({ data }) => {
       let data = String(Math.floor(Date.now() / 1000) + 3600)
       task.endDate = BigInt(data);
       console.log("task.endDate: ", task.endDate);
+
       await createTask(task);
+
       setOpenInformartion(true);      
     } catch (error) {
       console.log("Erro: ", error);
