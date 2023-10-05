@@ -169,10 +169,10 @@ function HeaderUserbox({ disconnect, account }) {
           <ListItem button to="/tasks/create-task" component={NavLink}>
             <ListItemText primary="Criar Tarefa" />
           </ListItem>
-          <ListItem button to="/tasks/list-task" component={NavLink}>
-            <ListItemText primary="Minhas Tarefas" />
+          <ListItem button to="/tasks/details-task" component={NavLink}>
+            <ListItemText primary="Detalhes Tarefa" />
           </ListItem>
-          <ListItem button to="/dapp/profile" component={NavLink}>
+          <ListItem button to="/settings" component={NavLink}>
             <ListItemText primary="Configurações" />
           </ListItem>
         </List>

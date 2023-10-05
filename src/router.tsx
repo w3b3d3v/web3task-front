@@ -23,6 +23,10 @@ const CreateTask = Loader(
   lazy(() => import('src/content/applications/Tasks/settings/CreateTask'))
 );
 
+const DetailsTasks = Loader(
+  lazy(() => import('src/content/applications/Tasks/details/DetailsTask'))
+)
+
 const ListTasks = Loader(
   lazy(() => import('src/content/applications/Tasks/tasks/ListTasks'))
 )
@@ -83,6 +87,10 @@ const routes: RouteObject[] = [
           {
             path: 'create-task',
             element: <CreateTask />
+          },
+          {
+            path: 'details-task/:taskId',
+            element: <DetailsTasks />
           },
           {
             path: 'list-task',

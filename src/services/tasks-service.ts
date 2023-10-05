@@ -1,18 +1,80 @@
-import { Web3TaskContract } from "src/contracts/Web3Task";
-import contractAddress from "src/contracts/contract-Web3Task-address.json";
+import { useState } from "react";
 import { Task } from 'src/models/task';
-import { contract, tasksManagerContract } from '../wagmi'
-import { ethers } from "ethers";
-
+import { UserRole } from 'src/models/user';
+import { tasksManagerContract } from '../wagmi'
+import { is } from 'date-fns/locale';
+import { useWeb3Utils } from "src/hooks/Web3Utils";
 
 export function useTaskService() {
+    const [loading, setLoading] = useState<boolean>(false);
+    const [operator, isOperator] = useState<boolean>(false);
+    const [userRole, setUserRole] = useState<UserRole>();    
+    const { userAddress } = useWeb3Utils();
+
 
     async function createTask(task: Task) {
-        await contract.createTask(task);
+        if (hasLeaderRole(userAddress())){
+            let intefaceID = tasksManagerContract.interface.getSighash("createTask");
+            await tasksManagerContract.isOperator(intefaceID, UserRole.Leader).then(isOperator => { 
+                if (!isOperator)
+                    throw Error("User unauthorized to perform createTask!");   
+                
+                tasksManagerContract.createTask(task);         
+            });     
+        }          
+    }
+
+    async function startTask(id: bigint) {
+        if (hasLeaderRole(userAddress()) || hasMemberRole(userAddress())){
+            let intefaceID = tasksManagerContract.interface.getSighash("startTask");
+            await tasksManagerContract.isOperator(intefaceID, UserRole.Leader).then(isOperator => { 
+                if (!isOperator)
+                    throw Error("User unauthorized to perform startTask!");   
+                
+                tasksManagerContract.startTask(id, UserRole.Member);         
+            });     
+        }
+    }
+
+    async function reviewTask(id: bigint) {
+        let metadata = "";
+        if (hasLeaderRole(userAddress())){
+            let intefaceID = tasksManagerContract.interface.getSighash("reviewTask");
+            await tasksManagerContract.isOperator(intefaceID, UserRole.Leader).then(isOperator => { 
+                if (!isOperator)
+                    throw Error("User unauthorized to perform reviewTask!");   
+                
+                tasksManagerContract.reviewTask(id, UserRole.Leader, metadata);         
+            });     
+        }
+    }
+
+    async function completeTask(id: bigint) {
+        if (hasLeaderRole(userAddress())){
+            let intefaceID = tasksManagerContract.interface.getSighash("completeTask");
+            await tasksManagerContract.isOperator(intefaceID, UserRole.Leader).then(isOperator => { 
+                if (!isOperator)
+                    throw Error("User unauthorized to perform completeTask!");   
+                
+                tasksManagerContract.completeTask(id, UserRole.Member);         
+            });     
+        }
+    }
+
+    async function cancelTask(id: bigint) {
+        if (hasLeaderRole(userAddress())){
+            let intefaceID = tasksManagerContract.interface.getSighash("cancelTask");
+            await tasksManagerContract.isOperator(intefaceID, UserRole.Leader).then(isOperator => { 
+                if (!isOperator)
+                    throw Error("User unauthorized to perform cancelTask!");   
+                
+                tasksManagerContract.cancelTask(id, UserRole.Member);         
+            });     
+        }
     }
 
     async function getTask(taskId: any) {
-        return await contract.getTask(taskId);
+        return await tasksManagerContract.getTask(taskId);
     }
 
     async function getMultiTasks(min: number, max: number) {
@@ -57,6 +119,14 @@ export function useTaskService() {
         return await tasksManagerContract.setOperator(interfaceId, roleId, isAuthorized);
     }
 
-    return { createTask, getTask, getMultiTasks, setRole, setOperator };
+    async function hasLeaderRole(address: any) {
+        return await tasksManagerContract.hasRole(UserRole.Leader, address);
+    }
+    
+    async function hasMemberRole(address: any) {
+        return await tasksManagerContract.hasRole(UserRole.Member, address);
+    }
+
+    return { createTask, startTask, reviewTask, completeTask, cancelTask, getTask, getMultiTasks, setRole, setOperator, hasLeaderRole, hasMemberRole };
 
 }
