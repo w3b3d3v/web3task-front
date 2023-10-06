@@ -1,13 +1,12 @@
 import { Box, Grid, Typography } from "@mui/material";
 import TuneIcon from '@mui/icons-material/Tune';
 import { useTaskService } from "src/services/tasks-service";
-import { useTaskServiceHook } from "src/content/applications/Tasks/hooks/useTaskServiceHook";
+import { useTaskServiceHook } from "src/hooks/TaskServiceHook";
 import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Grid, Slider, TextField, Typography, useTheme } from "@mui/material";
 import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
-import CardTasks from "../CardTasks";
 import CardMultiTasks from "../CardMultiTasks";
 
 const HomeTask = () => {
@@ -20,25 +19,21 @@ const HomeTask = () => {
     const taskService = useTaskService();
 
     // Instância do hook useTaskServiceHook
-    const { handleTask, handleMultiTask, taskData, multiTasksData, loading, error } = useTaskServiceHook(taskService);
+    const { handleMultiTask, multiTasksData, loading, error } = useTaskServiceHook(taskService);
 
     useEffect(() => {
         const fetchData = async () => {
             // Chama as operações assíncronas ao montar o componente
-            await handleTask(1);
-            await handleMultiTask(0, 10);
+            await handleMultiTask(1, 10, false);
         };
 
         fetchData();
     }, []); // Dependência vazia significa que isso será executado apenas uma vez no montar do componente
 
     useEffect(() => {
-        if (taskData && multiTasksData && !loading) {
-            console.log('taskData', taskData);
+        if (multiTasksData && !loading) {
             console.log('multiTasksData', multiTasksData);
-        } else {
-            console.error(error);
-        }
+        } 
     }, []);
 
     const filteredMultiTasks = multiTasksData?.filter((task) => {

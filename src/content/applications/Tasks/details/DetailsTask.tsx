@@ -5,7 +5,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import { Helmet } from 'react-helmet-async';
 import SuspenseLoader from 'src/components/SuspenseLoader'
 import { useTaskService } from "src/services/tasks-service";
-import { useTaskServiceHook } from "src/content/applications/Tasks/hooks/useTaskServiceHook";
+import { useTaskServiceHook } from "src/hooks/TaskServiceHook";
 import { useEffect } from "react";
 import CardTasks from "../tasks/CardTasks";
 

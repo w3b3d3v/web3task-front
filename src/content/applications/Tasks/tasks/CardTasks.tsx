@@ -8,7 +8,7 @@ import Start from '@mui/icons-material/Start';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { useTaskService } from "src/services/tasks-service";
-import { useWeb3Utils } from 'src/hooks/Web3Utils';
+import { useWeb3Utils } from 'src/hooks/Web3UtilsHook';
 /**
  * CardTasks Component
  *

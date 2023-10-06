@@ -2,7 +2,7 @@ import { Button, Stack, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import { useTaskService } from 'src/services/tasks-service';
-import { useTaskServiceHook } from '../hooks/useTaskServiceHook';
+import { useTaskServiceHook } from '../../../../hooks/TaskServiceHook';
 
 const AdminOptions = () => {
 
