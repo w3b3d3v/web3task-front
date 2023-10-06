@@ -15,6 +15,10 @@ const Loader = (Component) => (props) =>
   </Suspense>
 );
 
+const UserProfile = Loader(
+  lazy(() => import('src/content/applications/Users/profile'))
+)
+
 const AdminOptions = Loader(
   lazy(() => import('src/content/applications/Tasks/settings/AdminOptions'))
 )
@@ -50,7 +54,7 @@ const routes: RouteObject[] = [
     children: [
       {
         path: "/",
-        element: <Overview />,
+        element: <HomeTask />,
       },
       {
         path: "overview",
@@ -76,6 +80,19 @@ const routes: RouteObject[] = [
       {
         path: "*",
         element: <Status404 />,
+      },
+      {
+        path: 'users',
+        children: [
+          {
+            path: '',
+            element: < HomeTask />
+          },
+          {
+            path: 'profile',
+            element: <UserProfile />
+          }
+        ]
       },
       {
         path: 'tasks',
