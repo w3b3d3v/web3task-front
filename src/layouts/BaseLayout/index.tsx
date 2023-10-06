@@ -6,6 +6,7 @@ import SuspenseLoader from "src/components/SuspenseLoader";
 import Footer from 'src/components/Footer';
 import { useAccount } from 'wagmi';
 import HomeTask from "src/content/applications/Tasks/tasks/HomeTasks";
+import Overview from "src/content/overview";
 
 const Loader = (Component) => (props) =>
   (
@@ -78,8 +79,8 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
           }}
         >
           <Box display="block">
-            <Outlet />
-          </Box>
+            <Overview />
+          </Box>          
         </Box>
         )        
         }

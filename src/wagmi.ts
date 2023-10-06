@@ -50,7 +50,7 @@ if (window.ethereum == null) {
 }
 
 
-export const contract = new ethers.Contract(
+export const web3TaskContract = new ethers.Contract(
   contractAddress.Web3Task,
   Web3TaskContract.abi,
   signer

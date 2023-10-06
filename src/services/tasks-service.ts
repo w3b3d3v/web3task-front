@@ -1,25 +1,26 @@
 import { useState } from "react";
 import { Task } from 'src/models/task';
 import { UserRole } from 'src/models/user';
-import { tasksManagerContract } from '../wagmi'
+import { web3TaskContract, tasksManagerContract } from '../wagmi'
 import { is } from 'date-fns/locale';
-import { useWeb3Utils } from "src/hooks/Web3Utils";
+import { useWeb3Utils } from "src/hooks/Web3UtilsHook";
 
 export function useTaskService() {
-    const [loading, setLoading] = useState<boolean>(false);
-    const [operator, isOperator] = useState<boolean>(false);
-    const [userRole, setUserRole] = useState<UserRole>();    
     const { userAddress } = useWeb3Utils();
-
+    const [ tasks, setTasks ] = useState<any>()
 
     async function createTask(task: Task) {
         if (hasLeaderRole(userAddress())){
             let intefaceID = tasksManagerContract.interface.getSighash("createTask");
             await tasksManagerContract.isOperator(intefaceID, UserRole.Leader).then(isOperator => { 
-                if (!isOperator)
+                if (!isOperator)        
                     throw Error("User unauthorized to perform createTask!");   
                 
-                tasksManagerContract.createTask(task);         
+                    web3TaskContract.createTask(task).error(error =>
+                      {
+                        throw Error("Error performing createTask: "+ error.data.message);  
+                      }  
+                    );       
             });     
         }          
     }
@@ -31,7 +32,7 @@ export function useTaskService() {
                 if (!isOperator)
                     throw Error("User unauthorized to perform startTask!");   
                 
-                tasksManagerContract.startTask(id, UserRole.Member);         
+                    web3TaskContract.startTask(id, UserRole.Member);         
             });     
         }
     }
@@ -44,7 +45,7 @@ export function useTaskService() {
                 if (!isOperator)
                     throw Error("User unauthorized to perform reviewTask!");   
                 
-                tasksManagerContract.reviewTask(id, UserRole.Leader, metadata);         
+                    web3TaskContract.reviewTask(id, UserRole.Leader, metadata);         
             });     
         }
     }
@@ -56,7 +57,7 @@ export function useTaskService() {
                 if (!isOperator)
                     throw Error("User unauthorized to perform completeTask!");   
                 
-                tasksManagerContract.completeTask(id, UserRole.Member);         
+                    web3TaskContract.completeTask(id, UserRole.Member);         
             });     
         }
     }
@@ -68,7 +69,7 @@ export function useTaskService() {
                 if (!isOperator)
                     throw Error("User unauthorized to perform cancelTask!");   
                 
-                tasksManagerContract.cancelTask(id, UserRole.Member);         
+                    web3TaskContract.cancelTask(id, UserRole.Member);         
             });     
         }
     }
@@ -77,12 +78,25 @@ export function useTaskService() {
         return await tasksManagerContract.getTask(taskId);
     }
 
-    async function getMultiTasks(min: number, max: number) {
+    async function getMultiTasks(min: number, max: number, isUserProfile: boolean) {
         /// Prepare the encoding of data and submit it to the contract
         const payloadArray = [];
-        for (var i = 1; i <= 10; i++) {
-            payloadArray.push(tasksManagerContract.interface.encodeFunctionData("getTask", [i]));
+        let taskIds: bigint[] = [];
+
+        if (isUserProfile){
+            taskIds = await tasksManagerContract.getUserTasks(userAddress());
+            if (taskIds && taskIds.length > 0) {
+                for (var i = 0; i < taskIds.length; i++) {
+                    let id = Number(taskIds[i]);
+                    payloadArray.push(tasksManagerContract.interface.encodeFunctionData("getTask", [id]));
+                }       
+            }
+        } else {
+            for (var i = 1; i <= 10; i++) {
+                payloadArray.push(tasksManagerContract.interface.encodeFunctionData("getTask", [i]));
+            }
         }
+
         const response = await tasksManagerContract.multicallRead(payloadArray);
 
         /// Decode the results
@@ -104,9 +118,7 @@ export function useTaskService() {
                 console.log("Could not decode result", error);
             }
         });
-
         return decodedResults;
-
     }
 
     async function setRole(roleId: any, authorizedAddress: any, isAuthorized: boolean) {
@@ -127,6 +139,18 @@ export function useTaskService() {
         return await tasksManagerContract.hasRole(UserRole.Member, address);
     }
 
-    return { createTask, startTask, reviewTask, completeTask, cancelTask, getTask, getMultiTasks, setRole, setOperator, hasLeaderRole, hasMemberRole };
+    return { 
+        createTask, 
+        startTask, 
+        reviewTask,
+        completeTask, 
+        cancelTask, 
+        getTask, 
+        getMultiTasks, 
+        setRole, 
+        setOperator, 
+        hasLeaderRole, 
+        hasMemberRole 
+    };
 
 }
