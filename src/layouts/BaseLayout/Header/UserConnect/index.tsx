@@ -24,6 +24,8 @@ import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone";
 import AccountTreeTwoToneIcon from "@mui/icons-material/AccountTreeTwoTone";
 import MessageIcon from "@mui/icons-material/Message";
 import { useConnect } from 'wagmi';
+import Card from "src/components/Card";
+import { useWeb3React } from "@web3-react/core";
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -63,7 +65,7 @@ const UserBoxDescription = styled(Typography)(
 function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting, pendingConnector }) {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
-
+  const { connector, hooks } = useWeb3React();
 
 
   const handleOpen = (): void => {
@@ -109,6 +111,13 @@ function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting
             ))
           }
         </List>
+
+        <List>
+            <ListItem button to="/" component={NavLink}>
+              <Card connector={connector} hooks={hooks} name="Phantom" />
+            </ListItem>
+        </List>
+
         <Divider />
         <Box sx={{ m: 1 }}>
           <Button color="primary" fullWidth>
