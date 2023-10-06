@@ -1,5 +1,3 @@
-import { Box, Grid, Typography } from "@mui/material";
-import TuneIcon from '@mui/icons-material/Tune';
 import { useTaskService } from "src/services/tasks-service";
 import { useTaskServiceHook } from "src/hooks/TaskServiceHook";
 import { useEffect, useState } from "react";
