@@ -13,11 +13,9 @@ If you're a programmer and want to contribute, we have a [backlog](https://githu
 
 We recognize that disputes are common in this type of service, so we are not primarily working on a solution to this problem, as many people have tried and failed. Instead, our solution is a gamified approach for both task creators and task assignees. Delivering before the deadline will give the assignee a better score, while completing the created tasks will also give the task creator a profile score. This score is used to rank users on the platform, and the higher the score, the more trustworthy the user. Starting a dispute is considered a risky and unworthy move by both sides, as disputes will drastically reduce the score of both sides or the side that is wrong, according to the DAO's Final Saying.
 
-
 ## Bounties
 
 The task creator can create a task and set a bounty for it, and the task assignee can start the task and submit it for review. If the task creator approves the task, the bounty will be sent to the task assignee, otherwise the task creator can cancel the task and get the bounty back.
-
 
 ## Ranking
 
@@ -30,6 +28,7 @@ The ranking system is based on the user's score, which is calculated based on th
 The points are only applied after the task has been completed.
 
 ## Features
+
 The following features are currently implemented
 
 - Create a task
@@ -44,6 +43,7 @@ yarn
 ```
 
 ## Usage
+
 To run the frontend, you need to run a local node. To do this, you need to set up the [web3task-contracts](https://github.com/w3b3d3v/web3task-contracts) project on your machine.
 
 ```bash
