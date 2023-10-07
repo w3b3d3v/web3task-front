@@ -180,7 +180,7 @@ const HomeTask = () => {
 
                         <Grid item xs={9} style={{ maxWidth: '100%' }}>
 
-                            <CardMultiTasks multiTasksData={filteredMultiTasks} loading={loading} />
+                            <CardMultiTasks multiTasksData={filteredMultiTasks} loading={loading} page={currentPage} />
                         </Grid>
                     </Grid>
                 </Box>

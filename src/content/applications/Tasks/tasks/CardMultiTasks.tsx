@@ -39,8 +39,7 @@ const CardAddAction = styled(Card)(
   `
 );
 
-export const CardMultiTasks = ({ multiTasksData, loading }) => {
-
+export const CardMultiTasks = ({ multiTasksData, loading, page }) => {
 
     const handleCardSelect = (taskId) => {
         window.location.href = "/tasks/details-task/" + taskId;
@@ -56,7 +55,7 @@ export const CardMultiTasks = ({ multiTasksData, loading }) => {
                         {multiTasksData && (
                             multiTasksData.map((item: TaskFront, index: React.Key) => (
                                 <Grid item key={index} xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'} sx={{ margin: '5px' }}>
-                                    <CardAddAction onClick={() => handleCardSelect(Number(index) + 1)}>
+                                    <CardAddAction onClick={() => handleCardSelect((page - 1) * 20 + Number(index) + 1)}>
                                         <Card key={index} sx={{ width: 254, height: 336 }}>
                                             <CardMedia
                                                 sx={{ width: 254, height: 248 }}
