@@ -7,6 +7,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Box, Grid, Slider, TextF
 import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
 import CardMultiTasks from "../CardMultiTasks";
 import CoverTasks from "../CoverTasks";
+import usePagination from "src/components/Pagination";
 
 const HomeTask = () => {
     const [title, setTitle] = useState("")
@@ -17,17 +18,26 @@ const HomeTask = () => {
     const theme = useTheme();
     const taskService = useTaskService();
 
-    // Instância do hook useTaskServiceHook
     const { handleMultiTask, multiTasksData, loading, error } = useTaskServiceHook(taskService);
 
+    const tasksPerPage = 20;
+    const { currentPage, Pagination, setPage } = usePagination();
+
     useEffect(() => {
+        const minimumTasks = (currentPage - 1) * tasksPerPage + 1;
+        const maxTasks = currentPage * tasksPerPage;
+
         const fetchData = async () => {
-            // Chama as operações assíncronas ao montar o componente
-            await handleMultiTask(1, 10, false);
+            try {
+                await handleMultiTask(minimumTasks, maxTasks, false);
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
         };
 
         fetchData();
-    }, []);
+    }, [currentPage]);
+
 
     useEffect(() => {
         if (multiTasksData && !loading) {
@@ -65,7 +75,8 @@ const HomeTask = () => {
     return (
         <>
 
-            <Box>
+            <Box
+                sx={{ width: '100%' }}>
 
                 <CoverTasks />
 
@@ -73,7 +84,7 @@ const HomeTask = () => {
                     <Box height={40} bgcolor={'#8EFFC2'} />
 
 
-                    <Grid container spacing={2} marginTop={0}>
+                    <Grid container spacing={2} marginTop={0} style={{ width: '100%', overflowX: 'hidden' }} >
                         <Grid item xs={3} bgcolor={theme.palette.mode === 'dark' ? theme.colors.alpha.black[100] : theme.colors.alpha.trueWhite[100]}>
                             <Box display="inline-flex" alignItems="center">
                                 <img
@@ -167,10 +178,17 @@ const HomeTask = () => {
                             </Accordion>
                         </Grid>
 
-                        <Grid item xs={9}>
+                        <Grid item xs={9} style={{ maxWidth: '100%' }}>
+
                             <CardMultiTasks multiTasksData={filteredMultiTasks} loading={loading} />
                         </Grid>
                     </Grid>
+                </Box>
+
+                <Box display={'flex'} justifyContent={'center'} alignItems={'center'} mt={10}>
+
+                    <Pagination />
+
                 </Box>
 
             </Box >
