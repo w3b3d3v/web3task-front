@@ -34,15 +34,16 @@ const CardAddAction = styled(Card)(
           
           &:hover {
             border-color: ${theme.colors.alpha.black[70]};
+            cursor: pointer;
           }
   `
-  );
+);
 
 export const CardMultiTasks = ({ multiTasksData, loading }) => {
 
 
     const handleCardSelect = (taskId) => {
-        window.location.href = "/tasks/details-task/"+taskId;
+        window.location.href = "/tasks/details-task/" + taskId;
     };
 
     return (
@@ -55,7 +56,7 @@ export const CardMultiTasks = ({ multiTasksData, loading }) => {
                         {multiTasksData && (
                             multiTasksData.map((item: TaskFront, index: React.Key) => (
                                 <Grid item key={index} xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'} sx={{ margin: '5px' }}>
-                                    <CardAddAction onClick={() => handleCardSelect(Number(index)+1)}>
+                                    <CardAddAction onClick={() => handleCardSelect(Number(index) + 1)}>
                                         <Card key={index} sx={{ width: 254, height: 336 }}>
                                             <CardMedia
                                                 sx={{ width: 254, height: 248 }}
@@ -75,10 +76,10 @@ export const CardMultiTasks = ({ multiTasksData, loading }) => {
                                                 </Typography>
                                             </CardContent>
                                         </Card>
-                                    </CardAddAction>                                    
+                                    </CardAddAction>
                                 </Grid>
                             ))
-                        ) }
+                        )}
                     </>
                 )}
             </Grid >
