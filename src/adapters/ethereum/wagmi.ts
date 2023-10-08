@@ -1,5 +1,5 @@
 import { Web3TaskContract } from "src/contracts/Web3Task";
-import { TasksManager } from "./contracts/TasksManager";
+import { TasksManager } from "../../contracts/TasksManager";
 import contractAddress from "src/contracts/contract-Web3Task-address.json";
 import { ethers } from "ethers";
 import { chain, createClient, defaultChains, useAccount } from 'wagmi'

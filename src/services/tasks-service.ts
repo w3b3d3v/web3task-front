@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Task } from 'src/models/task';
 import { UserRole } from 'src/models/user';
-import { tasksManagerContract } from '../wagmi'
+import { tasksManagerContract } from '../adapters/ethereum/wagmi'
 import { is } from 'date-fns/locale';
 import { useWeb3Utils } from "src/hooks/Web3Utils";
 

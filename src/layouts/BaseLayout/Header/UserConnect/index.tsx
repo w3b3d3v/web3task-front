@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 
 import { NavLink } from "react-router-dom";
 
@@ -24,8 +24,7 @@ import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone";
 import AccountTreeTwoToneIcon from "@mui/icons-material/AccountTreeTwoTone";
 import MessageIcon from "@mui/icons-material/Message";
 import { useConnect } from 'wagmi';
-import Card from "src/components/Card";
-import { useWeb3React } from "@web3-react/core";
+import ConnectWalletSolana from "src/adapters/solana/ConnectWalletSolana";
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -65,8 +64,6 @@ const UserBoxDescription = styled(Typography)(
 function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting, pendingConnector }) {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
-  const { connector, hooks } = useWeb3React();
-
 
   const handleOpen = (): void => {
     setOpen(true);
@@ -75,6 +72,8 @@ function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting
   const handleClose = (): void => {
     setOpen(false);
   };
+
+  const isOpenMemo = useMemo(() => isOpen, [isOpen]);
 
   return (
     <>
@@ -114,7 +113,7 @@ function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting
 
         <List>
             <ListItem button to="/" component={NavLink}>
-              <Card connector={connector} hooks={hooks} name="Phantom" />
+              <ConnectWalletSolana/>
             </ListItem>
         </List>
 
