@@ -5,12 +5,13 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { Dayjs } from 'dayjs';
 import { DatePicker, DatePickerProps } from '@mui/x-date-pickers';
 import { useTaskService } from "src/services/tasks-service";
 import { Task, TaskStatus } from "src/models/task";
 import SuspenseLoader from 'src/components/SuspenseLoader';
+import CoverCreateTask from './CoverCreateTask';
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -32,12 +33,15 @@ let newTask: Task = {
 }
 
 const CreateTask = ({ data }) => {
+  const theme = useTheme();
   const { createTask } = useTaskService();
   const [task, setTask] = useState<Task>();
   const [expireDate, setExpireDate] = useState<DatePickerProps<Dayjs> | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [openInformartion, setOpenInformartion] = useState(false);
   const [openError, setOpenError] = useState(false);
+
+  const logoImage = "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
 
   const handleChange = (event: { target: { value: any; }; }) => {
     task.description = event.target.value;
@@ -77,14 +81,14 @@ const CreateTask = ({ data }) => {
 
   const onSubmit = async (event: { preventDefault: () => void; }) => {
     try {
-      console.log("Expire date",(expireDate))
+      console.log("Expire date", (expireDate))
       let data = String(Math.floor(Date.now() / 1000) + 3600)
       task.endDate = BigInt(data);
       console.log("task.endDate: ", task.endDate);
 
       await createTask(task);
 
-      setOpenInformartion(true);      
+      setOpenInformartion(true);
     } catch (error) {
       console.log("Erro: ", error);
       setOpenError(true);
@@ -130,7 +134,7 @@ const CreateTask = ({ data }) => {
       </Snackbar>
       <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseSnackError}>
         <Alert onClose={handleCloseSnackError} severity="error" sx={{ width: '100%' }}>
-        Task not created! Try again!
+          Task not created! Try again!
         </Alert>
       </Snackbar>
       <Box
@@ -142,8 +146,7 @@ const CreateTask = ({ data }) => {
 
         <Box
           width={'100%'}>
-          <img src='/static/images/task/create-task-cover.png' alt='CreateTaskCover' width={'100%'} height={'100%'} />
-
+          <CoverCreateTask />
         </Box>
         {
           loading ? <SuspenseLoader /> : (
@@ -156,7 +159,7 @@ const CreateTask = ({ data }) => {
                   label={'Title'}
                   onBlur={handleTitle}
                   placeholder={'Describe the activity or link to a document'}
-                  />
+                />
 
                 <TextField
                   fullWidth
@@ -164,7 +167,7 @@ const CreateTask = ({ data }) => {
                   label={'Authorized Roles (separate by `,`)'}
                   onBlur={handleAuthorizedRoles}
                   placeholder={'The authorized roles to perform the task'}
-                  />
+                />
 
                 <TextField
                   fullWidth
@@ -172,7 +175,7 @@ const CreateTask = ({ data }) => {
                   label={'Creator Role'}
                   onBlur={handleCreatorRole}
                   placeholder={'0xABCD...01234'}
-                  />
+                />
 
                 <TextField
                   fullWidth
@@ -180,7 +183,7 @@ const CreateTask = ({ data }) => {
                   label={'Assignee Address (leave blank to allow anyone to perform the task)'}
                   onBlur={handleAssignee}
                   placeholder={'Assignee address'}
-                  />
+                />
 
                 <TextField
                   fullWidth
@@ -188,7 +191,7 @@ const CreateTask = ({ data }) => {
                   label={'Metadata (IPFS)'}
                   onBlur={handleMetadata}
                   placeholder={'https://ipfs.io/ipfs/QmY5D...7CEh'}
-                  />
+                />
 
                 <TextField fullWidth //{...register("description")}                
                   id="outlined-required"
@@ -202,7 +205,7 @@ const CreateTask = ({ data }) => {
 
                 <Stack spacing={2} direction={'row'} alignItems="center" justifyContent="center">
                   <Box>
-                    <img src='/static/images/logo/pod3labs-logo.png' width={'100px'} height={'100px'} alt='Pod3LabsRecompensaIcon' />
+                    <img src={logoImage} width={'100px'} height={'100px'} alt='Pod3LabsRecompensaIcon' />
                   </Box>
                   <TextField
                     label={'Reward in USD'}
