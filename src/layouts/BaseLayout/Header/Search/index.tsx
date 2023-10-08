@@ -6,7 +6,6 @@ import {
   Grid,
   Button,
   Divider,
-  IconButton,
   InputAdornment,
   lighten,
   List,
@@ -84,10 +83,6 @@ function HeaderSearch() {
   };
 
   const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
     setOpen(false);

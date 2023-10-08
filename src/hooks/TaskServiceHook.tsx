@@ -39,19 +39,14 @@ export const useTaskServiceHook = (task: TaskService) => {
         switch (status) {
             case TaskStatus.Created:
                 return "Created"
-                break;
             case TaskStatus.Canceled:
                 return "Canceled"
-                break;
             case TaskStatus.Review:
                 return "In Review"
-                break;
             case TaskStatus.Progress:
                 return "In Progress"
-                break;
             case TaskStatus.Completed:
                 return "Completed"
-                break;
             default:
                 break;
         }
@@ -91,6 +86,7 @@ export const useTaskServiceHook = (task: TaskService) => {
     
             const shortenedAddressOrName = shortenAddressFromAddress(nft.assignee);
             nft.assignee = shortenedAddressOrName;
+            // TODO verify necessity
             //const d = new Date(Number(nft.endDate));
             //nft.endDate = d.toDateString();
     
@@ -120,13 +116,12 @@ export const useTaskServiceHook = (task: TaskService) => {
      */
 
     const handleMultiTask = async (start: number, end: number, isUserProfile: boolean) => {
-
-        const result: any = await task.getMultiTasks(start, end, isUserProfile);
-
-        let multiTask = [];
         try {
-            setLoading(true);
-            setError(null);
+            const result: any = await task.getMultiTasks(start, end, isUserProfile);
+
+            let multiTask = [];
+                setLoading(true);
+                setError(null);
 
             for (let i = 0; i < result.length; i++) {
                 const args = result[i].args[0];

@@ -5,7 +5,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { CssBaseline } from "@mui/material";
 import ThemeProviderWrapper from "./theme/ThemeProvider";
-import { SidebarProvider } from "./contexts/SidebarContext";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
@@ -39,7 +38,6 @@ function App() {
 
   return (
     <ThemeProviderWrapper>
-      <SidebarProvider>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <CssBaseline />
           <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleCloseSnackSuccess}>
@@ -54,7 +52,6 @@ function App() {
           </Snackbar>
           {content}
         </LocalizationProvider>
-      </SidebarProvider>
     </ThemeProviderWrapper>
   );
 }

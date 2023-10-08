@@ -47,6 +47,7 @@ function Status404() {
       <MainContent>
         <Container maxWidth="md">
           <Box textAlign="center">
+            {/* TODO img broken */}
             <img alt="404" height={180} src="/static/images/status/404.svg" />
             <Typography variant="h2" sx={{ my: 2 }}>
               The page you were looking for doesn't exist.

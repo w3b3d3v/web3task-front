@@ -18,10 +18,8 @@ import {
 
 import { styled } from "@mui/material/styles";
 import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
-import AccountBoxTwoToneIcon from "@mui/icons-material/AccountBoxTwoTone";
 import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone";
 import { User } from "src/models/user";
-import { useDisconnect, useAccount } from 'wagmi';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
