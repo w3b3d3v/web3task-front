@@ -225,23 +225,18 @@ export const CardTasks = ({ taskId, taskData, loading }: any) => {
                                         </Button>
                                     </Box>
 
-                                    {/* 
-
-                                        {
-                                            isLeader && taskData.status != "Canceled" &&
-                                            <Box sx={{ margin: '5px' }}>
-                                                <Button
-                                                    startIcon={<CancelScheduleSendIcon />}
-                                                    variant="contained"
-                                                    component="span"
-                                                    onClick={handleCancel}
-                                                >
-                                                    Cancel Task
-                                                </Button>
-                                            </Box>
-                                        }
-
-                                    */}
+                                    {
+                                        isLeader && taskData.status != "Canceled" &&
+                                        <Box sx={{ margin: '5px' }}>
+                                            <Button
+                                                variant="contained"
+                                                component="span"
+                                                onClick={handleCancel}
+                                            >
+                                                Cancel Task
+                                            </Button>
+                                        </Box>
+                                    }
 
                                 </CardContent>
                             </Box>
