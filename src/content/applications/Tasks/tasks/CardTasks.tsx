@@ -1,14 +1,14 @@
 import { useState, forwardRef, useEffect } from 'react';
-import { Box, Button, Grid, CardMedia, CardContent, Typography, Card } from '@mui/material'
+import { Box, Button, Grid, CardMedia, CardContent, Typography, Card, useMediaQuery } from '@mui/material'
 import SuspenseLoader from 'src/components/SuspenseLoader'
-import { styled } from '@mui/material/styles';
 import AccessTime from '@mui/icons-material/AccessTime';
-import CancelScheduleSendIcon from '@mui/icons-material/CancelScheduleSend';
-import Start from '@mui/icons-material/Start';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { useTaskService } from "src/services/tasks-service";
 import { useWeb3Utils } from 'src/hooks/Web3UtilsHook';
+import { useTheme } from '@mui/system';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+
 /**
  * CardTasks Component
  *
@@ -23,37 +23,21 @@ import { useWeb3Utils } from 'src/hooks/Web3UtilsHook';
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
     ref,
-  ) {
+) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-  });
+});
 
-const CardCover = styled(Card)(
-    ({ theme }) => `
-      position: relative;
-  
-      .MuiCardMedia-root {
-        height: ${theme.spacing(48)};
-      }
-  `
-  );
-  
-  const CardCoverAction = styled(Box)(
-    ({ theme }) => `
-      position: absolute;
-      right: ${theme.spacing(2)};
-      bottom: ${theme.spacing(2)};
-  `
-  );
-
-export const CardTasks = ({taskId, taskData, loading }: any) => {
+export const CardTasks = ({ taskId, taskData, loading }: any) => {
     const { startTask, reviewTask, completeTask, cancelTask, hasMemberRole, hasLeaderRole } = useTaskService();
-    const [ openInformartion, setOpenInformartion ] = useState(false);
-    const [ openError, setOpenError ] = useState(false);
-    const [ error, setError ] = useState<string>();
-    const [ action, setAction ] = useState<string>();
+    const [openInformartion, setOpenInformartion] = useState(false);
+    const [openError, setOpenError] = useState(false);
+    const [error, setError] = useState<string>();
+    const [action, setAction] = useState<string>();
     const { userAddress } = useWeb3Utils();
-    const [ isMember, setIsMember ] = useState<boolean>(false);
-    const [ isLeader, setIsLeader ] = useState<boolean>(false);
+    const [isMember, setIsMember] = useState<boolean>(false);
+    const [isLeader, setIsLeader] = useState<boolean>(false);
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     const getAction = (status: string) => {
         switch (status) {
@@ -86,7 +70,7 @@ export const CardTasks = ({taskId, taskData, loading }: any) => {
                 default:
                     break;
             }
-            
+
             setOpenInformartion(true);
         } catch (error) {
             setError(error.message)
@@ -105,159 +89,169 @@ export const CardTasks = ({taskId, taskData, loading }: any) => {
 
     const handleCloseSnackInformation = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
-          return;
+            return;
         }
-    
+
         setOpenInformartion(false);
     };
-    
+
     const handleCloseSnackError = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
-          return;
+            return;
         }
-    
+
         setOpenError(false);
     };
 
-    useEffect(() =>{
+    useEffect(() => {
         console.log("taskData", taskData)
-        if(taskData != null){
+        if (taskData != null) {
             getAction(taskData.status);
             hasLeaderRole(userAddress()).then(result => {
                 setIsLeader(result);
                 hasMemberRole(userAddress()).then(result => {
                     setIsMember(result);
-                })                
-            })            
+                })
+            })
         }
     }, [])
 
     return (
-              
-            
-                <Grid item xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'}>  
-                <Snackbar open={openInformartion} autoHideDuration={6000} onClose={handleCloseSnackInformation}>
-                    <Alert onClose={handleCloseSnackInformation} severity="info" sx={{ width: '100%' }}>                        
-                        Task Start process initiated with sucess!
-                    </Alert>
-                </Snackbar>
-                <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseSnackError}>
-                    <Alert onClose={handleCloseSnackError} severity="error" sx={{ width: '100%' }}>
-                        {error &&  error + " "} Try again!
-                    </Alert>
-                </Snackbar>
-                {loading ? (
-                    <SuspenseLoader />
-                ) : (
-                    <>
-                        {taskData ? (
-                            
-                                <Box display="flex" >
-                                    <Box flex={4}>
-                                        <CardCover>
-                                            <CardMedia
-                                                sx={{ minHeight: 277 }}
-                                                component="img"
-                                                image={taskData.metadata}
-                                                alt={'taskData'} />
-                                            <CardCoverAction>
-                                                <Typography gutterBottom variant="h5" component="div">
-                                                    {taskData.reward} MATIC
-                                                </Typography>
-                                            </CardCoverAction>
-                                        </CardCover>
-                                    </Box>
-                                    
-                                    <Box flex={8} flexDirection={'column'}>
-                                        <CardContent>
-                                            <Box display={'flex'}>
-                                                <Box flex={1}>
-                                                    <Typography gutterBottom variant="h3" component="div" textAlign={'left'}>
-                                                        {taskData.title}
-                                                    </Typography>
-                                                    <Typography gutterBottom variant="h5" component="div">
-                                                        #8654
-                                                    </Typography>
-                                                    
-                                                </Box>
-                                                <Box flex={9}>
-                                                    <Typography gutterBottom variant="h4" component="div" textAlign={'right'}>
-                                                        Status: {taskData.status}
-                                                    </Typography>
-                                                </Box>                                                
-                                            </Box>
-                                            <Box mt={'20px'} display={'flex'}>
-                                                <Box flex={1}>
-                                                    <Typography gutterBottom variant="h5" component="div" textAlign={'left'}>
-                                                        {taskData.description}
-                                                    </Typography>                                                    
-                                                </Box>                                                                                                
-                                            </Box>
-                                            <Box mt={'80px'}>                                                
-                                                <Typography gutterBottom variant="h5" component="div" textAlign={'right'}>
-                                                    Creator Role ID: {taskData.creatorRole}
-                                                </Typography>
-                                                <Typography gutterBottom variant="h5" component="div" textAlign={'right'}>
-                                                    Authorized Role ID: {taskData.authorizedRoles}
-                                                </Typography>
-                                                <Typography gutterBottom variant="h5" component="div" textAlign={'right'}>
-                                                    Assignee: {taskData.assignee}
-                                                </Typography>
-                                            </Box>
-                                            <Box mt={'50px'} display={'flex'}>
-                                                <Box sx={{ margin: '5px' }} >
-                                                    { 
-                                                        taskData.status != "Completed" && taskData.status != "Canceled" &&
-                                                        <Button
-                                                            startIcon={<Start />}
-                                                            variant="contained"
-                                                            component="span"
-                                                            onClick={handleAction}
-                                                        >
-                                                            {action}
-                                                        </Button>
-                                                    }
-                                                </Box>
-                                                
-                                                <Box sx={{ margin: '5px' }}>
-                                                    <Button
-                                                        startIcon={<AccessTime />}
-                                                        variant="contained"
-                                                        component="span"
-                                                    >
-                                                        End Date: {taskData.endDate} 
-                                                    </Button>    
-                                                </Box>
 
-                                                {
-                                                    isLeader && taskData.status != "Canceled" &&
-                                                    <Box sx={{ margin: '5px' }}>
-                                                        <Button
-                                                            startIcon={<CancelScheduleSendIcon />}
-                                                            variant="contained"
-                                                            component="span"
-                                                            onClick={handleCancel}
-                                                        >
-                                                            Cancel Task 
-                                                        </Button>    
-                                                    </Box>
-                                                }
-                                                
-                                                
-                                            </Box>
+
+        <Grid item xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'}>
+            <Snackbar open={openInformartion} autoHideDuration={6000} onClose={handleCloseSnackInformation}>
+                <Alert onClose={handleCloseSnackInformation} severity="info" sx={{ width: '100%' }}>
+                    Task Start process initiated with sucess!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseSnackError}>
+                <Alert onClose={handleCloseSnackError} severity="error" sx={{ width: '100%' }}>
+                    {error && error + " "} Try again!
+                </Alert>
+            </Snackbar>
+            {loading ? (
+                <SuspenseLoader />
+            ) : (
+                <>
+                    {taskData ? (
+
+                        <Box display="flex" flexDirection={isSmallScreen ? 'column' : 'row'} alignItems="center" >
+                            <Box display='flex' justifyContent={'center'} alignContent={'center'} >
+                                <Box sx={{ position: 'relative' }}>
+                                    <Card sx={{ width: 277, height: 277 }}>
+                                        <CardMedia
+                                            sx={{ width: 277, height: 277 }}
+                                            component="img"
+                                            image={taskData.metadata}
+                                            alt={'taskData'}
+                                        />
+                                        <CardContent sx={{
+                                            position: 'absolute',
+                                            bottom: 0,
+                                            left: 0,
+                                            width: '100%',
+                                            height: '42px',
+                                            color: 'white',
+                                            padding: '10px',
+                                            textAlign: 'right',
+                                            fontFamily: 'Istok Web',
+                                            fontWeight: '400'
+                                        }}>
+                                            <Typography
+                                                gutterBottom
+                                                variant="body2"
+                                                style={{
+                                                    textAlign: isSmallScreen ? 'left' : 'right',
+                                                    marginLeft: isSmallScreen ? 'auto' : 'unset',
+                                                }}
+                                            >
+                                                Reward {taskData.reward} USD
+                                            </Typography>
                                         </CardContent>
-                                    </Box>            
-                                </Box>                    
-                            
-                        ) : (
-                            console.log('Error Getting Card')
-                        )}
+                                    </Card>
+                                </Box>
+                            </Box>
 
-                    </>
-                )}
-                </Grid>
-           
-        
+                            <Box flexDirection={'column'} height={'282px'} width={'432px'} >
+                                <CardContent>
+                                    <Box>
+                                        <Box display={'flex'} justifyContent="space-between" alignItems="center"  >
+                                            <Typography gutterBottom variant="h3" component="div" textAlign={'left'} >
+                                                {taskData.title}
+                                            </Typography>
+
+                                            <OpenInNewIcon style={{
+                                                cursor: 'pointer'
+                                            }} />
+
+                                        </Box>
+                                        <Typography gutterBottom variant='subtitle2' component="div">
+                                            #8654
+                                        </Typography>
+
+                                    </Box>
+
+                                    <Box mt={4}>
+                                        <Typography gutterBottom variant="h5" component="div" textAlign={'right'}>
+                                            Creator Role ID: {taskData.creatorRole}
+                                        </Typography>
+                                        <Typography gutterBottom variant="h5" component="div" textAlign={'right'}>
+                                            Authorized Role ID: [{taskData.authorizedRoles}]
+                                        </Typography>
+                                        <Typography gutterBottom variant="h5" component="div" textAlign={'right'}>
+                                            Assignee: {taskData.assignee}
+                                        </Typography>
+                                    </Box>
+
+                                    <Box display={'flex'} justifyContent="space-between" mt={6} >
+                                        {
+                                            taskData.status != "Completed" && taskData.status != "Canceled" &&
+                                            <Button
+
+                                                variant="contained"
+                                                component="span"
+                                                onClick={handleAction}
+                                            >
+                                                {action}
+                                            </Button>
+                                        }
+                                        <Button
+                                            startIcon={<AccessTime />}
+                                            variant="contained"
+                                            component="span"
+                                        >
+                                            End Date: {taskData.endDate}
+                                        </Button>
+                                    </Box>
+
+                                    {
+                                        isLeader && taskData.status != "Canceled" &&
+                                        <Box sx={{ margin: '5px' }}>
+                                            <Button
+                                                variant="contained"
+                                                component="span"
+                                                onClick={handleCancel}
+                                            >
+                                                Cancel Task
+                                            </Button>
+                                        </Box>
+                                    }
+
+                                </CardContent>
+                            </Box>
+                        </Box >
+
+                    ) : (
+                        console.log('Error Getting Card')
+                    )
+                    }
+
+                </>
+            )
+            }
+        </Grid >
+
     )
 }
 
