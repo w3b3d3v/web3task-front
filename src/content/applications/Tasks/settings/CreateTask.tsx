@@ -1,4 +1,7 @@
 import { useEffect, useState, forwardRef } from 'react';
+import { useForm } from "react-hook-form";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
@@ -32,14 +35,53 @@ let newTask: Task = {
   metadata: ''
 }
 
+const schema = yup.object({
+  title: yup.string().required('Campo obrigatório.'),
+  creatorRole: yup.string().required('Campo obrigatório.').test({
+    test(value, ctx) {
+      let role = Number(value);
+      if (isNaN(role))
+        return ctx.createError({message: 'Número inválido para a role.'}) 
+      return true;
+    }
+  }),
+  valueReward: yup.string().required('Campo obrigatório.').test({
+    test(value, ctx) {
+      let role = Number(value);
+      if (isNaN(role))
+        return ctx.createError({message: 'Valor inválido.'}) 
+      return true;
+    }
+  }),
+  authorizedRoles: yup.string().required('Campo obrigatório.').test({
+    test(value, ctx) {
+      let validation = true;
+      let roles = value.split(',');
+      roles.forEach(element => {
+        let role = Number(element);
+        if (isNaN(role))
+          validation = false;
+      });
+      if (!validation)
+        return ctx.createError({message: 'Número inválido para as roles.'}); 
+      return validation;
+    }
+  })
+}).required();
+
 const CreateTask = ({ data }) => {
   const theme = useTheme();
   const { createTask } = useTaskService();
   const [task, setTask] = useState<Task>();
+  const [valueReward, setValueReward] = useState<string>();
+  const [authorizedRolesStr, setAuthorizedRolesStr] = useState<string>();
   const [expireDate, setExpireDate] = useState<DatePickerProps<Dayjs> | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [openInformartion, setOpenInformartion] = useState(false);
   const [openError, setOpenError] = useState(false);
+  const { register, handleSubmit, formState:{ errors } } = useForm({
+    resolver: yupResolver(schema)
+  });
 
   const logoImage = "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
 
@@ -52,10 +94,7 @@ const CreateTask = ({ data }) => {
   };
 
   const handleAuthorizedRoles = (event: any) => {
-
-    let authorizedRoles: string[] = (event.target.value).split(',');
-    const splittedRoles: readonly bigint[] = authorizedRoles.map(str => BigInt(str));
-    task.authorizedRoles = splittedRoles;
+    setAuthorizedRolesStr(event.target.value);
   };
 
   const handleCreatorRole = (event: { target: { value: any; }; }) => {
@@ -76,12 +115,16 @@ const CreateTask = ({ data }) => {
 
   const handleReward = (event: { target: { value: any; }; }) => {
     let reward = event.target.value;
-    task.reward = BigInt(reward);
+    setValueReward(reward);
   };
 
   const onSubmit = async (event: { preventDefault: () => void; }) => {
     try {
-      console.log("Expire date", (expireDate))
+
+      let authorizedRoles: string[] = (authorizedRolesStr).split(',');
+      const splittedRoles: readonly bigint[] = authorizedRoles.map(str => BigInt(str));
+      task.authorizedRoles = splittedRoles;
+      task.reward = BigInt(valueReward);
       let data = String(Math.floor(Date.now() / 1000) + 3600)
       task.endDate = BigInt(data);
       console.log("task.endDate: ", task.endDate);
@@ -150,32 +193,34 @@ const CreateTask = ({ data }) => {
         </Box>
         {
           loading ? <SuspenseLoader /> : (
-            <Box marginTop={2} >
+            <Box marginTop={2} component="form" onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing={2} alignItems={'center'} >
+                  <TextField  {...register("title")} 
+                    fullWidth 
+                    id="outlined-required"
+                    label={'Title'}
+                    onBlur={handleTitle}
+                    placeholder={'Describe the activity or link to a document'}
+                    />
+                    <p>{errors.title?.message}</p>
+                
+                  <TextField {...register("authorizedRoles")}
+                    fullWidth
+                    id="outlined-required"
+                    label={'Authorized Roles (separate by `,`)'}
+                    onBlur={handleAuthorizedRoles}
+                    placeholder={'The authorized roles to perform the task'}
+                    />
+                    <p>{errors.authorizedRoles?.message}</p>
 
-                <TextField
-                  fullWidth
-                  id="outlined-required"
-                  label={'Title'}
-                  onBlur={handleTitle}
-                  placeholder={'Describe the activity or link to a document'}
-                />
-
-                <TextField
-                  fullWidth
-                  id="outlined-required"
-                  label={'Authorized Roles (separate by `,`)'}
-                  onBlur={handleAuthorizedRoles}
-                  placeholder={'The authorized roles to perform the task'}
-                />
-
-                <TextField
+                <TextField {...register("creatorRole")}
                   fullWidth
                   id="outlined-required"
                   label={'Creator Role'}
                   onBlur={handleCreatorRole}
                   placeholder={'0xABCD...01234'}
-                />
+                  />
+                  <p>{errors.creatorRole?.message}</p>
 
                 <TextField
                   fullWidth
@@ -193,7 +238,7 @@ const CreateTask = ({ data }) => {
                   placeholder={'https://ipfs.io/ipfs/QmY5D...7CEh'}
                 />
 
-                <TextField fullWidth //{...register("description")}                
+                <TextField fullWidth                 
                   id="outlined-required"
                   label={'Description'}
                   onBlur={handleDescription}
@@ -207,17 +252,22 @@ const CreateTask = ({ data }) => {
                   <Box>
                     <img src={logoImage} width={'100px'} height={'100px'} alt='Pod3LabsRecompensaIcon' />
                   </Box>
-                  <TextField
-                    label={'Reward in USD'}
-                    onBlur={handleReward}
-                  />
-                  <DatePicker
-                    label={'Deliver Date'}
-                    onChange={(newValue: any) => setExpireDate(newValue)}
-                  />
+                  <div>
+                    <TextField  {...register("valueReward")}
+                      label={'Reward in USD'}
+                      onBlur={handleReward}
+                    />
+                    <p>{errors.valueReward?.message}</p>
+                  </div>
+                  <div>
+                    <DatePicker
+                      label={'Deliver Date'}
+                      onChange={(newValue: any) => setExpireDate(newValue)}
+                    />
+                  </div>
                 </Stack>
 
-                <Button onClick={onSubmit} variant='contained' color='primary'>
+                <Button type="submit" variant='contained' color='primary'>
                   Enviar
                 </Button>
 
