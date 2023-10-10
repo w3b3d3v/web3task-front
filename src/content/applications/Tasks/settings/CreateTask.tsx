@@ -14,7 +14,7 @@ import { DatePicker, DatePickerProps } from '@mui/x-date-pickers';
 import { useTaskService } from "src/services/tasks-service";
 import { Task, TaskStatus } from "src/models/task";
 import SuspenseLoader from 'src/components/SuspenseLoader';
-import CoverCreateTask from './CoverCreateTask';
+import CoverCreateTask from '../../../../components/Cover/CoverCreateTask';
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -66,7 +66,8 @@ const schema = yup.object({
         return ctx.createError({message: 'Número inválido para as roles.'}); 
       return validation;
     }
-  })
+  }),
+  endDate: yup.string().required('Campo obrigatório.')
 }).required();
 
 const CreateTask = ({ data }) => {
@@ -264,6 +265,7 @@ const CreateTask = ({ data }) => {
                       label={'Deliver Date'}
                       onChange={(newValue: any) => setExpireDate(newValue)}
                     />
+                    <p>{errors.endDate?.message}</p>
                   </div>
                 </Stack>
 

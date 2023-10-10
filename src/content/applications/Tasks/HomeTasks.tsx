@@ -5,11 +5,11 @@ import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Grid, Slider, TextField, Typography, useTheme } from "@mui/material";
 import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
-import CardMultiTasks from "../CardMultiTasks";
-import CoverTasks from "../CoverTasks";
+import CardMultiTasks from "../../../components/Task/CardMultiTasks";
+import CoverHomeTasks from "../../../components/Cover/CoverHomeTasks";
 import usePagination from "src/components/Pagination";
 
-const HomeTask = () => {
+const HomeTasks = () => {
     const [title, setTitle] = useState("")
     const [creatorRole, setCreatorRole] = useState("")
     const [reward, setReward] = useState(0)
@@ -78,7 +78,7 @@ const HomeTask = () => {
             <Box
                 sx={{ width: '100%' }}>
 
-                <CoverTasks />
+                <CoverHomeTasks />
 
                 <Box>
                     <Box height={40} bgcolor={'#8EFFC2'} />
@@ -197,4 +197,4 @@ const HomeTask = () => {
     )
 }
 
-export default HomeTask
+export default HomeTasks

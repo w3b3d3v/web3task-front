@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { useTaskService } from "src/services/tasks-service";
 import { useTaskServiceHook } from "src/hooks/TaskServiceHook";
 import { useEffect } from "react";
-import CardMultiTasks from "src/content/applications/Tasks/tasks/CardMultiTasks";
+import CardMultiTasks from "src/components/Task/CardMultiTasks";
 import { useWeb3Utils } from "src/hooks/Web3UtilsHook";
 import usePagination from "src/components/Pagination";
 
@@ -41,7 +41,7 @@ const UserProfile = () => {
 
         const fetchData = async () => {
             try {
-                await handleMultiTask(minimumTasks, maxTasks, false);
+                await handleMultiTask(minimumTasks, maxTasks, true);
             } catch (error) {
                 console.error('Error fetching tasks:', error);
             }

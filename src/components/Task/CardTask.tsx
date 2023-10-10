@@ -27,7 +27,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export const CardTasks = ({ taskId, taskData, loading }: any) => {
+export const CardTask = ({ taskId, taskData, loading }: any) => {
     const { startTask, reviewTask, completeTask, cancelTask, hasMemberRole, hasLeaderRole } = useTaskService();
     const [openInformartion, setOpenInformartion] = useState(false);
     const [openError, setOpenError] = useState(false);
@@ -255,4 +255,4 @@ export const CardTasks = ({ taskId, taskData, loading }: any) => {
     )
 }
 
-export default CardTasks
+export default CardTask
