@@ -16,7 +16,7 @@ const Loader = (Component) => (props) =>
 );
 
 const UserProfile = Loader(
-  lazy(() => import('src/content/applications/Users/profile'))
+  lazy(() => import('src/content/applications/Users/profile/UserProfile'))
 )
 
 const AdminOptions = Loader(
@@ -31,12 +31,8 @@ const DetailsTasks = Loader(
   lazy(() => import('src/content/applications/Tasks/details/DetailsTask'))
 )
 
-const ListTasks = Loader(
-  lazy(() => import('src/content/applications/Tasks/tasks/ListTasks'))
-)
-
 const HomeTask = Loader(
-  lazy(() => import('src/content/applications/Tasks/tasks/HomeTasks'))
+  lazy(() => import('src/content/applications/Tasks/HomeTasks'))
 )
 
 const Status404 = Loader(
@@ -108,10 +104,6 @@ const routes: RouteObject[] = [
           {
             path: 'details-task/:taskId',
             element: <DetailsTasks />
-          },
-          {
-            path: 'list-task',
-            element: <ListTasks />
           }
         ]
       },

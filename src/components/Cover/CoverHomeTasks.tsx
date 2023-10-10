@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
 
-const CoverTasks = () => {
+const CoverHomeTasks = () => {
     return (
         <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={304} flexDirection={"row"} >
 
@@ -51,4 +51,4 @@ const CoverTasks = () => {
     )
 }
 
-export default CoverTasks
+export default CoverHomeTasks

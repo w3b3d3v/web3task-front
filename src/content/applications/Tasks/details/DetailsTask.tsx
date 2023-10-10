@@ -5,7 +5,7 @@ import SuspenseLoader from 'src/components/SuspenseLoader'
 import { useTaskService } from "src/services/tasks-service";
 import { useTaskServiceHook } from "src/hooks/TaskServiceHook";
 import { useEffect } from "react";
-import CardTasks from "../tasks/CardTasks";
+import CardTasks from "../../../../components/Task/CardTask";
 
 const DetailsTask = () => {
     const theme = useTheme();
