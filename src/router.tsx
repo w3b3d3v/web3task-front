@@ -31,7 +31,7 @@ const DetailsTasks = Loader(
   lazy(() => import('src/content/applications/Tasks/details/DetailsTask'))
 )
 
-const HomeTask = Loader(
+const HomeTasks = Loader(
   lazy(() => import('src/content/applications/Tasks/HomeTasks'))
 )
 
@@ -50,7 +50,7 @@ const routes: RouteObject[] = [
     children: [
       {
         path: "/",
-        element: <HomeTask />,
+        element: <HomeTasks />,
       },
       {
         path: "overview",
@@ -82,7 +82,7 @@ const routes: RouteObject[] = [
         children: [
           {
             path: '',
-            element: < HomeTask />
+            element: < HomeTasks />
           },
           {
             path: 'profile',
@@ -95,7 +95,7 @@ const routes: RouteObject[] = [
         children: [
           {
             path: '',
-            element: < HomeTask />
+            element: < HomeTasks />
           },
           {
             path: 'create-task',
