@@ -1,9 +1,7 @@
-import { Web3TaskContract } from "src/contracts/Web3Task";
-import { TasksManager } from "./contracts/TasksManager";
-import contractAddress from "src/contracts/contract-Web3Task-address.json";
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 import { chain, createClient, defaultChains, useAccount } from 'wagmi'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+import { mapChainContract } from "./utils/findContract";
 
 const alchemyId = process.env.ALCHEMY_API_KEY as string
 const chains = defaultChains
@@ -23,7 +21,6 @@ export const client = createClient({
 })
 
 let signer = null;
-
 let provider;
 if (window.ethereum == null) {
 
@@ -41,23 +38,35 @@ if (window.ethereum == null) {
   // requests through MetaMask.
   //await window.ethereum.send('eth_requestAccounts');
 
-  provider = new ethers.providers.Web3Provider(window.ethereum)
-
+  provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  provider.on("network", (newNetwork, oldNetwork) => {
+    // When a Provider makes its initial connection, it emits a "network"
+    // event with a null oldNetwork along with the newNetwork. So, if the
+    // oldNetwork exists, it represents a changing network
+    if (oldNetwork) {
+      window.location.reload();
+    }
+  });
   // It also provides an opportunity to request access to write
   // operations, which will be performed by the private key
   // that MetaMask manages for the user.
   signer = provider.getSigner();
 }
 
+const { chainId } = await provider.getNetwork()
 
-export const web3TaskContract = new ethers.Contract(
-  contractAddress.Web3Task,
-  Web3TaskContract.abi,
-  signer
-);
+let contractABI_ID = mapChainContract.get(chainId)
+if (contractABI_ID == undefined) {
+  contractABI_ID = mapChainContract.get(137)
+}
 
+console.log(contractABI_ID)
+
+// Localhost
 export const tasksManagerContract = new ethers.Contract(
-  contractAddress.Web3Task,
-  TasksManager.abi,
+  contractABI_ID.address,
+  contractABI_ID.abi,
   signer
-);
+)
+
+console.log('tasksManagerContract', tasksManagerContract);

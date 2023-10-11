@@ -6,7 +6,6 @@ import SidebarLayout from "src/layouts/SidebarLayout";
 import BaseLayout from "src/layouts/BaseLayout";
 
 import SuspenseLoader from "src/components/SuspenseLoader";
-import Overview from "./content/overview";
 
 const Loader = (Component) => (props) =>
 (
@@ -51,10 +50,6 @@ const routes: RouteObject[] = [
       {
         path: "/",
         element: <HomeTasks />,
-      },
-      {
-        path: "overview",
-        element: <Navigate to="/" replace />,
       },
       {
         path: 'status',
@@ -112,41 +107,6 @@ const routes: RouteObject[] = [
         element: <AdminOptions />
       },
     ],
-  },
-  {
-    path: "home-side",
-    element: <SidebarLayout />,
-    children: [
-      {
-        path: "",
-        element: <Navigate to="overview" replace />,
-      },
-      {
-        path: "overview",
-        element: <Overview />,
-      },
-      {
-        path: 'status',
-        children: [
-          {
-            path: '',
-            element: <Navigate to="404" replace />
-          },
-          {
-            path: '404',
-            element: <Status404 />
-          },
-          {
-            path: '500',
-            element: <Status500 />
-          }
-        ]
-      },
-      {
-        path: "*",
-        element: <Status404 />,
-      },
-    ]
   },
 ];
 

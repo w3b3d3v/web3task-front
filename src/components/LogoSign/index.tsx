@@ -19,7 +19,7 @@ function Logo({ logoImage }) {
   const theme = useTheme();
 
   return (
-    <LogoWrapper to="/overview">
+    <LogoWrapper to="/">
       <img
         style={{ width: '100%', height: '100%' }}
         src={logoImage}
