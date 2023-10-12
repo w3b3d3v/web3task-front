@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   Box,
   Typography,
-  Hidden,
   Container,
   Button,
   Grid,
@@ -10,14 +9,7 @@ import {
 import { Helmet } from "react-helmet-async";
 import RefreshTwoToneIcon from "@mui/icons-material/RefreshTwoTone";
 import LoadingButton from "@mui/lab/LoadingButton";
-
 import { styled } from "@mui/material/styles";
-
-const GridWrapper = styled(Grid)(
-  ({ theme }) => `
-    background: ${theme.colors.gradients.black1};
-`
-);
 
 const MainContent = styled(Box)(
   () => `
@@ -28,18 +20,6 @@ const MainContent = styled(Box)(
     flex-direction: column;
     align-items: center;
     justify-content: center;
-`
-);
-
-const TypographyPrimary = styled(Typography)(
-  ({ theme }) => `
-      color: ${theme.colors.alpha.white[100]};
-`
-);
-
-const TypographySecondary = styled(Typography)(
-  ({ theme }) => `
-      color: ${theme.colors.alpha.white[70]};
 `
 );
 
@@ -57,7 +37,7 @@ function Status500() {
       <MainContent>
         <Grid
           container
-          sx={{ height: "100%" }}
+          sx={{ height: "100%", display: 'flex', justifyContent: 'center' }}
           alignItems="stretch"
           spacing={0}
         >
@@ -97,41 +77,12 @@ function Status500() {
                 >
                   Refresh view
                 </LoadingButton>
-                <Button href="/overview" variant="contained" sx={{ ml: 1 }}>
+                <Button href="/" variant="contained" sx={{ ml: 1 }}>
                   Go back
                 </Button>
               </Box>
             </Container>
           </Grid>
-          <Hidden mdDown>
-            <GridWrapper
-              xs={12}
-              md={6}
-              alignItems="center"
-              display="flex"
-              justifyContent="center"
-              item
-            >
-              <Container maxWidth="sm">
-                <Box textAlign="center">
-                  <TypographyPrimary variant="h1" sx={{ my: 2 }}>
-                    Web3Dev React Typescript Template
-                  </TypographyPrimary>
-                  <TypographySecondary
-                    variant="h4"
-                    fontWeight="normal"
-                    sx={{ mb: 4 }}
-                  >
-                    React template de alta performance idealizado para o uso com os poderosos componentes
-                    Material-UI.
-                  </TypographySecondary>
-                  <Button href="/overview" size="large" variant="contained">
-                    Overview
-                  </Button>
-                </Box>
-              </Container>
-            </GridWrapper>
-          </Hidden>
         </Grid>
       </MainContent>
     </>
