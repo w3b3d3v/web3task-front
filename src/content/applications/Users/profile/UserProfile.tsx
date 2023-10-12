@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import CardMultiTasks from "src/components/Task/CardMultiTasks";
 import { useWeb3Utils } from "src/hooks/Web3UtilsHook";
 import usePagination from "src/components/Pagination";
+import CoverUserProfile from "src/components/Cover/CoverUserProfile";
 
 const BoxCover = styled(Box)(
     ({ theme }) => `
@@ -116,12 +117,7 @@ const UserProfile = () => {
                     </Box>
 
                     <Box>
-                        <Box>
-                            <img
-                                src="/static/images/user/profile/title-profile-banner.svg"
-
-                            />
-                        </Box>
+                        <CoverUserProfile />
                     </Box>
 
                     <Box style={{ position: 'relative' }} >
