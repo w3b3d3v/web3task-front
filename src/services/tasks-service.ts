@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Task } from 'src/models/task';
 import { UserRole } from 'src/models/user';
-import { web3TaskContract, tasksManagerContract } from '../wagmi'
+import { tasksManagerContract } from '../wagmi'
 import { is } from 'date-fns/locale';
 import { useWeb3Utils } from "src/hooks/Web3UtilsHook";
 
@@ -9,6 +9,7 @@ export function useTaskService() {
     const { userAddress } = useWeb3Utils();
     const [tasks, setTasks] = useState<any>()
 
+    // Leader
     async function createTask(task: Task) {
         if (hasLeaderRole(userAddress())) {
             let intefaceID = tasksManagerContract.interface.getSighash("createTask");
@@ -16,7 +17,7 @@ export function useTaskService() {
                 if (!isOperator)
                     throw Error("User unauthorized to perform createTask!");
 
-                web3TaskContract.createTask(task).error(error => {
+                tasksManagerContract.createTask(task).error(error => {
                     throw Error("Error performing createTask: " + error.data.message);
                 }
                 );
@@ -24,18 +25,35 @@ export function useTaskService() {
         }
     }
 
+    // Leader or Member
     async function startTask(id: bigint) {
-        if (hasLeaderRole(userAddress()) || hasMemberRole(userAddress())) {
+
+        const isLeader = await hasLeaderRole(userAddress())
+        const isMember = await hasMemberRole(userAddress())
+
+        if (isLeader == true) {
+
             let intefaceID = tasksManagerContract.interface.getSighash("startTask");
-            await tasksManagerContract.isOperator(intefaceID, UserRole.Leader).then(isOperator => {
+            await tasksManagerContract.isOperator(intefaceID, (UserRole.Leader)).then(isOperator => {
                 if (!isOperator)
                     throw Error("User unauthorized to perform startTask!");
 
-                web3TaskContract.startTask(id, UserRole.Member);
+                tasksManagerContract.startTask(id, UserRole.Leader);
+            });
+        } else {
+
+            let intefaceID = tasksManagerContract.interface.getSighash("startTask");
+            await tasksManagerContract.isOperator(intefaceID, (UserRole.Member)).then(isOperator => {
+                if (!isOperator)
+                    throw Error("User unauthorized to perform startTask!");
+
+                tasksManagerContract.startTask(id, UserRole.Member);
             });
         }
+
     }
 
+    // LEADER 
     async function reviewTask(id: bigint) {
         let metadata = "";
         if (hasLeaderRole(userAddress())) {
@@ -44,11 +62,13 @@ export function useTaskService() {
                 if (!isOperator)
                     throw Error("User unauthorized to perform reviewTask!");
 
-                web3TaskContract.reviewTask(id, UserRole.Leader, metadata);
+                tasksManagerContract.reviewTask(id, UserRole.Leader, metadata);
             });
         }
     }
 
+    // 1 Leader que pegou tarefa completeTask e 2 LEADERS Aprovam
+    // 1 Membro que pegou tarefa completeTask e 2 LEADERS Aprovam
     async function completeTask(id: bigint) {
         if (hasLeaderRole(userAddress())) {
             let intefaceID = tasksManagerContract.interface.getSighash("completeTask");
@@ -56,11 +76,13 @@ export function useTaskService() {
                 if (!isOperator)
                     throw Error("User unauthorized to perform completeTask!");
 
-                web3TaskContract.completeTask(id, UserRole.Member);
+                tasksManagerContract.completeTask(id, UserRole.Leader);
             });
         }
     }
 
+    // 1 Leader que pegou tarefa cancela a task e 2 LEADERS Aprovam
+    // 1 Membro que pegou tarefa cancela a task e 2 LEADERS Aprovam
     async function cancelTask(id: bigint) {
         if (hasLeaderRole(userAddress())) {
             let intefaceID = tasksManagerContract.interface.getSighash("cancelTask");
@@ -68,7 +90,7 @@ export function useTaskService() {
                 if (!isOperator)
                     throw Error("User unauthorized to perform cancelTask!");
 
-                web3TaskContract.cancelTask(id, UserRole.Member);
+                tasksManagerContract.cancelTask(id, UserRole.Leader);
             });
         }
     }
