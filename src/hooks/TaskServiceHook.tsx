@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Task, TaskStatus, TaskFront } from 'src/models/task';
 import { useWeb3Utils } from 'src/hooks/Web3UtilsHook';
+import { useSnackBar } from 'src/contexts/SnackBarContext';
+import { AlertColor } from '@mui/material/Alert';
 
 /**
  * Interface for the Task Service, defining methods to interact with tasks.
@@ -24,6 +26,12 @@ export const useTaskServiceHook = (task: TaskService) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { shortenAddressFromAddress } = useWeb3Utils();
+    const { showSnackBar } = useSnackBar();
+
+    const handleSnackbar = (message: string, color: AlertColor) => {
+        showSnackBar(message, color)
+    };
+
 
     /**
      * getStatus
@@ -35,7 +43,7 @@ export const useTaskServiceHook = (task: TaskService) => {
      * @param taskId - The ID of the task to fetch.
      * @returns - A promise that resolves when data is fetched.
      */
-    function getStatus(status: TaskStatus) : string {
+    function getStatus(status: TaskStatus): string {
         switch (status) {
             case TaskStatus.Created:
                 return "Created"
@@ -69,13 +77,13 @@ export const useTaskServiceHook = (task: TaskService) => {
      * @returns - A promise that resolves when data is fetched.
      */
     const handleTask = async (taskId: number) => {
-    
+
         try {
             setLoading(true);
             setError(null);
-    
+
             const result: any = await task.getTask(taskId);
-            
+
             let nft: TaskFront = {
                 taskId: taskId,
                 status: getStatus(result.status),
@@ -88,20 +96,21 @@ export const useTaskServiceHook = (task: TaskService) => {
                 assignee: result.assignee,
                 metadata: result.metadata
             }
-    
+
             const shortenedAddressOrName = shortenAddressFromAddress(nft.assignee);
             nft.assignee = shortenedAddressOrName;
             //const d = new Date(Number(nft.endDate));
             //nft.endDate = d.toDateString();
-    
-    
-            const timeInSeconds = Math.floor(Number(nft.endDate)*1000);
+
+
+            const timeInSeconds = Math.floor(Number(nft.endDate) * 1000);
             const date = new Date(timeInSeconds);
             const dateFormatted = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
             nft.endDate = dateFormatted;
             setTaskData(nft);
         } catch (error) {
             setError('Erro ao buscar tarefa');
+            handleSnackbar('Error Searching Task', 'error')
         } finally {
             setLoading(false);
         }
@@ -150,6 +159,7 @@ export const useTaskServiceHook = (task: TaskService) => {
             }
         } catch (error) {
             setError('Erro ao buscar tarefas múltiplas' + error);
+            handleSnackbar('Error Searching Tasks', 'error')
         } finally {
             setLoading(false);
         }
@@ -160,7 +170,13 @@ export const useTaskServiceHook = (task: TaskService) => {
         console.log('authorizedAddress ', authorizedAddress)
         console.log('isAuthorized ', isAuthorized)
 
-        return await task.setRole(roleId, authorizedAddress, isAuthorized);
+        try {
+            handleSnackbar('Set Role process initiated with success!', 'info')
+            return await task.setRole(roleId, authorizedAddress, isAuthorized);
+        } catch (error) {
+            handleSnackbar('Error Set Role!', 'error')
+        }
+
     };
 
     const handleOperator = async (interfaceId: any, roleId: any, isAuthorized: boolean) => {
@@ -168,7 +184,13 @@ export const useTaskServiceHook = (task: TaskService) => {
         console.log('roleId ', roleId)
         console.log('isAuthorized ', isAuthorized)
 
-        return await task.setOperator(interfaceId, roleId, isAuthorized);
+        try {
+            handleSnackbar('Set Operator process initiated with success!', 'info')
+            return await task.setOperator(interfaceId, roleId, isAuthorized);
+        } catch (error) {
+            handleSnackbar('Error Set Operator!', 'error')
+        }
+
     };
 
     return {
