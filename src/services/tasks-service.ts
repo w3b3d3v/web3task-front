@@ -2,26 +2,37 @@ import { useState } from "react";
 import { Task } from 'src/models/task';
 import { UserRole } from 'src/models/user';
 import { tasksManagerContract } from '../wagmi'
-import { is } from 'date-fns/locale';
 import { useWeb3Utils } from "src/hooks/Web3UtilsHook";
+import { useSnackBar } from "src/contexts/SnackBarContext";
+import { AlertColor } from '@mui/material/Alert';
+
 
 export function useTaskService() {
     const { userAddress } = useWeb3Utils();
-    const [tasks, setTasks] = useState<any>()
+    const { showSnackBar } = useSnackBar();
+
+    const handleSnackbar = (message: string, color: AlertColor) => {
+        showSnackBar(message, color)
+    };
 
     // Leader
     async function createTask(task: Task) {
-        if (hasLeaderRole(userAddress())) {
-            let intefaceID = tasksManagerContract.interface.getSighash("createTask");
-            await tasksManagerContract.isOperator(intefaceID, UserRole.Leader).then(isOperator => {
-                if (!isOperator)
-                    throw Error("User unauthorized to perform createTask!");
+        try {
+            if (hasLeaderRole(userAddress())) {
+                const intefaceID = tasksManagerContract.interface.getSighash("createTask");
+                const isOperator = await tasksManagerContract.isOperator(intefaceID, UserRole.Leader);
 
-                tasksManagerContract.createTask(task).error(error => {
-                    throw Error("Error performing createTask: " + error.data.message);
+                if (!isOperator) {
+                    throw new Error("User unauthorized to perform createTask!");
                 }
-                );
-            });
+
+                await tasksManagerContract.createTask(task);
+
+            } else {
+                throw new Error("User does not have the leader role!");
+            }
+        } catch (error) {
+            handleSnackbar(error.message, 'error');
         }
     }
 
@@ -35,19 +46,23 @@ export function useTaskService() {
 
             let intefaceID = tasksManagerContract.interface.getSighash("startTask");
             await tasksManagerContract.isOperator(intefaceID, (UserRole.Leader)).then(isOperator => {
-                if (!isOperator)
+                if (!isOperator) {
+                    handleSnackbar("User unauthorized to perform startTask", 'error')
                     throw Error("User unauthorized to perform startTask!");
-
-                tasksManagerContract.startTask(id, UserRole.Leader);
+                } else {
+                    tasksManagerContract.startTask(id, UserRole.Leader);
+                }
             });
         } else {
 
             let intefaceID = tasksManagerContract.interface.getSighash("startTask");
             await tasksManagerContract.isOperator(intefaceID, (UserRole.Member)).then(isOperator => {
-                if (!isOperator)
+                if (!isOperator) {
+                    handleSnackbar("User unauthorized to perform startTask", 'error')
                     throw Error("User unauthorized to perform startTask!");
-
-                tasksManagerContract.startTask(id, UserRole.Member);
+                } else {
+                    tasksManagerContract.startTask(id, UserRole.Member);
+                }
             });
         }
 
@@ -58,12 +73,13 @@ export function useTaskService() {
         let metadata = "";
         if (hasLeaderRole(userAddress())) {
             let intefaceID = tasksManagerContract.interface.getSighash("reviewTask");
-            await tasksManagerContract.isOperator(intefaceID, UserRole.Leader).then(isOperator => {
-                if (!isOperator)
-                    throw Error("User unauthorized to perform reviewTask!");
-
+            const isOperator = await tasksManagerContract.isOperator(intefaceID, UserRole.Leader)
+            if (!isOperator) {
+                handleSnackbar("User unauthorized to perform reviewTask!", "error");
+                throw Error("User unauthorized to perform reviewTask!");
+            } else {
                 tasksManagerContract.reviewTask(id, UserRole.Leader, metadata);
-            });
+            }
         }
     }
 
@@ -72,12 +88,13 @@ export function useTaskService() {
     async function completeTask(id: bigint) {
         if (hasLeaderRole(userAddress())) {
             let intefaceID = tasksManagerContract.interface.getSighash("completeTask");
-            await tasksManagerContract.isOperator(intefaceID, UserRole.Leader).then(isOperator => {
-                if (!isOperator)
-                    throw Error("User unauthorized to perform completeTask!");
-
+            const isOperator = await tasksManagerContract.isOperator(intefaceID, UserRole.Leader)
+            if (!isOperator) {
+                handleSnackbar("User unauthorized to perform completeTask!", "error");
+                throw Error("User unauthorized to perform completeTask!");
+            } else {
                 tasksManagerContract.completeTask(id, UserRole.Leader);
-            });
+            }
         }
     }
 
@@ -86,17 +103,22 @@ export function useTaskService() {
     async function cancelTask(id: bigint) {
         if (hasLeaderRole(userAddress())) {
             let intefaceID = tasksManagerContract.interface.getSighash("cancelTask");
-            await tasksManagerContract.isOperator(intefaceID, UserRole.Leader).then(isOperator => {
-                if (!isOperator)
-                    throw Error("User unauthorized to perform cancelTask!");
-
+            const isOperator = await tasksManagerContract.isOperator(intefaceID, UserRole.Leader)
+            if (!isOperator) {
+                handleSnackbar("User unauthorized to perform cancelTask!", "error");
+                throw Error("User unauthorized to perform cancelTask!");
+            } else {
                 tasksManagerContract.cancelTask(id, UserRole.Leader);
-            });
+            }
         }
     }
 
     async function getTask(taskId: any) {
-        return await tasksManagerContract.getTask(taskId);
+        try {
+            return await tasksManagerContract.getTask(taskId);
+        } catch (error) {
+            handleSnackbar('Erro ao buscar tarefa', 'error')
+        }
     }
 
     async function getMultiTasks(min: number, max: number, isUserProfile: boolean) {
@@ -143,13 +165,19 @@ export function useTaskService() {
     }
 
     async function setRole(roleId: any, authorizedAddress: any, isAuthorized: boolean) {
-
-        return await tasksManagerContract.setRole(roleId, authorizedAddress, isAuthorized);
+        try {
+            return await tasksManagerContract.setRole(roleId, authorizedAddress, isAuthorized);
+        } catch (error) {
+            handleSnackbar('Erro ao setar Role', 'error')
+        }
     }
 
     async function setOperator(interfaceId: any, roleId: any, isAuthorized: boolean) {
-
-        return await tasksManagerContract.setOperator(interfaceId, roleId, isAuthorized);
+        try {
+            return await tasksManagerContract.setOperator(interfaceId, roleId, isAuthorized);
+        } catch (error) {
+            handleSnackbar('Erro ao setar Operador', 'error')
+        }
     }
 
     async function hasLeaderRole(address: any) {
