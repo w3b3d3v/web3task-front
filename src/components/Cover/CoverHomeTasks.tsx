@@ -7,7 +7,7 @@ const CoverHomeTasks = () => {
 
             <Box>
                 <img
-                    src="/static/images/logo/2491992.svg"
+                    src="/static/images/task/home/web3task-home-task.svg"
                     alt="Logo Web3task"
                     width={200}
                     height={150}
