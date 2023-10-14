@@ -12,6 +12,8 @@ interface TaskService {
     getMultiTasks: (start: number, end: number, isUserProfile: boolean) => Promise<Task[]>;
     setRole: (roleId: any, authorizedAddress: any, isAuthorized: boolean) => Promise<any>
     setOperator: (interfaceId: any, roleId: any, isAuthorized: boolean) => Promise<any>
+    setMinQuorum: (quorum: any) => Promise<any>
+    deposit: (roleId: any, amount: any) => Promise<any>
 }
 
 /**
@@ -193,6 +195,24 @@ export const useTaskServiceHook = (task: TaskService) => {
 
     };
 
+    const handleQuorum = async (quorum: any) => {
+        try {
+            handleSnackbar('Set Quorum process initiated with success!', 'info')
+            return await task.setMinQuorum(quorum);
+        } catch (error) {
+            handleSnackbar('Error Set Quorum!', 'error')
+        }
+    };
+
+    const handleDeposit = async (roleId: any, amount: any) => {
+        try {
+            handleSnackbar('Set Quorum process initiated with success!', 'info')
+            return await task.deposit(roleId, amount);
+        } catch (error) {
+            handleSnackbar('Error Set Quorum!', 'error')
+        }
+    };
+
     return {
         taskData,
         multiTasksData,
@@ -201,6 +221,8 @@ export const useTaskServiceHook = (task: TaskService) => {
         handleTask,
         handleMultiTask,
         handleRole,
-        handleOperator
+        handleOperator,
+        handleQuorum,
+        handleDeposit
     };
 };

@@ -8,7 +8,7 @@ import { AlertColor } from '@mui/material/Alert';
 
 
 export function useTaskService() {
-    const { userAddress } = useWeb3Utils();
+    const { userAddress, parseUnits } = useWeb3Utils();
     const { showSnackBar } = useSnackBar();
 
     const handleSnackbar = (message: string, color: AlertColor) => {
@@ -180,6 +180,22 @@ export function useTaskService() {
         }
     }
 
+    async function setMinQuorum(quorum: any) {
+        try {
+            return await tasksManagerContract.setMinQuorum(quorum);
+        } catch (error) {
+            handleSnackbar('Erro ao setar Quorum', 'error')
+        }
+    }
+
+    async function deposit(roleId: any, amount: any) {
+        try {
+            return await tasksManagerContract.deposit(roleId, { value: parseUnits(amount) });
+        } catch (error) {
+            handleSnackbar('Erro ao setar Quorum', 'error')
+        }
+    }
+
     async function hasLeaderRole(address: any) {
         return await tasksManagerContract.hasRole(UserRole.Leader, address);
     }
@@ -199,7 +215,9 @@ export function useTaskService() {
         setRole,
         setOperator,
         hasLeaderRole,
-        hasMemberRole
+        hasMemberRole,
+        setMinQuorum,
+        deposit
     };
 
 }
