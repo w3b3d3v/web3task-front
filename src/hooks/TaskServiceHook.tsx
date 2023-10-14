@@ -49,19 +49,14 @@ export const useTaskServiceHook = (task: TaskService) => {
         switch (status) {
             case TaskStatus.Created:
                 return "Created"
-                break;
             case TaskStatus.Canceled:
                 return "Canceled"
-                break;
             case TaskStatus.Review:
                 return "In Review"
-                break;
             case TaskStatus.Progress:
                 return "In Progress"
-                break;
             case TaskStatus.Completed:
                 return "Completed"
-                break;
             default:
                 break;
         }
@@ -206,10 +201,10 @@ export const useTaskServiceHook = (task: TaskService) => {
 
     const handleDeposit = async (roleId: any, amount: any) => {
         try {
-            handleSnackbar('Set Quorum process initiated with success!', 'info')
+            handleSnackbar('Set Deposit process initiated with success!', 'info')
             return await task.deposit(roleId, amount);
         } catch (error) {
-            handleSnackbar('Error Set Quorum!', 'error')
+            handleSnackbar('Error Set Deposit!', 'error')
         }
     };
 

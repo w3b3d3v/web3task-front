@@ -117,7 +117,7 @@ export function useTaskService() {
         try {
             return await tasksManagerContract.getTask(taskId);
         } catch (error) {
-            handleSnackbar('Erro ao buscar tarefa', 'error')
+            handleSnackbar('Error searching Task', 'error')
         }
     }
 
@@ -168,7 +168,7 @@ export function useTaskService() {
         try {
             return await tasksManagerContract.setRole(roleId, authorizedAddress, isAuthorized);
         } catch (error) {
-            handleSnackbar('Erro ao setar Role', 'error')
+            handleSnackbar('Error setting Role', 'error')
         }
     }
 
@@ -176,7 +176,7 @@ export function useTaskService() {
         try {
             return await tasksManagerContract.setOperator(interfaceId, roleId, isAuthorized);
         } catch (error) {
-            handleSnackbar('Erro ao setar Operador', 'error')
+            handleSnackbar('Error setting Operator', 'error')
         }
     }
 
@@ -184,7 +184,7 @@ export function useTaskService() {
         try {
             return await tasksManagerContract.setMinQuorum(quorum);
         } catch (error) {
-            handleSnackbar('Erro ao setar Quorum', 'error')
+            handleSnackbar('Error setting Quorum', 'error')
         }
     }
 
@@ -192,7 +192,7 @@ export function useTaskService() {
         try {
             return await tasksManagerContract.deposit(roleId, { value: parseUnits(amount) });
         } catch (error) {
-            handleSnackbar('Erro ao setar Quorum', 'error')
+            handleSnackbar('Error setting deposit', 'error')
         }
     }
 
