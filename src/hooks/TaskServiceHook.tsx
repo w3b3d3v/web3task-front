@@ -110,7 +110,7 @@ export const useTaskServiceHook = (task: TaskService) => {
             setTaskData(nft);
         } catch (error) {
             setError('Erro ao buscar tarefa');
-            handleSnackbar('Error Searching Task', 'error')
+            handleSnackbar('Error Searching Task: '+error, 'error')
         } finally {
             setLoading(false);
         }
@@ -159,7 +159,7 @@ export const useTaskServiceHook = (task: TaskService) => {
             }
         } catch (error) {
             setError('Erro ao buscar tarefas múltiplas' + error);
-            handleSnackbar('Error Searching Tasks', 'error')
+            //handleSnackbar('Error Searching Tasks: '+ error, 'error')
         } finally {
             setLoading(false);
         }
