@@ -1,4 +1,5 @@
 import { useAccount, useEnsName } from 'wagmi';
+import { BigNumber, ethers } from "ethers";
 
 export function useWeb3Utils() {
 
@@ -30,8 +31,12 @@ export function useWeb3Utils() {
     function userAddress(): string {      
       return accountData?.address;
     }
+
+    function parseUnits(amount: string): BigNumber {
+      return ethers.utils.parseUnits(amount, "ether");
+    }
   
-    return { shortenAddressOrEnsName, shortenAddressFromAddress, shortenAddressFromUser, userAddress };
+    return { shortenAddressOrEnsName, shortenAddressFromAddress, shortenAddressFromUser, userAddress, parseUnits };
   }
 
  

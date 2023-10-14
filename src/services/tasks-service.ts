@@ -8,7 +8,7 @@ import { AlertColor } from '@mui/material/Alert';
 
 
 export function useTaskService() {
-    const { userAddress } = useWeb3Utils();
+    const { userAddress, parseUnits } = useWeb3Utils();
     const { showSnackBar } = useSnackBar();
 
     const handleSnackbar = (message: string, color: AlertColor) => {
@@ -117,7 +117,7 @@ export function useTaskService() {
         try {
             return await tasksManagerContract.getTask(taskId);
         } catch (error) {
-            handleSnackbar('Erro ao buscar tarefa', 'error')
+            handleSnackbar('Error searching Task', 'error')
         }
     }
 
@@ -168,7 +168,7 @@ export function useTaskService() {
         try {
             return await tasksManagerContract.setRole(roleId, authorizedAddress, isAuthorized);
         } catch (error) {
-            handleSnackbar('Erro ao setar Role', 'error')
+            handleSnackbar('Error setting Role', 'error')
         }
     }
 
@@ -176,7 +176,23 @@ export function useTaskService() {
         try {
             return await tasksManagerContract.setOperator(interfaceId, roleId, isAuthorized);
         } catch (error) {
-            handleSnackbar('Erro ao setar Operador', 'error')
+            handleSnackbar('Error setting Operator', 'error')
+        }
+    }
+
+    async function setMinQuorum(quorum: any) {
+        try {
+            return await tasksManagerContract.setMinQuorum(quorum);
+        } catch (error) {
+            handleSnackbar('Error setting Quorum', 'error')
+        }
+    }
+
+    async function deposit(roleId: any, amount: any) {
+        try {
+            return await tasksManagerContract.deposit(roleId, { value: parseUnits(amount) });
+        } catch (error) {
+            handleSnackbar('Error setting deposit', 'error')
         }
     }
 
@@ -199,7 +215,9 @@ export function useTaskService() {
         setRole,
         setOperator,
         hasLeaderRole,
-        hasMemberRole
+        hasMemberRole,
+        setMinQuorum,
+        deposit
     };
 
 }
