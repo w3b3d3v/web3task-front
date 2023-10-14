@@ -33,7 +33,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
   return (
     <Box display="flex" flexDirection="column">
       <Box display="inline-flex" alignItems="center">
-        <img src="/static/images/task/home/filtroIcon.svg" alt="Filtro" />
+        <img src="/static/images/task/home/filtro.svg" alt="Filtro" />
 
         <Typography fontSize={20}>Filtro</Typography>
       </Box>

@@ -7,8 +7,8 @@ const CoverHomeTasks = () => {
 
             <Box>
                 <img
-                    src="/static/images/task/home/quebra-cabeca.svg"
-                    alt="Quebra Cabeca"
+                    src="/static/images/task/home/web3task-home-task.svg"
+                    alt="Logo Web3task"
                     width={200}
                     height={150}
                 />
@@ -16,8 +16,8 @@ const CoverHomeTasks = () => {
 
             <Box>
                 <Box>
-                    <Typography color={'green'} fontSize={50}>
-                        WEB3 TASK
+                    <Typography color={'green'} fontFamily='istok' fontSize={50}>
+                        WEB3TASK
                     </Typography>
                 </Box>
                 <Box>

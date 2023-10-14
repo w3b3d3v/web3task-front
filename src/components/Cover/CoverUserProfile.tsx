@@ -7,7 +7,7 @@ const CoverCreateTask = () => {
             <Box>
 
                 <Box>
-                    <Typography color={'green'} fontSize={50}>
+                    <Typography color={'green'} fontFamily='istok' fontSize={50}>
                         PERSONAL PROFILE
                     </Typography>
                 </Box>
