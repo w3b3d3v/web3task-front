@@ -90,7 +90,7 @@ const AdminOptions = () => {
             }
             case "setQuorum": {
                 try {
-                    await handleQuorum(quorum.quorum)
+                    await handleQuorum(BigInt(quorum.quorum))
                 } catch (error) {
                     console.error('Erro ao enviar o formulário:', error);
                 }
