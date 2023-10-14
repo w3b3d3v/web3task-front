@@ -24,7 +24,7 @@ const FooterWrapper = styled(Container)(
 
 function Footer() {
   const theme = useTheme();
-  const logoImage = "/static/images/logo/logo-web3task-" + theme.palette.mode + ".svg";
+  const logoImage = "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
 
   return (
     <FooterWrapper
