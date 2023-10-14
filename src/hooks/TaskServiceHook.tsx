@@ -159,7 +159,6 @@ export const useTaskServiceHook = (task: TaskService) => {
             }
         } catch (error) {
             setError('Erro ao buscar tarefas múltiplas' + error);
-            //handleSnackbar('Error Searching Tasks: '+ error, 'error')
         } finally {
             setLoading(false);
         }
