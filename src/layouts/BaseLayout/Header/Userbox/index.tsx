@@ -1,7 +1,5 @@
-import { useRef, useState } from "react";
-
+import { useRef, useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-
 import {
   Avatar,
   Box,
@@ -15,13 +13,12 @@ import {
   Popover,
   Typography,
 } from "@mui/material";
-
 import { styled } from "@mui/material/styles";
 import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
-import AccountBoxTwoToneIcon from "@mui/icons-material/AccountBoxTwoTone";
 import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone";
 import { User } from "src/models/user";
-import { useDisconnect, useAccount } from 'wagmi';
+import { useWeb3Utils } from "src/hooks/Web3UtilsHook";
+import { useTaskService } from "src/services/tasks-service";
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -83,7 +80,7 @@ function stringToColor(string: string) {
 
 const MuiAvatar = styled(Avatar)(
   ({ theme }) => `
-    width: 360px;
+    width: 160px;
 `
 );
 
@@ -98,6 +95,11 @@ function stringAvatar(name: string) {
 
 function HeaderUserbox({ disconnect, account }) {
   const [avatar, setAvatar] = useState("/static/images/avatars/1.jpg");
+  const { shortenAddressFromUser, userAddress } = useWeb3Utils();
+  const { hasMemberRole, hasLeaderRole } = useTaskService();
+  const [isMember, setIsMember] = useState<boolean>(false);
+  const [isLeader, setIsLeader] = useState<boolean>(false);
+
   const user: User = {
     name: "",
     avatar: avatar,
@@ -123,15 +125,26 @@ function HeaderUserbox({ disconnect, account }) {
     disconnect();
   };
 
+  useEffect(() => {
+    
+    hasLeaderRole(userAddress()).then(result => {
+      setIsLeader(result);
+      hasMemberRole(userAddress()).then(result => {
+        setIsMember(result);
+      })
+    })
+    
+}, [])
+
   return (
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen} sx={{ ml: 1 }}>
-        <MuiAvatar variant="rounded" {...stringAvatar(account?.address)} />
+        <MuiAvatar variant="rounded" {...stringAvatar(shortenAddressFromUser())} />
         <Hidden mdDown>
           <UserBoxText>
             <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
-            <UserBoxDescription variant="body2">
-              {user.jobTitle}
+            <UserBoxDescription noWrap variant="body2">
+              { isLeader ? "Leader" : isMember ? "Member" : "No Role" }
             </UserBoxDescription>
           </UserBoxText>
         </Hidden>
@@ -153,11 +166,11 @@ function HeaderUserbox({ disconnect, account }) {
         }}
       >
         <MenuUserBox sx={{ minWidth: 210 }} display="flex">
-          <MuiAvatar variant="rounded" {...stringAvatar(account?.address)} />
+          <MuiAvatar variant="rounded" {...stringAvatar(shortenAddressFromUser())} />
           <UserBoxText>
             <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
             <UserBoxDescription variant="body2">
-              {user.jobTitle}
+              { isLeader ? "Leader" : isMember ? "Member" : "No Role" }
             </UserBoxDescription>
           </UserBoxText>
         </MenuUserBox>
@@ -166,12 +179,18 @@ function HeaderUserbox({ disconnect, account }) {
           <ListItem button to="/users/profile" component={NavLink}>
             <ListItemText primary="Perfil" />
           </ListItem>
-          <ListItem button to="/tasks/create-task" component={NavLink}>
-            <ListItemText primary="Criar Tarefa" />
-          </ListItem>
-          <ListItem button to="/settings" component={NavLink}>
-            <ListItemText primary="Configurações" />
-          </ListItem>
+          {
+            isLeader && 
+            <ListItem button to="/tasks/create-task" component={NavLink}>
+              <ListItemText primary="Criar Tarefa" />
+            </ListItem>            
+          }
+          {
+            isLeader && 
+            <ListItem button to="/settings" component={NavLink}>
+              <ListItemText primary="Configurações" />
+            </ListItem>
+          }
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>

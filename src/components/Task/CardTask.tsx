@@ -1,13 +1,13 @@
-import { useState, forwardRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Button, Grid, CardMedia, CardContent, Typography, Card, useMediaQuery } from '@mui/material'
 import SuspenseLoader from 'src/components/SuspenseLoader'
 import AccessTime from '@mui/icons-material/AccessTime';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { AlertColor } from '@mui/material/Alert';
 import { useTaskService } from "src/services/tasks-service";
 import { useWeb3Utils } from 'src/hooks/Web3UtilsHook';
 import { useTheme } from '@mui/system';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { useSnackBar } from 'src/contexts/SnackBarContext';
 
 /**
  * CardTasks Component
@@ -15,21 +15,15 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
  * A component that displays a card for an NFT representing a task.
  *
  * @component
+ * @param taskId - ID of the Task
  * @param taskData - An array of TaskFront objects representing task data obtained from the Solidity contract function getTask().
  * @param loading - A boolean indicating whether the data is still loading.
  * @returns Card NFT to display
  */
 
-const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
-    props,
-    ref,
-) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 export const CardTask = ({ taskId, taskData, loading }: any) => {
     const { startTask, reviewTask, completeTask, cancelTask, hasMemberRole, hasLeaderRole } = useTaskService();
-    const [openInformartion, setOpenInformartion] = useState(false);
     const [openError, setOpenError] = useState(false);
     const [error, setError] = useState<string>();
     const [action, setAction] = useState<string>();
@@ -38,6 +32,12 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
     const [isLeader, setIsLeader] = useState<boolean>(false);
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+    const { showSnackBar } = useSnackBar();
+
+    const handleSnackbar = (message: string, color: AlertColor) => {
+        showSnackBar(message, color)
+    };
 
     const getAction = (status: string) => {
         switch (status) {
@@ -60,18 +60,20 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
             switch (taskData.status) {
                 case "Created":
                     await startTask(BigInt(taskId));
+                    handleSnackbar('Task Start process initiated with success!', 'info')
                     break;
                 case "In Progress":
                     await reviewTask(BigInt(taskId));
+                    handleSnackbar('Review Task process initiated with success!', 'info')
                     break;
                 case "In Review":
                     await completeTask(BigInt(taskId));
+                    handleSnackbar('Complete Task process initiated with success!', 'info')
                     break;
                 default:
                     break;
             }
 
-            setOpenInformartion(true);
         } catch (error) {
             setError(error.message)
             setOpenError(true);
@@ -81,27 +83,12 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
     const handleCancel = async () => {
         try {
             await cancelTask(BigInt(taskId));
+            handleSnackbar('Cancel Task process initiated with success!', 'warning')
         } catch (error) {
             setError(error.message)
             setOpenError(true);
         }
     }
-
-    const handleCloseSnackInformation = (event?: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpenInformartion(false);
-    };
-
-    const handleCloseSnackError = (event?: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpenError(false);
-    };
 
     useEffect(() => {
         console.log("taskData", taskData)
@@ -118,18 +105,8 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
 
     return (
 
-
         <Grid item xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'}>
-            <Snackbar open={openInformartion} autoHideDuration={6000} onClose={handleCloseSnackInformation}>
-                <Alert onClose={handleCloseSnackInformation} severity="info" sx={{ width: '100%' }}>
-                    Task Start process initiated with sucess!
-                </Alert>
-            </Snackbar>
-            <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseSnackError}>
-                <Alert onClose={handleCloseSnackError} severity="error" sx={{ width: '100%' }}>
-                    {error && error + " "} Try again!
-                </Alert>
-            </Snackbar>
+
             {loading ? (
                 <SuspenseLoader />
             ) : (
@@ -250,6 +227,7 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                 </>
             )
             }
+
         </Grid >
 
     )

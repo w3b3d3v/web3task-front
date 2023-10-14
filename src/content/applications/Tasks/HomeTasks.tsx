@@ -5,7 +5,7 @@ import { Box, Grid, useTheme } from "@mui/material";
 import CardMultiTasks from "../../../components/Task/CardMultiTasks";
 import CoverHomeTasks from "../../../components/Cover/CoverHomeTasks";
 import usePagination from "src/components/Pagination";
-import SearchFilters from "src/components/SearchFilters";
+import SearchFilters from "src/components/Task/SearchFiltersTasks";
 import { useSearchFilters } from "src/hooks/useSearchFilters";
 
 const HomeTasks = () => {

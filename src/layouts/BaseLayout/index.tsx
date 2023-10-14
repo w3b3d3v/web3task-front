@@ -5,7 +5,7 @@ import Header from "./Header";
 import SuspenseLoader from "src/components/SuspenseLoader";
 import Footer from 'src/components/Footer';
 import { useAccount } from 'wagmi';
-import Overview from "src/content/overview";
+import HomeTasks from "src/content/applications/Tasks/HomeTasks";
 
 const Loader = (Component) => (props) =>
 (
@@ -14,8 +14,6 @@ const Loader = (Component) => (props) =>
   </Suspense>
 );
 
-// Pages
-//const Overview = Loader(lazy(() => import('src/content/overview')));
 
 interface BaseLayoutProps {
   children?: ReactNode;
@@ -78,7 +76,7 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
             }}
           >
             <Box display="block">
-              <Overview />
+              <HomeTasks />
             </Box>
           </Box>
         )

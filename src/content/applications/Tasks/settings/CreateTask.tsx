@@ -1,27 +1,19 @@
-import { useEffect, useState, forwardRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import Typography from '@mui/material/Typography';
+import { AlertColor } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import { Box, useTheme } from '@mui/material';
 import { Dayjs } from 'dayjs';
 import { DatePicker, DatePickerProps } from '@mui/x-date-pickers';
 import { useTaskService } from "src/services/tasks-service";
-import { Task, TaskStatus } from "src/models/task";
+import { Task } from "src/models/task";
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import CoverCreateTask from '../../../../components/Cover/CoverCreateTask';
-
-const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref,
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+import { useSnackBar } from 'src/contexts/SnackBarContext';
 
 let newTask: Task = {
   status: 0,
@@ -41,7 +33,7 @@ const schema = yup.object({
     test(value, ctx) {
       let role = Number(value);
       if (isNaN(role))
-        return ctx.createError({message: 'Número inválido para a role.'}) 
+        return ctx.createError({ message: 'Número inválido para a role.' })
       return true;
     }
   }),
@@ -49,7 +41,7 @@ const schema = yup.object({
     test(value, ctx) {
       let role = Number(value);
       if (isNaN(role))
-        return ctx.createError({message: 'Valor inválido.'}) 
+        return ctx.createError({ message: 'Valor inválido.' })
       return true;
     }
   }),
@@ -63,14 +55,15 @@ const schema = yup.object({
           validation = false;
       });
       if (!validation)
-        return ctx.createError({message: 'Número inválido para as roles.'}); 
+        return ctx.createError({ message: 'Número inválido para as roles.' });
       return validation;
     }
   }),
-  endDate: yup.string().required('Campo obrigatório.')
+  // endDate: yup.string().required('Campo obrigatório.')
 }).required();
 
 const CreateTask = ({ data }) => {
+
   const theme = useTheme();
   const { createTask } = useTaskService();
   const [task, setTask] = useState<Task>();
@@ -78,11 +71,16 @@ const CreateTask = ({ data }) => {
   const [authorizedRolesStr, setAuthorizedRolesStr] = useState<string>();
   const [expireDate, setExpireDate] = useState<DatePickerProps<Dayjs> | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [openInformartion, setOpenInformartion] = useState(false);
   const [openError, setOpenError] = useState(false);
-  const { register, handleSubmit, formState:{ errors } } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema)
   });
+
+  const { showSnackBar } = useSnackBar();
+
+  const handleSnackbar = (message: string, color: AlertColor) => {
+    showSnackBar(message, color)
+  };
 
   const logoImage = "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
 
@@ -121,7 +119,7 @@ const CreateTask = ({ data }) => {
 
   const onSubmit = async (event: { preventDefault: () => void; }) => {
     try {
-
+      handleSnackbar('Create Task Start process initiated with success!', 'info')
       let authorizedRoles: string[] = (authorizedRolesStr).split(',');
       const splittedRoles: readonly bigint[] = authorizedRoles.map(str => BigInt(str));
       task.authorizedRoles = splittedRoles;
@@ -132,27 +130,10 @@ const CreateTask = ({ data }) => {
 
       await createTask(task);
 
-      setOpenInformartion(true);
     } catch (error) {
       console.log("Erro: ", error);
       setOpenError(true);
     }
-  };
-
-  const handleCloseSnackInformation = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpenInformartion(false);
-  };
-
-  const handleCloseSnackError = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpenError(false);
   };
 
   useEffect(() => {
@@ -171,16 +152,6 @@ const CreateTask = ({ data }) => {
 
   return (
     <Stack spacing={2} sx={{ width: '100%' }}>
-      <Snackbar open={openInformartion} autoHideDuration={6000} onClose={handleCloseSnackInformation}>
-        <Alert onClose={handleCloseSnackInformation} severity="info" sx={{ width: '100%' }}>
-          Task creation initiated with sucess!
-        </Alert>
-      </Snackbar>
-      <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseSnackError}>
-        <Alert onClose={handleCloseSnackError} severity="error" sx={{ width: '100%' }}>
-          Task not created! Try again!
-        </Alert>
-      </Snackbar>
       <Box
         display={'flex'}
         justifyContent={'center'}
@@ -196,32 +167,32 @@ const CreateTask = ({ data }) => {
           loading ? <SuspenseLoader /> : (
             <Box marginTop={2} component="form" onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing={2} alignItems={'center'} >
-                  <TextField  {...register("title")} 
-                    fullWidth 
-                    id="outlined-required"
-                    label={'Title'}
-                    onBlur={handleTitle}
-                    placeholder={'Describe the activity or link to a document'}
-                    />
-                    <p>{errors.title?.message}</p>
-                
-                  <TextField {...register("authorizedRoles")}
-                    fullWidth
-                    id="outlined-required"
-                    label={'Authorized Roles (separate by `,`)'}
-                    onBlur={handleAuthorizedRoles}
-                    placeholder={'The authorized roles to perform the task'}
-                    />
-                    <p>{errors.authorizedRoles?.message}</p>
+                <TextField  {...register("title")}
+                  fullWidth
+                  id="outlined-required"
+                  label={'Title'}
+                  onBlur={handleTitle}
+                  placeholder={'Describe the activity or link to a document'}
+                />
+                <p>{errors.title?.message}</p>
+
+                <TextField {...register("authorizedRoles")}
+                  fullWidth
+                  id="outlined-required"
+                  label={'Authorized Roles (separate by `,`)'}
+                  onBlur={handleAuthorizedRoles}
+                  placeholder={'The authorized roles to perform the task'}
+                />
+                <p>{errors.authorizedRoles?.message}</p>
 
                 <TextField {...register("creatorRole")}
                   fullWidth
                   id="outlined-required"
                   label={'Creator Role'}
                   onBlur={handleCreatorRole}
-                  placeholder={'0xABCD...01234'}
-                  />
-                  <p>{errors.creatorRole?.message}</p>
+                  placeholder={'Creator Role 5..10..'}
+                />
+                <p>{errors.creatorRole?.message}</p>
 
                 <TextField
                   fullWidth
@@ -239,7 +210,7 @@ const CreateTask = ({ data }) => {
                   placeholder={'https://ipfs.io/ipfs/QmY5D...7CEh'}
                 />
 
-                <TextField fullWidth                 
+                <TextField fullWidth
                   id="outlined-required"
                   label={'Description'}
                   onBlur={handleDescription}
@@ -265,7 +236,7 @@ const CreateTask = ({ data }) => {
                       label={'Deliver Date'}
                       onChange={(newValue: any) => setExpireDate(newValue)}
                     />
-                    <p>{errors.endDate?.message}</p>
+                    {/* <p>{errors.endDate?.message}</p> */}
                   </div>
                 </Stack>
 

@@ -18,13 +18,14 @@ import {
   DialogContent,
   Slide,
   Hidden,
+  useMediaQuery,
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
 import FindInPageTwoToneIcon from "@mui/icons-material/FindInPageTwoTone";
 import ChevronRightTwoToneIcon from "@mui/icons-material/ChevronRightTwoTone";
 import { Dialog, TextField, DialogTitle } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import HeaderNotifications from "../Buttons/Notifications";
 import HeaderToggleTheme from "../Buttons/ToggleTheme";
 
@@ -67,7 +68,8 @@ const DialogTitleWrapper = styled(DialogTitle)(
 function HeaderSearch() {
   const [openSearchResults, setOpenSearchResults] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-
+  const theme = useTheme();
+  const smDown = useMediaQuery(theme.breakpoints.down('sm'));
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setSearchValue(event.target.value);
     console.log("search value = ", searchValue);
@@ -96,32 +98,36 @@ function HeaderSearch() {
   return (
     <>
       <Grid container alignItems="center" rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid item xs={3}>
-
+        <Grid item xs={1}>
         </Grid>
-        <Grid item xs={6}>
-          <Box >
-            <Tooltip arrow title="Search">
-                <SearchInputWrapper
-                  value={searchValue}
-                  autoFocus={true}
-                  onChange={handleSearchChange}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchTwoToneIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                  placeholder="Search terms here..."
-                  fullWidth
-                />
-            </Tooltip>  
-          </Box>
+        
+        <Grid item xs={7}>          
+          <Hidden mdDown>
+            <Box >
+              <Tooltip arrow title="Search">
+                  <SearchInputWrapper
+                    value={searchValue}
+                    autoFocus={true}
+                    onChange={handleSearchChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchTwoToneIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    placeholder="Search terms here..."
+                    fullWidth
+                  />
+              </Tooltip>  
+            </Box>            
+          </Hidden>
         </Grid>
-        <Grid  item xs={3}>
+          
+        
+        <Grid  item xs={4}>
           <Box sx={{ mr: 1 }}>
-            <Box sx={{ mx: 0.5 }} component="span">
+            <Box sx={{ mx: 0.5 }} component="span" display={"flex"} >
               <HeaderNotifications />
               <HeaderToggleTheme />
             </Box>

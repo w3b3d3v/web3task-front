@@ -1,5 +1,7 @@
-export const TasksManager = {
-  "address": "0xeC20dCBf0380F1C9856Ee345aF41F62Ee45a95a1",
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "Web3Task",
+  "sourceName": "contracts/Web3Task.sol",
   "abi": [
     {
       "inputs": [
@@ -72,14 +74,9 @@ export const TasksManager = {
           "internalType": "uint256",
           "name": "taskId",
           "type": "uint256"
-        },
-        {
-          "internalType": "enum IWeb3Task.Status",
-          "name": "status",
-          "type": "uint8"
         }
       ],
-      "name": "TaskCannotBeChanged",
+      "name": "InvalidTaskId",
       "type": "error"
     },
     {
@@ -222,63 +219,6 @@ export const TasksManager = {
       "anonymous": false,
       "inputs": [
         {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "taskId",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "description",
-          "type": "string"
-        }
-      ],
-      "name": "DescriptionUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "taskId",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "endDate",
-          "type": "uint256"
-        }
-      ],
-      "name": "EndDateUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "taskId",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "metadata",
-          "type": "string"
-        }
-      ],
-      "name": "MetadataUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
           "indexed": false,
           "internalType": "uint256",
           "name": "value",
@@ -386,25 +326,6 @@ export const TasksManager = {
         }
       ],
       "name": "TaskUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "taskId",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "title",
-          "type": "string"
-        }
-      ],
-      "name": "TitleUpdated",
       "type": "event"
     },
     {
@@ -843,44 +764,6 @@ export const TasksManager = {
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "bytes[]",
-          "name": "data",
-          "type": "bytes[]"
-        }
-      ],
-      "name": "multicall",
-      "outputs": [
-        {
-          "internalType": "bytes[]",
-          "name": "results",
-          "type": "bytes[]"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "bytes[]",
-          "name": "data",
-          "type": "bytes[]"
-        }
-      ],
-      "name": "multicallRead",
-      "outputs": [
-        {
-          "internalType": "bytes[]",
-          "name": "results",
-          "type": "bytes[]"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "inputs": [],
       "name": "name",
       "outputs": [
@@ -1027,60 +910,6 @@ export const TasksManager = {
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "_taskId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "string",
-          "name": "_description",
-          "type": "string"
-        }
-      ],
-      "name": "setDescription",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_taskId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_endDate",
-          "type": "uint256"
-        }
-      ],
-      "name": "setEndDate",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_taskId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "string",
-          "name": "_metadata",
-          "type": "string"
-        }
-      ],
-      "name": "setMetadata",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
           "name": "_value",
           "type": "uint256"
         }
@@ -1132,24 +961,6 @@ export const TasksManager = {
         }
       ],
       "name": "setRole",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_taskId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "string",
-          "name": "_title",
-          "type": "string"
-        }
-      ],
-      "name": "setTitle",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1290,4 +1101,8 @@ export const TasksManager = {
       "type": "function"
     }
   ],
-} as const
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
