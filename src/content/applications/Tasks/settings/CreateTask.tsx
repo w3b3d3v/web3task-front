@@ -70,7 +70,7 @@ const CreateTask = ({ data }) => {
   const [task, setTask] = useState<Task>();
   const [valueReward, setValueReward] = useState<string>();
   const [authorizedRolesStr, setAuthorizedRolesStr] = useState<string>();
-  const [expireDate, setExpireDate] = useState<DatePickerProps<Dayjs> | null>(null);
+  const [expireDate, setExpireDate] = useState<Dayjs | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [openError, setOpenError] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm({
@@ -125,8 +125,8 @@ const CreateTask = ({ data }) => {
       const splittedRoles: readonly bigint[] = authorizedRoles.map(str => BigInt(str));
       task.authorizedRoles = splittedRoles;
       task.reward = BigInt(valueReward);
-      let data = String(Math.floor(Date.now() / 1000) + 3600)
-      task.endDate = BigInt(data);
+      let expireTimestamp = expireDate.unix();
+      task.endDate = BigInt(expireTimestamp);
       console.log("task.endDate: ", task.endDate);
 
       await createTask(task);
@@ -239,7 +239,7 @@ const CreateTask = ({ data }) => {
                     <div>
                       <DatePicker
                         label={'Deliver Date'}
-                        onChange={(newValue: any) => setExpireDate(newValue)}
+                        onChange={(newValue: Dayjs) => setExpireDate(newValue)}
                         slotProps={{
                           textField: { size: 'medium' },
                           openPickerIcon: { style: { color: theme.palette.primary.main } },
