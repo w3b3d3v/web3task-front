@@ -235,6 +235,11 @@ const CreateTask = ({ data }) => {
                     <DatePicker
                       label={'Deliver Date'}
                       onChange={(newValue: any) => setExpireDate(newValue)}
+                      slotProps={{
+                        textField: { size: 'medium' },
+                        openPickerIcon: { style: { color: theme.palette.primary.main } },
+                        switchViewButton: { style: { color: 'info' } }
+                      }}
                     />
                     {/* <p>{errors.endDate?.message}</p> */}
                   </div>

@@ -328,6 +328,7 @@ export const DarkTheme = createTheme({
       styleOverrides: {
         root: {
           boxShadow: "none",
+          background: 'transparent',
 
           "&.Mui-expanded": {
             margin: 0,

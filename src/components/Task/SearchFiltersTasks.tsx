@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import { useSearchFilters } from 'src/hooks/useSearchFilters';
+import TuneIcon from '@mui/icons-material/Tune';
 
 interface SearchFiltersProps {
   maxReward?: number;
@@ -32,9 +33,8 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
 
   return (
     <Box display="flex" flexDirection="column">
-      <Box display="inline-flex" alignItems="center">
-        <img src="/static/images/task/home/filtro.svg" alt="Filtro" />
-
+      <Box display="inline-flex" alignItems="center" justifyContent={'left'} ml={4}>
+        <TuneIcon color='primary' />
         <Typography fontSize={20}>Filtro</Typography>
       </Box>
 
@@ -42,9 +42,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
         <AccordionSummary
           expandIcon={
             <ExpandMoreTwoToneIcon
-              sx={{
-                color: theme.palette.mode === 'dark' ? 'white' : 'black',
-              }}
+              color='primary'
             />
           }
         >
@@ -66,9 +64,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
         <AccordionSummary
           expandIcon={
             <ExpandMoreTwoToneIcon
-              sx={{
-                color: theme.palette.mode === 'dark' ? 'white' : 'black',
-              }}
+              color='primary'
             />
           }
         >
@@ -90,9 +86,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
         <AccordionSummary
           expandIcon={
             <ExpandMoreTwoToneIcon
-              sx={{
-                color: theme.palette.mode === 'dark' ? 'white' : 'black',
-              }}
+              color='primary'
             />
           }
         >
@@ -124,10 +118,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
         <AccordionSummary
           expandIcon={
             <ExpandMoreTwoToneIcon
-              sx={{
-                color: theme.palette.mode === 'dark' ? 'white' : 'black',
-              }}
-            />
+              color='primary' />
           }
         >
           <Typography>Data de vencimento</Typography>
@@ -139,10 +130,16 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
             value={dueDate}
             onChange={setDueDate}
             format="DD/MM/YYYY"
+            slotProps={{
+              textField: { size: 'medium' },
+              openPickerIcon: { style: { color: theme.palette.primary.main } },
+              switchViewButton: { style: { color: 'info' } }
+            }}
           />
         </AccordionDetails>
       </Accordion>
-    </Box>
+
+    </Box >
   );
 }
 

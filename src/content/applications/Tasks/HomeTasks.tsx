@@ -52,7 +52,7 @@ const HomeTasks = () => {
         <>
 
             <Box
-                sx={{ width: '100%' }}>
+            >
 
                 <CoverHomeTasks />
 
@@ -60,12 +60,12 @@ const HomeTasks = () => {
                     <Box height={40} bgcolor={'#8EFFC2'} />
 
 
-                    <Grid container spacing={2} marginTop={0} style={{ width: '100%', overflowX: 'hidden' }} >
-                        <Grid item xs={3} bgcolor={theme.palette.mode === 'dark' ? theme.colors.alpha.black[100] : theme.colors.alpha.trueWhite[100]}>
+                    <Grid container spacing={2} marginTop={0} style={{ width: '100%' }} >
+                        <Grid item xs={4} mt={5}>
                             <SearchFilters maxReward={maxReward} />
                         </Grid>
 
-                        <Grid item xs={9} style={{ maxWidth: '100%' }}>
+                        <Grid item xs={8} style={{ width: '100%' }}>
 
                             <CardMultiTasks multiTasksData={filteredMultiTasks} loading={loading} page={currentPage} />
                         </Grid>
