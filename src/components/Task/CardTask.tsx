@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Button, Grid, CardMedia, CardContent, Typography, Card, useMediaQuery } from '@mui/material'
+import { Box, Button, Grid, IconButton, CardMedia, CardContent, Typography, Card, useMediaQuery, Tooltip } from '@mui/material'
 import SuspenseLoader from 'src/components/SuspenseLoader'
 import AccessTime from '@mui/icons-material/AccessTime';
 import { AlertColor } from '@mui/material/Alert';
@@ -103,6 +103,16 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
         }
     }, [])
 
+    const copyContent = async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            handleSnackbar("Copy to Clipboard", 'info')
+        } catch (err) {
+            console.error('Failed to copy: ', err);
+            handleSnackbar("Failed to copy to clipboard", 'error')
+        }
+    }
+
     return (
 
         <Grid item xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'}>
@@ -157,14 +167,14 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                             <Typography gutterBottom variant="h3" component="div" textAlign={'left'} >
                                                 {taskData.title}
                                             </Typography>
-
-                                            <OpenInNewIcon style={{
-                                                cursor: 'pointer'
-                                            }} />
+                                            <IconButton color="primary"
+                                                onClick={copyContent}>
+                                                <OpenInNewIcon />
+                                            </IconButton>
 
                                         </Box>
                                         <Typography gutterBottom variant='subtitle2' component="div">
-                                            #8654
+                                            #{taskId}
                                         </Typography>
 
                                     </Box>
