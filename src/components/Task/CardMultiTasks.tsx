@@ -1,5 +1,6 @@
 import { Grid, CardMedia, CardContent, Typography, Card } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { ethers } from "ethers";
 import { TaskFront } from "src/models/task";
 
 const CardAddAction = styled(Card)<{ $loading: boolean }>(
@@ -90,7 +91,7 @@ export const CardMultiTasks = ({ multiTasksData, loading, page }) => {
                             {!loading && item?.title}
                         </Typography>
                         <Typography gutterBottom variant="h5" component="div">
-                            {!loading && `${item?.reward} MATIC`}
+                            {!loading && `${ethers.utils.formatEther(item?.reward)} MATIC`}
                         </Typography>
                         <Typography
                             gutterBottom
