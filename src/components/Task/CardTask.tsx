@@ -8,6 +8,7 @@ import { useWeb3Utils } from 'src/hooks/Web3UtilsHook';
 import { useTheme } from '@mui/system';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useSnackBar } from 'src/contexts/SnackBarContext';
+import { ethers } from 'ethers';
 
 /**
  * CardTasks Component
@@ -153,7 +154,7 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                                     marginLeft: isSmallScreen ? 'auto' : 'unset',
                                                 }}
                                             >
-                                                Reward {taskData.reward} USD
+                                                Reward {ethers.utils.formatEther(taskData.reward)} USD
                                             </Typography>
                                         </CardContent>
                                     </Card>
