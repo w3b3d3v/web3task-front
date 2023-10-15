@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import { TaskFront } from "src/models/task";
 
 const CardAddAction = styled(Card)<{ $loading: boolean }>(
-  ({ theme, $loading }) => `
+    ({ theme, $loading }) => `
         border: ${theme.colors.primary.main} dashed 1px;
         height: 100%;
         color: ${theme.colors.primary.main};
@@ -25,9 +25,8 @@ const CardAddAction = styled(Card)<{ $loading: boolean }>(
             cursor: pointer;
         }          
 
-        ${
-          $loading &&
-          `
+        ${$loading &&
+        `
             @keyframes shine {
                 to {
                     background-position-x: -200%;
@@ -61,89 +60,72 @@ const CardAddAction = styled(Card)<{ $loading: boolean }>(
  */
 
 export const CardMultiTasks = ({ multiTasksData, loading, page }) => {
-  const handleCardSelect = (taskId) => {
-    window.location.href = "/tasks/details-task/" + taskId;
-  };
+    const handleCardSelect = (taskId) => {
+        window.location.href = "/tasks/details-task/" + taskId;
+    };
 
-  loading = true 
-
-  /* multiTasksData = [
-    {
-      metadata: "9",
-      title: "9",
-      reward: "9",
-      creatorRole: "9",
-    },
-    {
-      metadata: "9",
-      title: "9",
-      reward: "9",
-      creatorRole: "9",
-    },
-  ]; */
-
-  const CardTasks = ({ index, item }: { index: React.Key; item?: any }) => (
-    <Grid
-      item
-      key={index}
-      xs={"auto"}
-      sm={"auto"}
-      md={"auto"}
-      lg={"auto"}
-      sx={{ margin: "5px" }}
-    >
-      <CardAddAction
-        onClick={() => handleCardSelect((page - 1) * 20 + Number(index) + 1)}
-        $loading={loading}
-      >
-        <Card key={index} sx={{ width: 254, height: 336 }}>
-          <CardMedia
-            sx={{ width: 254, height: 248 }}
-            component="img"
-            image={item?.metadata}
-            alt={!loading && "multiTasksData"}
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {!loading && item?.title}
-            </Typography>
-            <Typography gutterBottom variant="h5" component="div">
-              {!loading && `${item?.reward} MATIC`}
-            </Typography>
-            <Typography
-              gutterBottom
-              variant="h5"
-              component="div"
-              textAlign={"right"}
+    const CardTasks = ({ index, item }: { index: React.Key; item?: any }) => (
+        <Grid
+            item
+            key={index}
+            xs={"auto"}
+            sm={"auto"}
+            md={"auto"}
+            lg={"auto"}
+            sx={{ margin: "5px" }}
+        >
+            <CardAddAction
+                onClick={() => handleCardSelect((page - 1) * 20 + Number(index) + 1)}
+                $loading={loading}
             >
-              #{item?.creatorRole}
-            </Typography>
-          </CardContent>
-        </Card>
-      </CardAddAction>
-    </Grid>
-  );
+                <Card key={index} sx={{ width: 254, height: 336 }}>
+                    <CardMedia
+                        sx={{ width: 254, height: 248 }}
+                        component="img"
+                        image={item?.metadata}
+                        alt={!loading && "multiTasksData"}
+                    />
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                            {!loading && item?.title}
+                        </Typography>
+                        <Typography gutterBottom variant="h5" component="div">
+                            {!loading && `${item?.reward} MATIC`}
+                        </Typography>
+                        <Typography
+                            gutterBottom
+                            variant="h5"
+                            component="div"
+                            textAlign={"right"}
+                        >
+                            #{item?.creatorRole}
+                        </Typography>
+                    </CardContent>
+                </Card>
+            </CardAddAction>
+        </Grid>
+    );
 
-  return (
-    <>
-      <Grid container spacing={4} ml={15} mt={5}>
-        {loading ? (
-          Array.from({ length: 12 }, () => ({})).map(
-            (index: React.Key) => (
-              <CardTasks index={index} />
-            )
-          )
-        ) : (
-          <>
-            {multiTasksData &&
-              multiTasksData.map((item: TaskFront, index: React.Key) => (
-                <CardTasks index={index} item={item} />
-              ))}
-          </>
-        )}
-      </Grid>
-    </>
-  );
+    return (
+        <>
+            <Grid container spacing={4} mt={5}>
+                {loading ? (
+                    Array.from({ length: (multiTasksData.length || 12) }, () => ({})).map(
+                        (index: React.Key) => (
+                            <CardTasks index={index} />
+                        )
+                    )
+                ) : (
+                    <>
+                        {multiTasksData &&
+                            multiTasksData.map((item: TaskFront, index: React.Key) => (
+                                <CardTasks index={index} item={item} />
+                            ))}
+                    </>
+                )}
+            </Grid>
+        </>
+    );
 };
 
 export default CardMultiTasks;
