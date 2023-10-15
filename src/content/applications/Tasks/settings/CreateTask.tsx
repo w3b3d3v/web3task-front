@@ -14,6 +14,7 @@ import { Task } from "src/models/task";
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import CoverCreateTask from '../../../../components/Cover/CoverCreateTask';
 import { useSnackBar } from 'src/contexts/SnackBarContext';
+import { Helmet } from 'react-helmet-async';
 
 let newTask: Task = {
   status: 0,
@@ -151,111 +152,115 @@ const CreateTask = ({ data }) => {
   }, [setLoading]);
 
   return (
-    <Stack spacing={2} sx={{ width: '100%' }}>
-      <Box
-        display={'flex'}
-        justifyContent={'center'}
-        alignItems={'center'}
-        height={'100%'}
-        flexDirection={'column'}>
-
+    <>
+      <Helmet>
+        <title>Web3Task - Create Task</title>
+      </Helmet>
+      <Stack spacing={2} sx={{ width: '100%' }}>
         <Box
-          width={'100%'}>
-          <CoverCreateTask />
-        </Box>
-        {
-          loading ? <SuspenseLoader /> : (
-            <Box marginTop={2} component="form" onSubmit={handleSubmit(onSubmit)}>
-              <Stack spacing={2} alignItems={'center'} >
-                <TextField  {...register("title")}
-                  fullWidth
-                  id="outlined-required"
-                  label={'Title'}
-                  onBlur={handleTitle}
-                  placeholder={'Describe the activity or link to a document'}
-                />
-                <p>{errors.title?.message}</p>
+          display={'flex'}
+          justifyContent={'center'}
+          alignItems={'center'}
+          height={'100%'}
+          flexDirection={'column'}>
 
-                <TextField {...register("authorizedRoles")}
-                  fullWidth
-                  id="outlined-required"
-                  label={'Authorized Roles (separate by `,`)'}
-                  onBlur={handleAuthorizedRoles}
-                  placeholder={'The authorized roles to perform the task'}
-                />
-                <p>{errors.authorizedRoles?.message}</p>
+          <Box
+            width={'100%'}>
+            <CoverCreateTask />
+          </Box>
+          {
+            loading ? <SuspenseLoader /> : (
+              <Box marginTop={2} component="form" onSubmit={handleSubmit(onSubmit)}>
+                <Stack spacing={2} alignItems={'center'} >
+                  <TextField  {...register("title")}
+                    fullWidth
+                    id="outlined-required"
+                    label={'Title'}
+                    onBlur={handleTitle}
+                    placeholder={'Describe the activity or link to a document'}
+                  />
+                  <p>{errors.title?.message}</p>
 
-                <TextField {...register("creatorRole")}
-                  fullWidth
-                  id="outlined-required"
-                  label={'Creator Role'}
-                  onBlur={handleCreatorRole}
-                  placeholder={'Creator Role 5..10..'}
-                />
-                <p>{errors.creatorRole?.message}</p>
+                  <TextField {...register("authorizedRoles")}
+                    fullWidth
+                    id="outlined-required"
+                    label={'Authorized Roles (separate by `,`)'}
+                    onBlur={handleAuthorizedRoles}
+                    placeholder={'The authorized roles to perform the task'}
+                  />
+                  <p>{errors.authorizedRoles?.message}</p>
 
-                <TextField
-                  fullWidth
-                  id="outlined-required"
-                  label={'Assignee Address (leave blank to allow anyone to perform the task)'}
-                  onBlur={handleAssignee}
-                  placeholder={'Assignee address'}
-                />
+                  <TextField {...register("creatorRole")}
+                    fullWidth
+                    id="outlined-required"
+                    label={'Creator Role'}
+                    onBlur={handleCreatorRole}
+                    placeholder={'Creator Role 5..10..'}
+                  />
+                  <p>{errors.creatorRole?.message}</p>
 
-                <TextField
-                  fullWidth
-                  id="outlined-required"
-                  label={'Metadata (IPFS)'}
-                  onBlur={handleMetadata}
-                  placeholder={'https://ipfs.io/ipfs/QmY5D...7CEh'}
-                />
+                  <TextField
+                    fullWidth
+                    id="outlined-required"
+                    label={'Assignee Address (leave blank to allow anyone to perform the task)'}
+                    onBlur={handleAssignee}
+                    placeholder={'Assignee address'}
+                  />
 
-                <TextField fullWidth
-                  id="outlined-required"
-                  label={'Description'}
-                  onBlur={handleDescription}
-                  placeholder={'A full description about the ativity.'}
-                  multiline
-                  maxRows="18"
-                  onChange={handleChange}
-                />
+                  <TextField
+                    fullWidth
+                    id="outlined-required"
+                    label={'Metadata (IPFS)'}
+                    onBlur={handleMetadata}
+                    placeholder={'https://ipfs.io/ipfs/QmY5D...7CEh'}
+                  />
 
-                <Stack spacing={2} direction={'row'} alignItems="center" justifyContent="center">
-                  <Box>
-                    <img src={logoImage} width={'100px'} height={'100px'} alt='Pod3LabsRecompensaIcon' />
-                  </Box>
-                  <div>
-                    <TextField  {...register("valueReward")}
-                      label={'Reward in USD'}
-                      onBlur={handleReward}
-                    />
-                    <p>{errors.valueReward?.message}</p>
-                  </div>
-                  <div>
-                    <DatePicker
-                      label={'Deliver Date'}
-                      onChange={(newValue: any) => setExpireDate(newValue)}
-                      slotProps={{
-                        textField: { size: 'medium' },
-                        openPickerIcon: { style: { color: theme.palette.primary.main } },
-                        switchViewButton: { style: { color: 'info' } }
-                      }}
-                    />
-                    {/* <p>{errors.endDate?.message}</p> */}
-                  </div>
+                  <TextField fullWidth
+                    id="outlined-required"
+                    label={'Description'}
+                    onBlur={handleDescription}
+                    placeholder={'A full description about the ativity.'}
+                    multiline
+                    maxRows="18"
+                    onChange={handleChange}
+                  />
+
+                  <Stack spacing={2} direction={'row'} alignItems="center" justifyContent="center">
+                    <Box>
+                      <img src={logoImage} width={'100px'} height={'100px'} alt='Pod3LabsRecompensaIcon' />
+                    </Box>
+                    <div>
+                      <TextField  {...register("valueReward")}
+                        label={'Reward in USD'}
+                        onBlur={handleReward}
+                      />
+                      <p>{errors.valueReward?.message}</p>
+                    </div>
+                    <div>
+                      <DatePicker
+                        label={'Deliver Date'}
+                        onChange={(newValue: any) => setExpireDate(newValue)}
+                        slotProps={{
+                          textField: { size: 'medium' },
+                          openPickerIcon: { style: { color: theme.palette.primary.main } },
+                          switchViewButton: { style: { color: 'info' } }
+                        }}
+                      />
+                      {/* <p>{errors.endDate?.message}</p> */}
+                    </div>
+                  </Stack>
+
+                  <Button type="submit" variant='contained' color='primary'>
+                    Enviar
+                  </Button>
+
                 </Stack>
-
-                <Button type="submit" variant='contained' color='primary'>
-                  Enviar
-                </Button>
-
-              </Stack>
-            </Box>
-          )
-        }
-      </Box>
-    </Stack>
-
+              </Box>
+            )
+          }
+        </Box>
+      </Stack>
+    </>
   );
 }
 

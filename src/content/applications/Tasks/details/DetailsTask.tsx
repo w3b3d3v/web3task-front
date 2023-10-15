@@ -27,7 +27,7 @@ const DetailsTask = () => {
     return (
         <>
             <Helmet>
-                <title>Web3Task - Profile</title>
+                <title>Web3Task - Task Details</title>
             </Helmet>
 
             <Container sx={{
