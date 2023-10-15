@@ -7,6 +7,7 @@ import CoverHomeTasks from "../../../components/Cover/CoverHomeTasks";
 import usePagination from "src/components/Pagination";
 import SearchFilters from "src/components/Task/SearchFiltersTasks";
 import { useSearchFilters } from "src/hooks/useSearchFilters";
+import { Helmet } from "react-helmet-async";
 
 const HomeTasks = () => {
     const taskService = useTaskService();
@@ -50,6 +51,9 @@ const HomeTasks = () => {
 
     return (
         <>
+            <Helmet>
+                <title>Web3Task</title>
+            </Helmet>
 
             <Box
             >

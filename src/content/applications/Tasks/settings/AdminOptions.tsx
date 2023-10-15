@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTaskService } from 'src/services/tasks-service';
 import { useTaskServiceHook } from '../../../../hooks/TaskServiceHook';
 import CoverAdminOptions from 'src/components/Cover/CoverAdminOptions';
+import { Helmet } from 'react-helmet-async';
 
 const AdminOptions = () => {
 
@@ -74,7 +75,7 @@ const AdminOptions = () => {
             case "setRole": {
                 try {
                     await handleRole(role.roleId, role.authorizedAddress, role.isAuthorized);
-                    
+
                 } catch (error) {
                     console.error('Erro ao enviar o formulário:', error);
                 }
@@ -112,11 +113,14 @@ const AdminOptions = () => {
 
     return (
         <>
+            <Helmet>
+                <title>Web3Task - Adm Settings</title>
+            </Helmet>
             <Box>
                 <CoverAdminOptions />
                 <Box display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'}>
                     <Stack>
-                    <Box m={2}>
+                        <Box m={2}>
                             <Typography sx={{ alignItems: 'left' }} fontWeight={'bold'} fontSize={'24px'} mb={2}>Deposit</Typography>
                             <TextField label={'Role ID'} sx={{ mr: 2 }} onChange={(event) => (handleInputChange('deposit', event))} name='roleId' />
                             <TextField label={'Amount'} sx={{ mr: 2 }} onChange={(event) => (handleInputChange('deposit', event))} name='amount' />
