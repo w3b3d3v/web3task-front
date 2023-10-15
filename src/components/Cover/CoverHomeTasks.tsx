@@ -16,7 +16,7 @@ const CoverHomeTasks = () => {
 
             <Box>
                 <Box>
-                    <Typography color={'green'} fontFamily='istok' fontSize={50}>
+                    <Typography color={'green'} fontSize={50}>
                         WEB3TASK
                     </Typography>
                 </Box>
