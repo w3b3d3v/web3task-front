@@ -328,6 +328,7 @@ export const LightTheme = createTheme({
       styleOverrides: {
         root: {
           boxShadow: "none",
+          background: "transparent",
 
           "&.Mui-expanded": {
             margin: 0,

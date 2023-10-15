@@ -49,7 +49,7 @@ export const CardMultiTasks = ({ multiTasksData, loading, page }) => {
 
     return (
         <>
-            <Grid container spacing={4} ml={15} mt={5}>
+            <Grid container spacing={4} mt={5}>
                 {loading ? (
                     <SuspenseLoader />
                 ) : (
