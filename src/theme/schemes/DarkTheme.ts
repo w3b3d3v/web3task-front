@@ -1194,6 +1194,9 @@ export const DarkTheme = createTheme({
           fontSize: 17,
           lineHeight: 1.7,
         },
+        root: {
+          fontFamily: 'Public Sans'
+        },
       },
     },
 
@@ -1203,7 +1206,7 @@ export const DarkTheme = createTheme({
   },
   typography: {
     fontFamily:
-      '"Istok", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
+      '"Istok", Public Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
     h1: {
       fontWeight: 700,
       fontSize: 35,
