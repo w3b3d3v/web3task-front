@@ -14,6 +14,7 @@ interface TaskService {
     setOperator: (interfaceId: any, roleId: any, isAuthorized: boolean) => Promise<any>
     setMinQuorum: (quorum: any) => Promise<any>
     deposit: (roleId: any, amount: any) => Promise<any>
+    getScore: (address: any) => Promise<any>
 }
 
 /**
@@ -107,7 +108,7 @@ export const useTaskServiceHook = (task: TaskService) => {
             setTaskData(nft);
         } catch (error) {
             setError('Erro ao buscar tarefa');
-            handleSnackbar('Error Searching Task: '+error, 'error')
+            handleSnackbar('Error Searching Task: ' + error, 'error')
         } finally {
             setLoading(false);
         }
@@ -207,6 +208,14 @@ export const useTaskServiceHook = (task: TaskService) => {
         }
     };
 
+    const handleUserScore = async (address: any) => {
+        try {
+            return await task.getScore(address);
+        } catch (error) {
+            handleSnackbar('Error getting Score', 'error')
+        }
+    };
+
     return {
         taskData,
         multiTasksData,
@@ -217,6 +226,7 @@ export const useTaskServiceHook = (task: TaskService) => {
         handleRole,
         handleOperator,
         handleQuorum,
-        handleDeposit
+        handleDeposit,
+        handleUserScore
     };
 };

@@ -15,12 +15,13 @@ import SuspenseLoader from 'src/components/SuspenseLoader';
 import CoverCreateTask from '../../../../components/Cover/CoverCreateTask';
 import { useSnackBar } from 'src/contexts/SnackBarContext';
 import { Helmet } from 'react-helmet-async';
+import { BigNumber, ethers } from 'ethers';
 
 let newTask: Task = {
   status: 0,
   title: '',
   description: '',
-  reward: BigInt(''),
+  reward: BigNumber.from("0"),
   endDate: BigInt(''),
   authorizedRoles: [BigInt('')],
   creatorRole: BigInt(''),
@@ -124,7 +125,8 @@ const CreateTask = ({ data }) => {
       let authorizedRoles: string[] = (authorizedRolesStr).split(',');
       const splittedRoles: readonly bigint[] = authorizedRoles.map(str => BigInt(str));
       task.authorizedRoles = splittedRoles;
-      task.reward = BigInt(valueReward);
+      task.reward = ethers.utils.parseEther(valueReward);
+      console.log('task.reward = ', task.reward);
       let expireTimestamp = expireDate.unix();
       task.endDate = BigInt(expireTimestamp);
       console.log("task.endDate: ", task.endDate);
