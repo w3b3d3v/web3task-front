@@ -70,20 +70,21 @@ const schema = yup.object({
   }),
   metadata: yup.string().required('Mandatory field.').test({
     test(value, ctx) {
-      if (value.slice(0,4) != "ipfs" || value.slice(0,4) != "http")
-        return ctx.createError({ message: 'Invalid metadata. Try ipfs.io/ipfs/...' });
+      if (value.slice(0,4) != "ipfs"){
+        if (value.slice(0,4) != "http")
+          return ctx.createError({ message: 'Invalid metadata. Try ipfs.io/ipfs/...' });
+      }
       return true;
     }
   }),
   description: yup.string().required('Mandatory field.').test({
     test(value, ctx) {
-      if (value.length < 100)
-        return ctx.createError({ message: 'Invalid description. Minimum 100 characters' });
+      if (value.length < 30)
+        return ctx.createError({ message: 'Invalid description. Minimum 30 characters' });
       return true;
     }
   }),
-  endDate: yup.string().required('Campo obrigatório.')
-}).required();
+});
 
 const CreateTask = ({ data }) => {
 
@@ -147,7 +148,6 @@ const CreateTask = ({ data }) => {
       const splittedRoles: readonly bigint[] = authorizedRoles.map(str => BigInt(str));
       task.authorizedRoles = splittedRoles;
       task.reward = ethers.utils.parseEther(valueReward);
-      console.log('task.reward = ', task.reward);
       let expireTimestamp = expireDate.unix();
       task.endDate = BigInt(expireTimestamp);
       console.log("task.endDate: ", task.endDate);
@@ -248,7 +248,6 @@ const CreateTask = ({ data }) => {
                     placeholder={'A full description about the ativity.'}
                     multiline
                     maxRows="18"
-                    onChange={handleChange}
                   />
                   <p>{errors.description?.message}</p>
 
@@ -258,13 +257,13 @@ const CreateTask = ({ data }) => {
                     </Box>
                     <div>
                       <TextField  {...register("valueReward")}
-                        label={'Reward in USD'}
+                        label={'Reward in ETH'}
                         onBlur={handleReward}
                       />
                       <p>{errors.valueReward?.message}</p>
                     </div>
                     <div>
-                      <DatePicker {...register("endDate")}
+                      <DatePicker
                         label={'Deliver Date'}
                         onChange={(newValue: Dayjs) => setExpireDate(newValue)}
                         slotProps={{
@@ -273,7 +272,7 @@ const CreateTask = ({ data }) => {
                           switchViewButton: { style: { color: 'info' } }
                         }}
                       />
-                      <p>{errors.endDate?.message}</p>
+                      <p></p>
                     </div>
                   </Stack>
 

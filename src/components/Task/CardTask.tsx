@@ -156,7 +156,7 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                                     backgroundColor: '#000000',
                                                 }}
                                             >
-                                                Reward {ethers.utils.formatEther(taskData.reward)} USD
+                                                Reward {ethers.utils.formatEther(taskData.reward)} ETH
                                             </Typography>
                                         </CardContent>
                                     </Card>
