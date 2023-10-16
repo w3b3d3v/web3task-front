@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { Helmet } from 'react-helmet-async';
 import { useTaskService } from "src/services/tasks-service";
@@ -8,6 +8,8 @@ import CardMultiTasks from "src/components/Task/CardMultiTasks";
 import { useWeb3Utils } from "src/hooks/Web3UtilsHook";
 import usePagination from "src/components/Pagination";
 import CoverUserProfile from "src/components/Cover/CoverUserProfile";
+import SearchFilters from "src/components/Task/SearchFiltersTasks";
+import { useSearchFilters } from "src/hooks/useSearchFilters";
 
 const BoxCover = styled(Box)(
     ({ theme }) => `
@@ -30,12 +32,19 @@ const BoxCoverAction = styled(Box)(
 const UserProfile = () => {
     const { shortenAddressFromUser, userAddress } = useWeb3Utils();
     const taskService = useTaskService();
+    const { filter: filterTasks } = useSearchFilters();
     const [userScore, setUserScore] = useState<number>();
-
     const { handleMultiTask, multiTasksData, loading, handleUserScore, error } = useTaskServiceHook(taskService);
-
     const tasksPerPage = 20;
     const { currentPage, Pagination, setPage } = usePagination();
+
+    const maxReward = multiTasksData?.reduce((acc, curr) => {
+        const parsedReward = Number.parseFloat(curr.reward)
+
+        return parsedReward > acc ? parsedReward : acc
+    }, 0) || 0
+
+    const filteredMultiTasks = filterTasks(multiTasksData || [])
 
     useEffect(() => {
         const minimumTasks = (currentPage - 1) * tasksPerPage + 1;
@@ -52,8 +61,6 @@ const UserProfile = () => {
 
         fetchData();
     }, [currentPage]);
-
-
 
     return (
         <>
@@ -167,23 +174,25 @@ const UserProfile = () => {
                         <Typography gutterBottom variant="h5" component="div" textAlign="center">
                             {shortenAddressFromUser()}
                         </Typography>
-                        User Task Score {userScore}
+                        User Task Score: { isNaN(userScore) ? "Not loaded." : userScore }
                     </BoxCoverAction>
 
                 </BoxCover>
-                <Box mt={'7%'}>
-                    <Box>
-                        <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={'max-content'} >
+                <Box>
 
-                            <CardMultiTasks multiTasksData={multiTasksData} loading={loading} page={currentPage} />
-                        </Box >
-                    </Box>
+                    <Grid container spacing={2} mt={8} ml={15} style={{ width: '100%' }} >
+                        <Grid item xs={3} mt={5}>
+                            <SearchFilters maxReward={maxReward} />
+                        </Grid>
+
+                        <Grid item xs={9} style={{ width: '100%' }}>
+                            <CardMultiTasks multiTasksData={filteredMultiTasks} loading={loading} page={currentPage} />
+                        </Grid>
+                    </Grid>
                 </Box>
 
                 <Box display={'flex'} justifyContent={'center'} alignItems={'center'} mt={10}>
-
                     <Pagination />
-
                 </Box>
 
             </Box>
