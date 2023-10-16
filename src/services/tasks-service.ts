@@ -196,6 +196,14 @@ export function useTaskService() {
         }
     }
 
+    async function getScore(address: any) {
+        try {
+            return await tasksManagerContract.getScore(address)
+        } catch (error) {
+            handleSnackbar('Error getting Score', 'error')
+        }
+    }
+
     async function hasLeaderRole(address: any) {
         try {
             return await tasksManagerContract.hasRole(UserRole.Leader, address);
@@ -227,7 +235,8 @@ export function useTaskService() {
         hasLeaderRole,
         hasMemberRole,
         setMinQuorum,
-        deposit
+        deposit,
+        getScore
     };
 
 }

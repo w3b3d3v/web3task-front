@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Helmet } from 'react-helmet-async';
 import { useTaskService } from "src/services/tasks-service";
 import { useTaskServiceHook } from "src/hooks/TaskServiceHook";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CardMultiTasks from "src/components/Task/CardMultiTasks";
 import { useWeb3Utils } from "src/hooks/Web3UtilsHook";
 import usePagination from "src/components/Pagination";
@@ -28,10 +28,11 @@ const BoxCoverAction = styled(Box)(
 );
 
 const UserProfile = () => {
-    const { shortenAddressFromUser } = useWeb3Utils();
+    const { shortenAddressFromUser, userAddress } = useWeb3Utils();
     const taskService = useTaskService();
+    const [userScore, setUserScore] = useState<number>();
 
-    const { handleMultiTask, multiTasksData, loading, error } = useTaskServiceHook(taskService);
+    const { handleMultiTask, multiTasksData, loading, handleUserScore, error } = useTaskServiceHook(taskService);
 
     const tasksPerPage = 20;
     const { currentPage, Pagination, setPage } = usePagination();
@@ -42,6 +43,7 @@ const UserProfile = () => {
 
         const fetchData = async () => {
             try {
+                await handleUserScore(userAddress()).then(score => { setUserScore(parseInt(score)); console.log('score', parseInt(score)) });
                 await handleMultiTask(minimumTasks, maxTasks, true);
             } catch (error) {
                 console.error('Error fetching tasks:', error);
@@ -50,6 +52,8 @@ const UserProfile = () => {
 
         fetchData();
     }, [currentPage]);
+
+
 
     return (
         <>
@@ -163,15 +167,13 @@ const UserProfile = () => {
                         <Typography gutterBottom variant="h5" component="div" textAlign="center">
                             {shortenAddressFromUser()}
                         </Typography>
+                        User Task Score {userScore}
                     </BoxCoverAction>
 
                 </BoxCover>
                 <Box mt={'7%'}>
                     <Box>
                         <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={'max-content'} >
-                            <Box>
-
-                            </Box>
 
                             <CardMultiTasks multiTasksData={multiTasksData} loading={loading} page={currentPage} />
                         </Box >

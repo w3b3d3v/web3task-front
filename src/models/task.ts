@@ -1,3 +1,5 @@
+import { BigNumber } from "ethers";
+
 export enum TaskStatus {
     Created = 0,
     Progress = 1,
@@ -11,7 +13,7 @@ export interface Task {
     status: TaskStatus;
     title: string;
     description: string;
-    reward: bigint;
+    reward: BigNumber;
     endDate: bigint;
     authorizedRoles: readonly bigint[];
     creatorRole: bigint;
