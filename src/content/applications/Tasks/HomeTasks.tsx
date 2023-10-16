@@ -15,9 +15,9 @@ const HomeTasks = () => {
     const { handleCountTasks, handleMultiTask, multiTasksData, loading } = useTaskServiceHook(taskService);
     const theme = useTheme();
     const { filter: filterTasks } = useSearchFilters();
-    const [tasksPerPage, setTasksPerPage] = useState<number>(8);
+    const [tasksPerPage, setTasksPerPage] = useState<number>(20);
     const [totalPages, setTotalPages] = useState<number>(1);
-    const [maxTasks, setMaxTasks] = useState<number>(8);
+    const [maxTasks, setMaxTasks] = useState<number>(20);
     const [minimumTasks, setMinimumTasks] = useState<number>(1);
     const { currentPage, Pagination } = usePagination();
 
@@ -65,12 +65,12 @@ const HomeTasks = () => {
                 <Box>
                     <Box height={40} bgcolor={'#8EFFC2'} />
 
-                    <Grid container spacing={2} ml={15} style={{ width: '100%' }} >
-                        <Grid item xs={3} mt={5}>
+                    <Grid container spacing={2} ml={15} style={{ width: '92%' }} >
+                        <Grid item xs={2} mt={5}>
                             <SearchFilters maxReward={maxReward} />
                         </Grid>
 
-                        <Grid item xs={9} style={{ width: '100%' }}>
+                        <Grid item xs={10} style={{ width: '92%' }}>
                             <CardMultiTasks multiTasksData={filteredMultiTasks} loading={loading} page={currentPage} />
                         </Grid>
                     </Grid>

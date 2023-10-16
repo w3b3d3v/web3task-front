@@ -192,12 +192,12 @@ const UserProfile = () => {
                 </BoxCover>
                 <Box>
 
-                    <Grid container spacing={2} mt={8} ml={15} style={{ width: '100%' }} >
-                        <Grid item xs={3} mt={5}>
+                    <Grid container spacing={5} mt={10} ml={10} mr={15} style={{ width: '100%' }} >
+                        <Grid item xs={2} mt={5}>
                             <SearchFilters maxReward={maxReward} />
                         </Grid>
 
-                        <Grid item xs={9} style={{ width: '100%' }}>
+                        <Grid item xs={10} style={{ width: '100%' }}>
                             <CardMultiTasks multiTasksData={filteredMultiTasks} loading={loading} page={currentPage} />
                         </Grid>
                     </Grid>
