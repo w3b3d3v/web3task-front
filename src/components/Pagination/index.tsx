@@ -8,9 +8,9 @@ const usePagination = () => {
         setPage(newPage);
     };
 
-    const PaginationComponent = () => (
+    const PaginationComponent = ({numPages}) => (
         <Pagination
-            count={20}
+            count={numPages}
             page={page}
             onChange={handleChange}
             color="primary"
