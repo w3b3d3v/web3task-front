@@ -150,6 +150,9 @@ const AdminOptions = () => {
                                         createTask - 0xe610a2dd
                                     </Typography>
                                     <Typography>
+                                        CancelTask - 0x1397e04a
+                                    </Typography>
+                                    <Typography>
                                         startTask - 0xf3ae70f0
                                     </Typography>
                                     <Typography>
