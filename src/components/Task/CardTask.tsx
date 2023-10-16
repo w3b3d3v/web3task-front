@@ -7,6 +7,7 @@ import { useTaskService } from "src/services/tasks-service";
 import { useWeb3Utils } from 'src/hooks/Web3UtilsHook';
 import { useTheme } from '@mui/system';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import Close from '@mui/icons-material/Close';
 import { useSnackBar } from 'src/contexts/SnackBarContext';
 import { ethers } from 'ethers';
 
@@ -141,8 +142,8 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                             width: '100%',
                                             height: '42px',
                                             color: 'white',
-                                            padding: '10px',
-                                            textAlign: 'right',
+                                            padding: '0px',
+                                            textAlign: 'center',
                                             fontFamily: 'Istok Web',
                                             fontWeight: '400'
                                         }}>
@@ -150,8 +151,9 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                                 gutterBottom
                                                 variant="body2"
                                                 style={{
-                                                    textAlign: isSmallScreen ? 'left' : 'right',
-                                                    marginLeft: isSmallScreen ? 'auto' : 'unset',
+                                                    textAlign: isSmallScreen ? 'left' : 'center',
+                                                    // marginLeft: isSmallScreen ? 'auto' : 'unset',
+                                                    backgroundColor: '#000000',
                                                 }}
                                             >
                                                 Reward {ethers.utils.formatEther(taskData.reward)} USD
@@ -168,11 +170,20 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                             <Typography gutterBottom variant="h3" component="div" textAlign={'left'} >
                                                 {taskData.title}
                                             </Typography>
+                                            <Box>
+                                            {
+                                                isLeader && taskData.status != "Canceled" &&
+                                                <IconButton color="primary" 
+                                                    onClick={handleCancel}>
+                                                <Close />
+                                                </IconButton>
+                                            }
+
                                             <IconButton color="primary"
                                                 onClick={copyContent}>
                                                 <OpenInNewIcon />
                                             </IconButton>
-
+                                            </Box>
                                         </Box>
                                         <Typography gutterBottom variant='subtitle2' component="div">
                                             #{taskId}
@@ -212,20 +223,6 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                             End Date: {taskData.endDate}
                                         </Button>
                                     </Box>
-
-                                    {
-                                        isLeader && taskData.status != "Canceled" &&
-                                        <Box sx={{ margin: '5px' }}>
-                                            <Button
-                                                variant="contained"
-                                                component="span"
-                                                onClick={handleCancel}
-                                            >
-                                                Cancel Task
-                                            </Button>
-                                        </Box>
-                                    }
-
                                 </CardContent>
                             </Box>
                         </Box >
