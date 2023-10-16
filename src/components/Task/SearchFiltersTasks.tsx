@@ -13,6 +13,7 @@ import {
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import { useSearchFilters } from 'src/hooks/useSearchFilters';
 import TuneIcon from '@mui/icons-material/Tune';
+import { ethers } from 'ethers';
 
 interface SearchFiltersProps {
   maxReward?: number;
@@ -108,7 +109,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
             />
 
             <Typography>
-              {maxReward}
+              {ethers.utils.formatEther(maxReward.toString())}
             </Typography>
           </Stack>
         </AccordionDetails>

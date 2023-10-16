@@ -70,15 +70,15 @@ export const CardMultiTasks = ({ multiTasksData, loading, page }) => {
             sm={"auto"}
             md={"auto"}
             lg={"auto"}
-            sx={{ margin: "5px" }}
+            sx={{ margin: "18px" }}
         >
             <CardAddAction
                 onClick={() => handleCardSelect((page - 1) * 20 + Number(index) + 1)}
                 $loading={loading}
             >
-                <Card key={index} sx={{ width: 254, height: 336 }}>
+                <Card key={index} sx={{ height: 316 }}>
                     <CardMedia
-                        sx={{ width: 254, height: 248 }}
+                        sx={{ height: 228 }}
                         component="img"
                         image={item?.metadata}
                         alt={!loading && "multiTasksData"}
@@ -106,7 +106,7 @@ export const CardMultiTasks = ({ multiTasksData, loading, page }) => {
 
     return (
         <>
-            <Grid container spacing={4} mt={5}>
+            <Grid container spacing={2} mt={5}>
                 {loading ? (
                     Array.from({ length: (multiTasksData.length || 12) }, () => ({})).map(
                         (index: React.Key) => (
