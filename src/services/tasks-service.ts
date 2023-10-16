@@ -71,16 +71,18 @@ export function useTaskService() {
     // LEADER 
     async function reviewTask(id: bigint) {
         let metadata = "";
-        if (hasLeaderRole(userAddress())) {
-            let intefaceID = tasksManagerContract.interface.getSighash("reviewTask");
-            const isOperator = await tasksManagerContract.isOperator(intefaceID, UserRole.Leader)
-            if (!isOperator) {
-                handleSnackbar("User unauthorized to perform reviewTask!", "error");
-                throw Error("User unauthorized to perform reviewTask!");
-            } else {
-                tasksManagerContract.reviewTask(id, UserRole.Leader, metadata);
-            }
+        const isLeader = await hasLeaderRole(userAddress())
+        const isMember = await hasMemberRole(userAddress())
+
+        let intefaceID = tasksManagerContract.interface.getSighash("reviewTask");
+        const isOperator = await tasksManagerContract.isOperator(intefaceID, UserRole.Leader)
+        if (!isOperator) {
+            handleSnackbar("User unauthorized to perform reviewTask!", "error");
+            throw Error("User unauthorized to perform reviewTask!");
+        } else {
+            tasksManagerContract.reviewTask(id, isLeader ? UserRole.Leader : UserRole.Member, metadata);
         }
+
     }
 
     // 1 Leader que pegou tarefa completeTask e 2 LEADERS Aprovam
