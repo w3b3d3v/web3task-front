@@ -35,7 +35,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
     <Box display="flex" flexDirection="column">
       <Box display="inline-flex" alignItems="center" justifyContent={'left'} ml={4}>
         <TuneIcon color='primary' />
-        <Typography fontSize={20}>Filtro</Typography>
+        <Typography fontSize={20}>Filter</Typography>
       </Box>
 
       <Accordion>
@@ -46,14 +46,14 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
             />
           }
         >
-          <Typography>Título</Typography>
+          <Typography>Title</Typography>
         </AccordionSummary>
 
         <AccordionDetails>
           <TextField
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            label="Pesquisar por título"
+            label="Search for title"
             variant="standard"
             fullWidth
           />
@@ -68,14 +68,14 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
             />
           }
         >
-          <Typography>Criador</Typography>
+          <Typography>Creator</Typography>
         </AccordionSummary>
 
         <AccordionDetails>
           <TextField
             value={creatorRole}
             onChange={(e) => setCreatorRole(e.target.value)}
-            label="Pesquisar por criador"
+            label="Search for creator"
             variant="standard"
             fullWidth
           />
@@ -90,7 +90,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
             />
           }
         >
-          <Typography>Pagamento por hora</Typography>
+          <Typography>Hourly payment</Typography>
         </AccordionSummary>
 
         <AccordionDetails>
@@ -121,15 +121,15 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
               color='primary' />
           }
         >
-          <Typography>Data de vencimento</Typography>
+          <Typography>End date</Typography>
         </AccordionSummary>
 
         <AccordionDetails>
           <DatePicker
-            label="Data de vencimento"
+            label="End date"
             value={dueDate}
             onChange={setDueDate}
-            format="DD/MM/YYYY"
+            format="MM/DD/YYYY"
             slotProps={{
               textField: { size: 'medium' },
               openPickerIcon: { style: { color: theme.palette.primary.main } },

@@ -79,7 +79,7 @@ function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
         <Hidden mdDown>
           <UserBoxText>
-            <UserBoxLabel variant="body1">Entrar</UserBoxLabel>
+            <UserBoxLabel variant="body1">Connect</UserBoxLabel>
           </UserBoxText>
         </Hidden>
         <Hidden smDown>

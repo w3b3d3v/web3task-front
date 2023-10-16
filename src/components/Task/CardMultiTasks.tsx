@@ -1,4 +1,4 @@
-import { Grid, CardMedia, CardContent, Typography, Card } from "@mui/material";
+import { Box, Grid, CardMedia, CardContent, Typography, Card } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { ethers } from "ethers";
 import { TaskFront } from "src/models/task";
@@ -41,10 +41,7 @@ const CardAddAction = styled(Card)<{ $loading: boolean }>(
                 color: transparent;
             }
             `
-        }
-        
-
-        
+        }      
   `
 );
 
@@ -98,8 +95,8 @@ export const CardMultiTasks = ({ multiTasksData, loading, page }) => {
                             variant="h5"
                             component="div"
                             textAlign={"right"}
-                        >
-                            #{item?.creatorRole}
+                            >
+                            #{(page - 1) * 20 + Number(index) + 1}
                         </Typography>
                     </CardContent>
                 </Card>

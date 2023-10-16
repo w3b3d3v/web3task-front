@@ -29,24 +29,24 @@ let newTask: Task = {
 }
 
 const schema = yup.object({
-  title: yup.string().required('Campo obrigatório.'),
-  creatorRole: yup.string().required('Campo obrigatório.').test({
+  title: yup.string().required('Mandatory field.'),
+  creatorRole: yup.string().required('Mandatory field.').test({
     test(value, ctx) {
       let role = Number(value);
       if (isNaN(role))
-        return ctx.createError({ message: 'Número inválido para a role.' })
+        return ctx.createError({ message: 'Invalid number for role.' })
       return true;
     }
   }),
-  valueReward: yup.string().required('Campo obrigatório.').test({
+  valueReward: yup.string().required('Mandatory field.').test({
     test(value, ctx) {
       let role = Number(value);
       if (isNaN(role))
-        return ctx.createError({ message: 'Valor inválido.' })
+        return ctx.createError({ message: 'Invalid value.' })
       return true;
     }
   }),
-  authorizedRoles: yup.string().required('Campo obrigatório.').test({
+  authorizedRoles: yup.string().required('Mandatory field.').test({
     test(value, ctx) {
       let validation = true;
       let roles = value.split(',');
@@ -56,11 +56,32 @@ const schema = yup.object({
           validation = false;
       });
       if (!validation)
-        return ctx.createError({ message: 'Número inválido para as roles.' });
+        return ctx.createError({ message: 'Invalid role number.' });
       return validation;
     }
   }),
-  // endDate: yup.string().required('Campo obrigatório.')
+  assignee: yup.string().required('Mandatory field.').test({
+    test(value, ctx) {
+      if (value.length != 42 || value.slice(0,2) != "0x")
+        return ctx.createError({ message: 'Invalid address.' });
+      return true;
+    }
+  }),
+  metadata: yup.string().required('Mandatory field.').test({
+    test(value, ctx) {
+      if (value.slice(0,4) != "ipfs" || value.slice(0,4) != "http")
+        return ctx.createError({ message: 'Invalid metadata. Try ipfs.io/ipfs/...' });
+      return true;
+    }
+  }),
+  description: yup.string().required('Mandatory field.').test({
+    test(value, ctx) {
+      if (value.length < 100)
+        return ctx.createError({ message: 'Invalid description. Minimum 100 characters' });
+      return true;
+    }
+  }),
+  endDate: yup.string().required('Campo obrigatório.')
 }).required();
 
 const CreateTask = ({ data }) => {
@@ -199,23 +220,26 @@ const CreateTask = ({ data }) => {
                   />
                   <p>{errors.creatorRole?.message}</p>
 
-                  <TextField
+                  <TextField {...register("assignee")}
                     fullWidth
                     id="outlined-required"
                     label={'Assignee Address (leave blank to allow anyone to perform the task)'}
                     onBlur={handleAssignee}
                     placeholder={'Assignee address'}
                   />
+                  <p>{errors.assignee?.message}</p>
 
-                  <TextField
+                  <TextField {...register("metadata")}
                     fullWidth
                     id="outlined-required"
                     label={'Metadata (IPFS)'}
                     onBlur={handleMetadata}
                     placeholder={'https://ipfs.io/ipfs/QmY5D...7CEh'}
                   />
+                  <p>{errors.metadata?.message}</p>
 
-                  <TextField fullWidth
+                  <TextField {...register("description")}
+                    fullWidth
                     id="outlined-required"
                     label={'Description'}
                     onBlur={handleDescription}
@@ -224,6 +248,7 @@ const CreateTask = ({ data }) => {
                     maxRows="18"
                     onChange={handleChange}
                   />
+                  <p>{errors.description?.message}</p>
 
                   <Stack spacing={2} direction={'row'} alignItems="center" justifyContent="center">
                     <Box>
@@ -237,7 +262,7 @@ const CreateTask = ({ data }) => {
                       <p>{errors.valueReward?.message}</p>
                     </div>
                     <div>
-                      <DatePicker
+                      <DatePicker {...register("endDate")}
                         label={'Deliver Date'}
                         onChange={(newValue: any) => setExpireDate(newValue)}
                         slotProps={{
@@ -246,12 +271,12 @@ const CreateTask = ({ data }) => {
                           switchViewButton: { style: { color: 'info' } }
                         }}
                       />
-                      {/* <p>{errors.endDate?.message}</p> */}
+                      <p>{errors.endDate?.message}</p>
                     </div>
                   </Stack>
 
                   <Button type="submit" variant='contained' color='primary'>
-                    Enviar
+                    Create
                   </Button>
 
                 </Stack>

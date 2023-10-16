@@ -1,7 +1,11 @@
 import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
+import {
+    useTheme,
+} from "@mui/material";
 
 const CoverAdminOptions = () => {
+    const theme = useTheme();
     return (
         <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={304} flexDirection={{ xs: 'column', md: 'row' }} >
 
@@ -16,7 +20,7 @@ const CoverAdminOptions = () => {
 
             <Box>
                 <Box>
-                    <Typography color={'green'} fontSize={50}>
+                    <Typography color={theme.colors.primary} fontWeight={"bold"} fontSize={50}>
                         ADM OPTIONS
                     </Typography>
                 </Box>
