@@ -29,81 +29,92 @@ let newTask: Task = {
   metadata: ''
 }
 
-const schema = yup.object({
-  title: yup.string().required('Mandatory field.'),
-  creatorRole: yup.string().required('Mandatory field.').test({
-    test(value, ctx) {
-      let role = Number(value);
-      if (isNaN(role))
-        return ctx.createError({ message: 'Invalid number for role.' })
-      return true;
-    }
-  }),
-  valueReward: yup.string().required('Mandatory field.').test({
-    test(value, ctx) {
-      let role = Number(value);
-      if (isNaN(role))
-        return ctx.createError({ message: 'Invalid value.' })
-      return true;
-    }
-  }),
-  authorizedRoles: yup.string().required('Mandatory field.').test({
-    test(value, ctx) {
-      let validation = true;
-      let roles = value.split(',');
-      roles.forEach(element => {
-        let role = Number(element);
-        if (isNaN(role))
-          validation = false;
-      });
-      if (!validation)
-        return ctx.createError({ message: 'Invalid role number.' });
-      return validation;
-    }
-  }),
-  assignee: yup.string().required('Mandatory field.').test({
-    test(value, ctx) {
-      if (value.length != 42 || value.slice(0,2) != "0x")
-        return ctx.createError({ message: 'Invalid address.' });
-      return true;
-    }
-  }),
-  metadata: yup.string().required('Mandatory field.').test({
-    test(value, ctx) {
-      if (value.slice(0,4) != "ipfs" || value.slice(0,4) != "http")
-        return ctx.createError({ message: 'Invalid metadata. Try ipfs.io/ipfs/...' });
-      return true;
-    }
-  }),
-  description: yup.string().required('Mandatory field.').test({
-    test(value, ctx) {
-      if (value.length < 100)
-        return ctx.createError({ message: 'Invalid description. Minimum 100 characters' });
-      return true;
-    }
-  }),
-  endDate: yup.string().required('Campo obrigatório.')
-}).required();
 
 const CreateTask = ({ data }) => {
-
   const theme = useTheme();
   const { createTask } = useTaskService();
   const [task, setTask] = useState<Task>();
   const [valueReward, setValueReward] = useState<string>();
   const [authorizedRolesStr, setAuthorizedRolesStr] = useState<string>();
   const [expireDate, setExpireDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<string>();
   const [loading, setLoading] = useState<boolean>(true);
   const [openError, setOpenError] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(schema)
-  });
-
   const { showSnackBar } = useSnackBar();
-
   const handleSnackbar = (message: string, color: AlertColor) => {
     showSnackBar(message, color)
   };
+
+  const schema = yup.object({
+    title: yup.string().required('Mandatory field.'),
+    creatorRole: yup.string().required('Mandatory field.').test({
+      test(value, ctx) {
+        let role = Number(value);
+        if (isNaN(role))
+          return ctx.createError({ message: 'Invalid number for role.' })
+        return true;
+      }
+    }),
+    valueReward: yup.string().required('Mandatory field.').test({
+      test(value, ctx) {
+        let role = Number(value);
+        if (isNaN(role))
+          return ctx.createError({ message: 'Invalid value.' })
+        return true;
+      }
+    }),
+    authorizedRoles: yup.string().required('Mandatory field.').test({
+      test(value, ctx) {
+        let validation = true;
+        let roles = value.split(',');
+        roles.forEach(element => {
+          let role = Number(element);
+          if (isNaN(role))
+            validation = false;
+        });
+        if (!validation)
+          return ctx.createError({ message: 'Invalid role number.' });
+        return validation;
+      }
+    }),
+    assignee: yup.string().test({
+      test(value, ctx) {
+        if (value.length != 42 || value.slice(0,2) != "0x")
+          return ctx.createError({ message: 'Invalid address.' });
+        return true;
+      }
+    }),
+    metadata: yup.string().required('Mandatory field.').test({
+      test(value, ctx) {
+        if (value.slice(0,4) == "ipfs" || value.slice(0,4) == "http")
+          return true;
+        
+        return ctx.createError({ message: 'Invalid metadata. Try ipfs.io/ipfs/...' });      
+      }
+    }),
+    description: yup.string().required('Mandatory field.').test({
+      test(value, ctx) {
+        console.log("value",value)
+        if (value.length < 100)
+          return ctx.createError({ message: 'Invalid description. Minimum 100 characters' });
+        return true;
+      }
+    }),
+    endDate: yup.string().test({
+      test(value, ctx) {
+        let date = Date.parse(endDate);
+        if (isNaN(date))
+          return ctx.createError({ message: 'Invalid date.' });
+        return true;
+      }
+    })
+  }).required();
+
+  
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(schema)
+  });
+  
 
   const logoImage = "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
 
@@ -138,6 +149,12 @@ const CreateTask = ({ data }) => {
   const handleReward = (event: { target: { value: any; }; }) => {
     let reward = event.target.value;
     setValueReward(reward);
+  };
+
+  const handleExpireDate = ( value: Dayjs ) => {
+    setExpireDate(value)
+    let strEndDate = value.toString();
+    setEndDate(strEndDate);
   };
 
   const onSubmit = async (event: { preventDefault: () => void; }) => {
@@ -248,7 +265,6 @@ const CreateTask = ({ data }) => {
                     placeholder={'A full description about the ativity.'}
                     multiline
                     maxRows="18"
-                    onChange={handleChange}
                   />
                   <p>{errors.description?.message}</p>
 
@@ -266,7 +282,7 @@ const CreateTask = ({ data }) => {
                     <div>
                       <DatePicker {...register("endDate")}
                         label={'Deliver Date'}
-                        onChange={(newValue: Dayjs) => setExpireDate(newValue)}
+                        onChange={(newValue: Dayjs) => handleExpireDate(newValue)}
                         slotProps={{
                           textField: { size: 'medium' },
                           openPickerIcon: { style: { color: theme.palette.primary.main } },
