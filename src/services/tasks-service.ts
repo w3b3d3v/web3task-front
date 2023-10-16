@@ -205,11 +205,21 @@ export function useTaskService() {
     }
 
     async function hasLeaderRole(address: any) {
-        return await tasksManagerContract.hasRole(UserRole.Leader, address);
+        try {
+            return await tasksManagerContract.hasRole(UserRole.Leader, address);
+        } catch (error) {
+            console.log("Error while searching for user role.",error)
+            return false;
+        }
     }
 
     async function hasMemberRole(address: any) {
-        return await tasksManagerContract.hasRole(UserRole.Member, address);
+        try {
+            return await tasksManagerContract.hasRole(UserRole.Member, address);
+        } catch (error) {
+            console.log("Error while searching for user role.",error)
+            return false;
+        }
     }
 
     return {

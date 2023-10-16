@@ -1,13 +1,17 @@
 import { Box, Typography } from '@mui/material'
+import {
+    useTheme,
+} from "@mui/material";
 
 const CoverCreateTask = () => {
+    const theme = useTheme();
     return (
         <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={304} flexDirection={"row"} >
 
             <Box>
 
                 <Box>
-                    <Typography color={'green'} fontSize={50}>
+                    <Typography color={theme.colors.primary} fontWeight={"bold"} fontSize={50}>
                         CREATE TASK
                     </Typography>
                 </Box>

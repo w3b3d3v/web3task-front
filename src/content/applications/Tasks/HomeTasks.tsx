@@ -44,7 +44,6 @@ const HomeTasks = () => {
         const parsedReward = Number.parseFloat(curr.reward)
 
         return parsedReward > acc ? parsedReward : acc
-
     }, 0) || 0
 
     const filteredMultiTasks = filterTasks(multiTasksData || [])
@@ -57,29 +56,23 @@ const HomeTasks = () => {
 
             <Box
             >
-
                 <CoverHomeTasks />
-
                 <Box>
                     <Box height={40} bgcolor={'#8EFFC2'} />
 
-
-                    <Grid container spacing={2} marginTop={0} style={{ width: '100%' }} >
-                        <Grid item xs={4} mt={5}>
+                    <Grid container spacing={2} ml={15} style={{ width: '100%' }} >
+                        <Grid item xs={3} mt={5}>
                             <SearchFilters maxReward={maxReward} />
                         </Grid>
 
-                        <Grid item xs={8} style={{ width: '100%' }}>
-
+                        <Grid item xs={9} style={{ width: '100%' }}>
                             <CardMultiTasks multiTasksData={filteredMultiTasks} loading={loading} page={currentPage} />
                         </Grid>
                     </Grid>
                 </Box>
 
                 <Box display={'flex'} justifyContent={'center'} alignItems={'center'} mt={10}>
-
                     <Pagination />
-
                 </Box>
 
             </Box >

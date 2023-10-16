@@ -1,7 +1,11 @@
 import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
+import {
+    useTheme,
+} from "@mui/material";
 
 const CoverHomeTasks = () => {
+    const theme = useTheme();
     return (
         <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={304} flexDirection={"row"} >
 
@@ -16,7 +20,7 @@ const CoverHomeTasks = () => {
 
             <Box>
                 <Box>
-                    <Typography color={'green'} fontSize={50}>
+                    <Typography color={theme.colors.primary} fontWeight={"bold"} fontSize={50}>
                         WEB3TASK
                     </Typography>
                 </Box>
