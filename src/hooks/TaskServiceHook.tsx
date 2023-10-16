@@ -102,7 +102,7 @@ export const useTaskServiceHook = (task: TaskService) => {
 
             const timeInSeconds = Math.floor(Number(nft.endDate) * 1000);
             const date = new Date(timeInSeconds);
-            const dateFormatted = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+            const dateFormatted = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
             nft.endDate = dateFormatted;
             setTaskData(nft);
         } catch (error) {
