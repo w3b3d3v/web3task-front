@@ -32,12 +32,34 @@ const BoxCoverAction = styled(Box)(
 const UserProfile = () => {
     const { shortenAddressFromUser, userAddress } = useWeb3Utils();
     const taskService = useTaskService();
+    const { handleCountUserTasks, countUserTasks, handleMultiTask, multiTasksData, loading } = useTaskServiceHook(taskService);
+    const [tasksPerPage, setTasksPerPage] = useState<number>(4);
+    const [totalPages, setTotalPages] = useState<number>(1);
+    const [maxTasks, setMaxTasks] = useState<number>(4);
+    const [minimumTasks, setMinimumTasks] = useState<number>(1);
+    const { currentPage, Pagination } = usePagination();
     const { filter: filterTasks } = useSearchFilters();
     const [userScore, setUserScore] = useState<number>();
-    const { handleMultiTask, multiTasksData, loading, handleUserScore, error } = useTaskServiceHook(taskService);
-    const tasksPerPage = 20;
-    const { currentPage, Pagination, setPage } = usePagination();
-
+    
+    const fetchData = async () => {
+        try {                            
+            await handleCountUserTasks().then(count => {
+                const total = (parseInt(count)/tasksPerPage)
+                console.log("total", total)
+                console.log("total", Math.floor(total))
+                if ((parseInt(count)%tasksPerPage) > 0)
+                    setTotalPages(Math.floor(total) + 1)                                 
+                else
+                    setTotalPages(total)                             
+            });
+            console.log("minimumTasks", minimumTasks)
+            console.log("maxTasks", maxTasks)
+            await handleMultiTask(minimumTasks, maxTasks, true);
+        } catch (error) {
+            console.error('Error fetching tasks:', error);
+        }
+    };
+    
     const maxReward = multiTasksData?.reduce((acc, curr) => {
         const parsedReward = Number.parseFloat(curr.reward)
 
@@ -45,24 +67,14 @@ const UserProfile = () => {
     }, 0) || 0
 
     const filteredMultiTasks = filterTasks(multiTasksData || [])
-
-    useEffect(() => {
-        const minimumTasks = (currentPage - 1) * tasksPerPage + 1;
-        const maxTasks = currentPage * tasksPerPage;
-
-        const fetchData = async () => {
-            try {
-                await handleUserScore(userAddress()).then(score => { setUserScore(parseInt(score)); console.log('score', parseInt(score)) });
-                await handleMultiTask(minimumTasks, maxTasks, true);
-            } catch (error) {
-                console.error('Error fetching tasks:', error);
-            }
-        };
-
-        fetchData();
-    }, [currentPage]);
-
-    return (
+    
+    useEffect(() => {  
+        setMinimumTasks(((currentPage - 1) * tasksPerPage) + 1);
+        setMaxTasks(currentPage * tasksPerPage);           
+        fetchData();        
+    }, [currentPage, totalPages, minimumTasks, maxTasks]);
+    
+  return (
         <>
             <Helmet>
                 <title>Web3Task - Profile</title>
@@ -192,7 +204,7 @@ const UserProfile = () => {
                 </Box>
 
                 <Box display={'flex'} justifyContent={'center'} alignItems={'center'} mt={10}>
-                    <Pagination />
+                    <Pagination numPages={totalPages} />
                 </Box>
 
             </Box>

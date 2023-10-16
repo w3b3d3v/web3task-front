@@ -8,6 +8,8 @@ import { AlertColor } from '@mui/material/Alert';
  * Interface for the Task Service, defining methods to interact with tasks.
  */
 interface TaskService {
+    countUserTasks: () => Promise<number>;
+    countTasks: () => Promise<number>;
     getTask: (taskId: number) => Promise<Task>;
     getMultiTasks: (start: number, end: number, isUserProfile: boolean) => Promise<Task[]>;
     setRole: (roleId: any, authorizedAddress: any, isAuthorized: boolean) => Promise<any>
@@ -26,6 +28,8 @@ interface TaskService {
 export const useTaskServiceHook = (task: TaskService) => {
     const [taskData, setTaskData] = useState(null);
     const [multiTasksData, setMultiTasksData] = useState(null);
+    const [countTasks, setCountTasks] = useState(null);
+    const [countUserTasks, setCountUserTasks] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { shortenAddressFromAddress } = useWeb3Utils();
@@ -62,6 +66,58 @@ export const useTaskServiceHook = (task: TaskService) => {
                 break;
         }
         return "";
+    }
+
+    /**
+     * handleCountTasks
+     *
+     * Fetches count tasks obtained from the Solidity contract function countTasks().
+     *
+     * @async
+     * @function
+     * @returns - A promise that resolves when data is fetched.
+     */
+    const handleCountTasks = async () => {
+    
+        try {
+            setLoading(true);
+            setError(null);
+
+            const countTasks: any = await task.countTasks();
+            setCountTasks(countTasks);
+            
+
+        } catch (error) {
+            setError('Erro ao buscar quantidade de tarefas.');
+            handleSnackbar('Error searching total of tasks: '+error, 'error')
+        }
+        return countTasks;
+    }
+
+    /**
+     * handleCountUserTasks
+     *
+     * Fetches count user tasks obtained from the Solidity contract function countTasks().
+     *
+     * @async
+     * @function
+     * @returns - A promise that resolves when data is fetched.
+     */
+    const handleCountUserTasks = async () => {
+    
+        try {
+            setLoading(true);
+            setError(null);
+
+            const countTasks: any = await task.countUserTasks();
+            setCountTasks(countTasks);
+            
+
+        } catch (error) {
+            setError('Erro ao buscar quantidade de tarefas.');
+            handleSnackbar('Error searching total of tasks: '+error, 'error')
+        }
+        return countTasks;
     }
 
     /**
@@ -127,7 +183,7 @@ export const useTaskServiceHook = (task: TaskService) => {
      */
 
     const handleMultiTask = async (start: number, end: number, isUserProfile: boolean) => {
-
+       
         const result: any = await task.getMultiTasks(start, end, isUserProfile);
 
         let multiTask = [];
@@ -219,10 +275,14 @@ export const useTaskServiceHook = (task: TaskService) => {
     return {
         taskData,
         multiTasksData,
+        countTasks,
+        countUserTasks,
         loading,
         error,
         handleTask,
         handleMultiTask,
+        handleCountTasks,
+        handleCountUserTasks,
         handleRole,
         handleOperator,
         handleQuorum,

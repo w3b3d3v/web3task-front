@@ -1,6 +1,6 @@
 import { useTaskService } from "src/services/tasks-service";
 import { useTaskServiceHook } from "src/hooks/TaskServiceHook";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Box, Grid, useTheme } from "@mui/material";
 import CardMultiTasks from "../../../components/Task/CardMultiTasks";
 import CoverHomeTasks from "../../../components/Cover/CoverHomeTasks";
@@ -12,33 +12,38 @@ import { Helmet } from "react-helmet-async";
 const HomeTasks = () => {
     const taskService = useTaskService();
 
-    const { handleMultiTask, multiTasksData, loading } = useTaskServiceHook(taskService);
+    const { handleCountTasks, handleMultiTask, multiTasksData, loading } = useTaskServiceHook(taskService);
     const theme = useTheme();
     const { filter: filterTasks } = useSearchFilters();
-    const tasksPerPage = 20;
+    const [tasksPerPage, setTasksPerPage] = useState<number>(8);
+    const [totalPages, setTotalPages] = useState<number>(1);
+    const [maxTasks, setMaxTasks] = useState<number>(8);
+    const [minimumTasks, setMinimumTasks] = useState<number>(1);
     const { currentPage, Pagination } = usePagination();
 
-    useEffect(() => {
-        const minimumTasks = (currentPage - 1) * tasksPerPage + 1;
-        const maxTasks = currentPage * tasksPerPage;
-
-        const fetchData = async () => {
-            try {
-                await handleMultiTask(minimumTasks, maxTasks, false);
-            } catch (error) {
-                console.error('Error fetching tasks:', error);
-            }
-        };
-
-        fetchData();
-    }, [currentPage]);
-
-
-    useEffect(() => {
-        if (multiTasksData && !loading) {
-            console.log('multiTasksData', multiTasksData);
+    const fetchData = async () => {
+        try {                            
+            await handleCountTasks().then(count => {
+                const total = (parseInt(count)/tasksPerPage)
+                console.log("total", total)
+                console.log("total", Math.floor(total))
+                if ((parseInt(count)%tasksPerPage) > 0)
+                    setTotalPages(Math.floor(total) + 1)                                 
+                else
+                    setTotalPages(total)                            
+            });
+            await handleMultiTask(minimumTasks, maxTasks, false);
+        } catch (error) {
+            console.error('Error fetching tasks:', error);
         }
-    }, []);
+    };
+
+    useEffect(() => {  
+        setMinimumTasks(((currentPage - 1) * tasksPerPage) + 1);
+        setMaxTasks(currentPage * tasksPerPage);           
+        fetchData();        
+    }, [currentPage, totalPages, minimumTasks, maxTasks]);
+
 
     const maxReward = multiTasksData?.reduce((acc, curr) => {
         const parsedReward = Number.parseFloat(curr.reward)
@@ -72,7 +77,7 @@ const HomeTasks = () => {
                 </Box>
 
                 <Box display={'flex'} justifyContent={'center'} alignItems={'center'} mt={10}>
-                    <Pagination />
+                    <Pagination numPages={totalPages} />
                 </Box>
 
             </Box >

@@ -115,6 +115,25 @@ export function useTaskService() {
         }
     }
 
+    async function countTasks() {
+        try {
+            return await tasksManagerContract.getTaskId();
+        } catch (error) {
+            handleSnackbar('Erro ao buscar a quantidade de tarefas.', 'error')
+        }
+    }
+
+    async function countUserTasks() {
+        try {
+            let taskIds: bigint[] = [];
+            taskIds = await tasksManagerContract.getUserTasks(userAddress());
+            return taskIds.length+1;
+        } catch (error) {
+            handleSnackbar('Erro ao buscar a quantidade de tarefas do usuário.', 'error')
+        }
+    }
+
+
     async function getTask(taskId: any) {
         try {
             return await tasksManagerContract.getTask(taskId);
@@ -131,9 +150,10 @@ export function useTaskService() {
         if (isUserProfile) {
             taskIds = await tasksManagerContract.getUserTasks(userAddress());
             if (taskIds && taskIds.length > 0) {
-                for (var i = 0; i < taskIds.length; i++) {
-                    let id = Number(taskIds[i]);
-                    payloadArray.push(tasksManagerContract.interface.encodeFunctionData("getTask", [id]));
+                for (var i = min; i <= max; i++) {
+                    let id = Number(taskIds[i-1]);
+                    if (!isNaN(id))
+                        payloadArray.push(tasksManagerContract.interface.encodeFunctionData("getTask", [id]));
                 }
             }
         } else {
@@ -230,6 +250,8 @@ export function useTaskService() {
         reviewTask,
         completeTask,
         cancelTask,
+        countTasks,
+        countUserTasks,
         getTask,
         getMultiTasks,
         setRole,
