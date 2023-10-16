@@ -7,6 +7,7 @@ import CoverHomeTasks from "../../../components/Cover/CoverHomeTasks";
 import usePagination from "src/components/Pagination";
 import SearchFilters from "src/components/Task/SearchFiltersTasks";
 import { useSearchFilters } from "src/hooks/useSearchFilters";
+import { Helmet } from "react-helmet-async";
 
 const HomeTasks = () => {
     const taskService = useTaskService();
@@ -48,39 +49,35 @@ const HomeTasks = () => {
         const parsedReward = Number.parseFloat(curr.reward)
 
         return parsedReward > acc ? parsedReward : acc
-
     }, 0) || 0
 
     const filteredMultiTasks = filterTasks(multiTasksData || [])
 
     return (
         <>
+            <Helmet>
+                <title>Web3Task</title>
+            </Helmet>
 
             <Box
-                sx={{ width: '100%' }}>
-
+            >
                 <CoverHomeTasks />
-
                 <Box>
                     <Box height={40} bgcolor={'#8EFFC2'} />
 
-
-                    <Grid container spacing={2} marginTop={0} style={{ width: '100%', overflowX: 'hidden' }} >
-                        <Grid item xs={3} bgcolor={theme.palette.mode === 'dark' ? theme.colors.alpha.black[100] : theme.colors.alpha.trueWhite[100]}>
+                    <Grid container spacing={2} ml={15} style={{ width: '100%' }} >
+                        <Grid item xs={3} mt={5}>
                             <SearchFilters maxReward={maxReward} />
                         </Grid>
 
-                        <Grid item xs={9} style={{ maxWidth: '100%' }}>
-
+                        <Grid item xs={9} style={{ width: '100%' }}>
                             <CardMultiTasks multiTasksData={filteredMultiTasks} loading={loading} page={currentPage} />
                         </Grid>
                     </Grid>
                 </Box>
 
                 <Box display={'flex'} justifyContent={'center'} alignItems={'center'} mt={10}>
-
                     <Pagination numPages={totalPages} />
-
                 </Box>
 
             </Box >

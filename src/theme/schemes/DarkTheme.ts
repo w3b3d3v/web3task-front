@@ -4,7 +4,7 @@ import "@mui/lab/themeAugmentation";
 const themeColors = {
   primary: "#ffffff",
   secondary: "#ffffff",
-  success: "#57CA22",
+  success: "#ffffff",
   warning: "#FFA319",
   error: "#FF1943",
   info: "#33C2FF",
@@ -328,6 +328,7 @@ export const DarkTheme = createTheme({
       styleOverrides: {
         root: {
           boxShadow: "none",
+          background: 'transparent',
 
           "&.Mui-expanded": {
             margin: 0,
@@ -1193,6 +1194,9 @@ export const DarkTheme = createTheme({
           fontSize: 17,
           lineHeight: 1.7,
         },
+        root: {
+          fontFamily: 'Public Sans'
+        },
       },
     },
 
@@ -1202,7 +1206,7 @@ export const DarkTheme = createTheme({
   },
   typography: {
     fontFamily:
-      '"Istok", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
+      '"Istok", Public Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
     h1: {
       fontWeight: 700,
       fontSize: 35,

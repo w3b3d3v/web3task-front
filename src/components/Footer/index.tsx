@@ -42,26 +42,26 @@ function Footer() {
         <Logo logoImage={logoImage} />
         <Box>
           <ListItem>
-            <Link href="/sobre-nos" underline="none">
-              {'Sobre Nós'}
+            <Link href="/about-us" underline="none">
+              {'About us'}
             </Link>
           </ListItem>
 
           <ListItem>
-            <Link href="/comunidade" underline="none">
-              {'Comunidade'}
+            <Link href="/" underline="none">
+              {'Explore'}
             </Link>
           </ListItem>
 
           <ListItem>
-            <Link href="/postagens" underline="none">
-              {'Postagens'}
+            <Link href="/documentation" underline="none">
+              {'Docs'}
             </Link>
           </ListItem>
 
           <ListItem>
-            <Link href="/perguntas-frequentes" underline="none">
-              {'Perguntas Frequentes'}
+            <Link href="/faq" underline="none">
+              {'FAQ'}
             </Link>
           </ListItem>
 
@@ -78,7 +78,7 @@ function Footer() {
             }}
             variant="subtitle1"
           >
-            Junte-se a nós
+            Join us!
           </Typography>
           <Box
             display="flex"
@@ -99,7 +99,7 @@ function Footer() {
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Typography variant="subtitle1">
-          &copy; 2023 Marketplace de Tarefas Web3Task
+          &copy; 2023 Web3Task - Tasks Marketplace
         </Typography>
       </Box>
     </FooterWrapper>

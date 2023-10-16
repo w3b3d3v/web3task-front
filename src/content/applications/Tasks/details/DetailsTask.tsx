@@ -27,7 +27,7 @@ const DetailsTask = () => {
     return (
         <>
             <Helmet>
-                <title>Web3Task - Profile</title>
+                <title>Web3Task - Task Details</title>
             </Helmet>
 
             <Container sx={{
@@ -51,7 +51,7 @@ const DetailsTask = () => {
                                                 <Card sx={{ width: isSmallScreen ? '100%' : 192, height: 119, justifyContent: 'center', marginBottom: isSmallScreen ? '16px' : '0' }}>
                                                     <CardContent>
                                                         <Typography gutterBottom variant="h4" component="div" textAlign={'center'}>
-                                                            Task Status
+                                                            Status
                                                         </Typography>
                                                         <Divider variant="fullWidth" />
                                                         <Typography variant="h6" textAlign={'center'} mt={1}>
@@ -60,11 +60,10 @@ const DetailsTask = () => {
                                                     </CardContent>
                                                 </Card>
 
-
                                                 <Card sx={{ width: isSmallScreen ? '100%' : 434, height: 119, justifyContent: isSmallScreen ? 'center' : 'left' }}>
                                                     <CardContent>
                                                         <Typography gutterBottom variant="h4" textAlign={'left'} component="div">
-                                                            Task Reviews
+                                                            Reviews
                                                         </Typography>
                                                         <Divider />
                                                         <Typography variant="h6" textAlign={'left'} mt={1} component="div">
@@ -72,6 +71,20 @@ const DetailsTask = () => {
                                                         </Typography>
                                                         <Typography variant="h6" textAlign={'left'} mt={1} component="div">
                                                             https://link2.com.br
+                                                        </Typography>
+                                                    </CardContent>
+                                                </Card>
+                                            </Box>
+
+                                            <Box mt={4} width={isSmallScreen ? '100%' : 679} display={'flex'} flexDirection={isSmallScreen ? 'column' : 'row'} justifyContent={isSmallScreen ? 'center' : 'space-between'} alignItems={'center'}>
+                                                <Card sx={{ width: '100%', height: 200, justifyContent: isSmallScreen ? 'center' : 'left' }}>
+                                                    <CardContent>
+                                                        <Typography gutterBottom variant="h4" textAlign={'left'} component="div">
+                                                            Description
+                                                        </Typography>
+                                                        <Divider />
+                                                        <Typography variant="h6" textAlign={'left'} mt={1} component="div">
+                                                            {taskData ? taskData.description : 'No description provided for this task.'}
                                                         </Typography>
                                                     </CardContent>
                                                 </Card>

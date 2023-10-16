@@ -14,12 +14,14 @@ import { Task } from "src/models/task";
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import CoverCreateTask from '../../../../components/Cover/CoverCreateTask';
 import { useSnackBar } from 'src/contexts/SnackBarContext';
+import { Helmet } from 'react-helmet-async';
+import { BigNumber, ethers } from 'ethers';
 
 let newTask: Task = {
   status: 0,
   title: '',
   description: '',
-  reward: BigInt(''),
+  reward: BigNumber.from("0"),
   endDate: BigInt(''),
   authorizedRoles: [BigInt('')],
   creatorRole: BigInt(''),
@@ -27,60 +29,92 @@ let newTask: Task = {
   metadata: ''
 }
 
-const schema = yup.object({
-  title: yup.string().required('Campo obrigatório.'),
-  creatorRole: yup.string().required('Campo obrigatório.').test({
-    test(value, ctx) {
-      let role = Number(value);
-      if (isNaN(role))
-        return ctx.createError({ message: 'Número inválido para a role.' })
-      return true;
-    }
-  }),
-  valueReward: yup.string().required('Campo obrigatório.').test({
-    test(value, ctx) {
-      let role = Number(value);
-      if (isNaN(role))
-        return ctx.createError({ message: 'Valor inválido.' })
-      return true;
-    }
-  }),
-  authorizedRoles: yup.string().required('Campo obrigatório.').test({
-    test(value, ctx) {
-      let validation = true;
-      let roles = value.split(',');
-      roles.forEach(element => {
-        let role = Number(element);
-        if (isNaN(role))
-          validation = false;
-      });
-      if (!validation)
-        return ctx.createError({ message: 'Número inválido para as roles.' });
-      return validation;
-    }
-  }),
-  // endDate: yup.string().required('Campo obrigatório.')
-}).required();
 
 const CreateTask = ({ data }) => {
-
   const theme = useTheme();
   const { createTask } = useTaskService();
   const [task, setTask] = useState<Task>();
   const [valueReward, setValueReward] = useState<string>();
   const [authorizedRolesStr, setAuthorizedRolesStr] = useState<string>();
-  const [expireDate, setExpireDate] = useState<DatePickerProps<Dayjs> | null>(null);
+  const [expireDate, setExpireDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<string>();
   const [loading, setLoading] = useState<boolean>(true);
   const [openError, setOpenError] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(schema)
-  });
-
   const { showSnackBar } = useSnackBar();
-
   const handleSnackbar = (message: string, color: AlertColor) => {
     showSnackBar(message, color)
   };
+
+  const schema = yup.object({
+    title: yup.string().required('Mandatory field.'),
+    creatorRole: yup.string().required('Mandatory field.').test({
+      test(value, ctx) {
+        let role = Number(value);
+        if (isNaN(role))
+          return ctx.createError({ message: 'Invalid number for role.' })
+        return true;
+      }
+    }),
+    valueReward: yup.string().required('Mandatory field.').test({
+      test(value, ctx) {
+        let role = Number(value);
+        if (isNaN(role))
+          return ctx.createError({ message: 'Invalid value.' })
+        return true;
+      }
+    }),
+    authorizedRoles: yup.string().required('Mandatory field.').test({
+      test(value, ctx) {
+        let validation = true;
+        let roles = value.split(',');
+        roles.forEach(element => {
+          let role = Number(element);
+          if (isNaN(role))
+            validation = false;
+        });
+        if (!validation)
+          return ctx.createError({ message: 'Invalid role number.' });
+        return validation;
+      }
+    }),
+    assignee: yup.string().test({
+      test(value, ctx) {
+        if (value.length != 42 || value.slice(0,2) != "0x")
+          return ctx.createError({ message: 'Invalid address.' });
+        return true;
+      }
+    }),
+    metadata: yup.string().required('Mandatory field.').test({
+      test(value, ctx) {
+        if (value.slice(0,4) == "ipfs" || value.slice(0,4) == "http")
+          return true;
+        
+        return ctx.createError({ message: 'Invalid metadata. Try ipfs.io/ipfs/...' });      
+      }
+    }),
+    description: yup.string().required('Mandatory field.').test({
+      test(value, ctx) {
+        console.log("value",value)
+        if (value.length < 100)
+          return ctx.createError({ message: 'Invalid description. Minimum 100 characters' });
+        return true;
+      }
+    }),
+    endDate: yup.string().test({
+      test(value, ctx) {
+        let date = Date.parse(endDate);
+        if (isNaN(date))
+          return ctx.createError({ message: 'Invalid date.' });
+        return true;
+      }
+    })
+  }).required();
+
+  
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(schema)
+  });
+  
 
   const logoImage = "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
 
@@ -117,15 +151,22 @@ const CreateTask = ({ data }) => {
     setValueReward(reward);
   };
 
+  const handleExpireDate = ( value: Dayjs ) => {
+    setExpireDate(value)
+    let strEndDate = value.toString();
+    setEndDate(strEndDate);
+  };
+
   const onSubmit = async (event: { preventDefault: () => void; }) => {
     try {
       handleSnackbar('Create Task Start process initiated with success!', 'info')
       let authorizedRoles: string[] = (authorizedRolesStr).split(',');
       const splittedRoles: readonly bigint[] = authorizedRoles.map(str => BigInt(str));
       task.authorizedRoles = splittedRoles;
-      task.reward = BigInt(valueReward);
-      let data = String(Math.floor(Date.now() / 1000) + 3600)
-      task.endDate = BigInt(data);
+      task.reward = ethers.utils.parseEther(valueReward);
+      console.log('task.reward = ', task.reward);
+      let expireTimestamp = expireDate.unix();
+      task.endDate = BigInt(expireTimestamp);
       console.log("task.endDate: ", task.endDate);
 
       await createTask(task);
@@ -151,106 +192,118 @@ const CreateTask = ({ data }) => {
   }, [setLoading]);
 
   return (
-    <Stack spacing={2} sx={{ width: '100%' }}>
-      <Box
-        display={'flex'}
-        justifyContent={'center'}
-        alignItems={'center'}
-        height={'100%'}
-        flexDirection={'column'}>
-
+    <>
+      <Helmet>
+        <title>Web3Task - Create Task</title>
+      </Helmet>
+      <Stack spacing={2} sx={{ width: '100%' }}>
         <Box
-          width={'100%'}>
-          <CoverCreateTask />
-        </Box>
-        {
-          loading ? <SuspenseLoader /> : (
-            <Box marginTop={2} component="form" onSubmit={handleSubmit(onSubmit)}>
-              <Stack spacing={2} alignItems={'center'} >
-                <TextField  {...register("title")}
-                  fullWidth
-                  id="outlined-required"
-                  label={'Title'}
-                  onBlur={handleTitle}
-                  placeholder={'Describe the activity or link to a document'}
-                />
-                <p>{errors.title?.message}</p>
+          display={'flex'}
+          justifyContent={'center'}
+          alignItems={'center'}
+          height={'100%'}
+          flexDirection={'column'}>
 
-                <TextField {...register("authorizedRoles")}
-                  fullWidth
-                  id="outlined-required"
-                  label={'Authorized Roles (separate by `,`)'}
-                  onBlur={handleAuthorizedRoles}
-                  placeholder={'The authorized roles to perform the task'}
-                />
-                <p>{errors.authorizedRoles?.message}</p>
+          <Box
+            width={'100%'}>
+            <CoverCreateTask />
+          </Box>
+          {
+            loading ? <SuspenseLoader /> : (
+              <Box marginTop={2} component="form" onSubmit={handleSubmit(onSubmit)}>
+                <Stack spacing={2} alignItems={'center'} >
+                  <TextField  {...register("title")}
+                    fullWidth
+                    id="outlined-required"
+                    label={'Title'}
+                    onBlur={handleTitle}
+                    placeholder={'Describe the activity or link to a document'}
+                  />
+                  <p>{errors.title?.message}</p>
 
-                <TextField {...register("creatorRole")}
-                  fullWidth
-                  id="outlined-required"
-                  label={'Creator Role'}
-                  onBlur={handleCreatorRole}
-                  placeholder={'Creator Role 5..10..'}
-                />
-                <p>{errors.creatorRole?.message}</p>
+                  <TextField {...register("authorizedRoles")}
+                    fullWidth
+                    id="outlined-required"
+                    label={'Authorized Roles (separate by `,`)'}
+                    onBlur={handleAuthorizedRoles}
+                    placeholder={'The authorized roles to perform the task'}
+                  />
+                  <p>{errors.authorizedRoles?.message}</p>
 
-                <TextField
-                  fullWidth
-                  id="outlined-required"
-                  label={'Assignee Address (leave blank to allow anyone to perform the task)'}
-                  onBlur={handleAssignee}
-                  placeholder={'Assignee address'}
-                />
+                  <TextField {...register("creatorRole")}
+                    fullWidth
+                    id="outlined-required"
+                    label={'Creator Role'}
+                    onBlur={handleCreatorRole}
+                    placeholder={'Creator Role 5..10..'}
+                  />
+                  <p>{errors.creatorRole?.message}</p>
 
-                <TextField
-                  fullWidth
-                  id="outlined-required"
-                  label={'Metadata (IPFS)'}
-                  onBlur={handleMetadata}
-                  placeholder={'https://ipfs.io/ipfs/QmY5D...7CEh'}
-                />
+                  <TextField {...register("assignee")}
+                    fullWidth
+                    id="outlined-required"
+                    label={'Assignee Address (leave blank to allow anyone to perform the task)'}
+                    onBlur={handleAssignee}
+                    placeholder={'Assignee address'}
+                  />
+                  <p>{errors.assignee?.message}</p>
 
-                <TextField fullWidth
-                  id="outlined-required"
-                  label={'Description'}
-                  onBlur={handleDescription}
-                  placeholder={'A full description about the ativity.'}
-                  multiline
-                  maxRows="18"
-                  onChange={handleChange}
-                />
+                  <TextField {...register("metadata")}
+                    fullWidth
+                    id="outlined-required"
+                    label={'Metadata (IPFS)'}
+                    onBlur={handleMetadata}
+                    placeholder={'https://ipfs.io/ipfs/QmY5D...7CEh'}
+                  />
+                  <p>{errors.metadata?.message}</p>
 
-                <Stack spacing={2} direction={'row'} alignItems="center" justifyContent="center">
-                  <Box>
-                    <img src={logoImage} width={'100px'} height={'100px'} alt='Pod3LabsRecompensaIcon' />
-                  </Box>
-                  <div>
-                    <TextField  {...register("valueReward")}
-                      label={'Reward in USD'}
-                      onBlur={handleReward}
-                    />
-                    <p>{errors.valueReward?.message}</p>
-                  </div>
-                  <div>
-                    <DatePicker
-                      label={'Deliver Date'}
-                      onChange={(newValue: any) => setExpireDate(newValue)}
-                    />
-                    {/* <p>{errors.endDate?.message}</p> */}
-                  </div>
+                  <TextField {...register("description")}
+                    fullWidth
+                    id="outlined-required"
+                    label={'Description'}
+                    onBlur={handleDescription}
+                    placeholder={'A full description about the ativity.'}
+                    multiline
+                    maxRows="18"
+                  />
+                  <p>{errors.description?.message}</p>
+
+                  <Stack spacing={2} direction={'row'} alignItems="center" justifyContent="center">
+                    <Box>
+                      <img src={logoImage} width={'100px'} height={'100px'} alt='Pod3LabsRecompensaIcon' />
+                    </Box>
+                    <div>
+                      <TextField  {...register("valueReward")}
+                        label={'Reward in USD'}
+                        onBlur={handleReward}
+                      />
+                      <p>{errors.valueReward?.message}</p>
+                    </div>
+                    <div>
+                      <DatePicker {...register("endDate")}
+                        label={'Deliver Date'}
+                        onChange={(newValue: Dayjs) => handleExpireDate(newValue)}
+                        slotProps={{
+                          textField: { size: 'medium' },
+                          openPickerIcon: { style: { color: theme.palette.primary.main } },
+                          switchViewButton: { style: { color: 'info' } }
+                        }}
+                      />
+                      <p>{errors.endDate?.message}</p>
+                    </div>
+                  </Stack>
+
+                  <Button type="submit" variant='contained' color='primary'>
+                    Create
+                  </Button>
+
                 </Stack>
-
-                <Button type="submit" variant='contained' color='primary'>
-                  Enviar
-                </Button>
-
-              </Stack>
-            </Box>
-          )
-        }
-      </Box>
-    </Stack>
-
+              </Box>
+            )
+          }
+        </Box>
+      </Stack>
+    </>
   );
 }
 

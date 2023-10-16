@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Button, Grid, CardMedia, CardContent, Typography, Card, useMediaQuery } from '@mui/material'
+import { Box, Button, Grid, IconButton, CardMedia, CardContent, Typography, Card, useMediaQuery, Tooltip } from '@mui/material'
 import SuspenseLoader from 'src/components/SuspenseLoader'
 import AccessTime from '@mui/icons-material/AccessTime';
 import { AlertColor } from '@mui/material/Alert';
@@ -7,7 +7,9 @@ import { useTaskService } from "src/services/tasks-service";
 import { useWeb3Utils } from 'src/hooks/Web3UtilsHook';
 import { useTheme } from '@mui/system';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import Close from '@mui/icons-material/Close';
 import { useSnackBar } from 'src/contexts/SnackBarContext';
+import { ethers } from 'ethers';
 
 /**
  * CardTasks Component
@@ -103,6 +105,16 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
         }
     }, [])
 
+    const copyContent = async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            handleSnackbar("Copy to Clipboard", 'info')
+        } catch (err) {
+            console.error('Failed to copy: ', err);
+            handleSnackbar("Failed to copy to clipboard", 'error')
+        }
+    }
+
     return (
 
         <Grid item xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'}>
@@ -130,8 +142,8 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                             width: '100%',
                                             height: '42px',
                                             color: 'white',
-                                            padding: '10px',
-                                            textAlign: 'right',
+                                            padding: '0px',
+                                            textAlign: 'center',
                                             fontFamily: 'Istok Web',
                                             fontWeight: '400'
                                         }}>
@@ -139,11 +151,12 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                                 gutterBottom
                                                 variant="body2"
                                                 style={{
-                                                    textAlign: isSmallScreen ? 'left' : 'right',
-                                                    marginLeft: isSmallScreen ? 'auto' : 'unset',
+                                                    textAlign: isSmallScreen ? 'left' : 'center',
+                                                    // marginLeft: isSmallScreen ? 'auto' : 'unset',
+                                                    backgroundColor: '#000000',
                                                 }}
                                             >
-                                                Reward {taskData.reward} USD
+                                                Reward {ethers.utils.formatEther(taskData.reward)} USD
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -157,14 +170,23 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                             <Typography gutterBottom variant="h3" component="div" textAlign={'left'} >
                                                 {taskData.title}
                                             </Typography>
+                                            <Box>
+                                            {
+                                                isLeader && taskData.status != "Canceled" &&
+                                                <IconButton color="primary" 
+                                                    onClick={handleCancel}>
+                                                <Close />
+                                                </IconButton>
+                                            }
 
-                                            <OpenInNewIcon style={{
-                                                cursor: 'pointer'
-                                            }} />
-
+                                            <IconButton color="primary"
+                                                onClick={copyContent}>
+                                                <OpenInNewIcon />
+                                            </IconButton>
+                                            </Box>
                                         </Box>
                                         <Typography gutterBottom variant='subtitle2' component="div">
-                                            #8654
+                                            #{taskId}
                                         </Typography>
 
                                     </Box>
@@ -201,20 +223,6 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                             End Date: {taskData.endDate}
                                         </Button>
                                     </Box>
-
-                                    {
-                                        isLeader && taskData.status != "Canceled" &&
-                                        <Box sx={{ margin: '5px' }}>
-                                            <Button
-                                                variant="contained"
-                                                component="span"
-                                                onClick={handleCancel}
-                                            >
-                                                Cancel Task
-                                            </Button>
-                                        </Box>
-                                    }
-
                                 </CardContent>
                             </Box>
                         </Box >

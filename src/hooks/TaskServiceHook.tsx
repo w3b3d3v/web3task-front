@@ -14,6 +14,9 @@ interface TaskService {
     getMultiTasks: (start: number, end: number, isUserProfile: boolean) => Promise<Task[]>;
     setRole: (roleId: any, authorizedAddress: any, isAuthorized: boolean) => Promise<any>
     setOperator: (interfaceId: any, roleId: any, isAuthorized: boolean) => Promise<any>
+    setMinQuorum: (quorum: any) => Promise<any>
+    deposit: (roleId: any, amount: any) => Promise<any>
+    getScore: (address: any) => Promise<any>
 }
 
 /**
@@ -51,19 +54,14 @@ export const useTaskServiceHook = (task: TaskService) => {
         switch (status) {
             case TaskStatus.Created:
                 return "Created"
-                break;
             case TaskStatus.Canceled:
                 return "Canceled"
-                break;
             case TaskStatus.Review:
                 return "In Review"
-                break;
             case TaskStatus.Progress:
                 return "In Progress"
-                break;
             case TaskStatus.Completed:
                 return "Completed"
-                break;
             default:
                 break;
         }
@@ -161,12 +159,12 @@ export const useTaskServiceHook = (task: TaskService) => {
 
             const timeInSeconds = Math.floor(Number(nft.endDate) * 1000);
             const date = new Date(timeInSeconds);
-            const dateFormatted = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+            const dateFormatted = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
             nft.endDate = dateFormatted;
             setTaskData(nft);
         } catch (error) {
             setError('Erro ao buscar tarefa');
-            handleSnackbar('Error Searching Task: '+error, 'error')
+            handleSnackbar('Error Searching Task: ' + error, 'error')
         } finally {
             setLoading(false);
         }
@@ -248,6 +246,32 @@ export const useTaskServiceHook = (task: TaskService) => {
 
     };
 
+    const handleQuorum = async (quorum: any) => {
+        try {
+            handleSnackbar('Set Quorum process initiated with success!', 'info')
+            return await task.setMinQuorum(quorum);
+        } catch (error) {
+            handleSnackbar('Error Set Quorum!', 'error')
+        }
+    };
+
+    const handleDeposit = async (roleId: any, amount: any) => {
+        try {
+            handleSnackbar('Set Deposit process initiated with success!', 'info')
+            return await task.deposit(roleId, amount);
+        } catch (error) {
+            handleSnackbar('Error Set Deposit!', 'error')
+        }
+    };
+
+    const handleUserScore = async (address: any) => {
+        try {
+            return await task.getScore(address);
+        } catch (error) {
+            handleSnackbar('Error getting Score', 'error')
+        }
+    };
+
     return {
         taskData,
         multiTasksData,
@@ -260,6 +284,9 @@ export const useTaskServiceHook = (task: TaskService) => {
         handleCountTasks,
         handleCountUserTasks,
         handleRole,
-        handleOperator
+        handleOperator,
+        handleQuorum,
+        handleDeposit,
+        handleUserScore
     };
 };

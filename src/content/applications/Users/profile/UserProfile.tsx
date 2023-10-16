@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { Helmet } from 'react-helmet-async';
 import { useTaskService } from "src/services/tasks-service";
@@ -8,6 +8,8 @@ import CardMultiTasks from "src/components/Task/CardMultiTasks";
 import { useWeb3Utils } from "src/hooks/Web3UtilsHook";
 import usePagination from "src/components/Pagination";
 import CoverUserProfile from "src/components/Cover/CoverUserProfile";
+import SearchFilters from "src/components/Task/SearchFiltersTasks";
+import { useSearchFilters } from "src/hooks/useSearchFilters";
 
 const BoxCover = styled(Box)(
     ({ theme }) => `
@@ -28,16 +30,17 @@ const BoxCoverAction = styled(Box)(
 );
 
 const UserProfile = () => {
-    const { shortenAddressFromUser } = useWeb3Utils();
+    const { shortenAddressFromUser, userAddress } = useWeb3Utils();
     const taskService = useTaskService();
-
     const { handleCountUserTasks, countUserTasks, handleMultiTask, multiTasksData, loading } = useTaskServiceHook(taskService);
     const [tasksPerPage, setTasksPerPage] = useState<number>(4);
     const [totalPages, setTotalPages] = useState<number>(1);
     const [maxTasks, setMaxTasks] = useState<number>(4);
     const [minimumTasks, setMinimumTasks] = useState<number>(1);
     const { currentPage, Pagination } = usePagination();
-
+    const { filter: filterTasks } = useSearchFilters();
+    const [userScore, setUserScore] = useState<number>();
+    
     const fetchData = async () => {
         try {                            
             await handleCountUserTasks().then(count => {
@@ -56,14 +59,22 @@ const UserProfile = () => {
             console.error('Error fetching tasks:', error);
         }
     };
+    
+    const maxReward = multiTasksData?.reduce((acc, curr) => {
+        const parsedReward = Number.parseFloat(curr.reward)
 
+        return parsedReward > acc ? parsedReward : acc
+    }, 0) || 0
+
+    const filteredMultiTasks = filterTasks(multiTasksData || [])
+    
     useEffect(() => {  
         setMinimumTasks(((currentPage - 1) * tasksPerPage) + 1);
         setMaxTasks(currentPage * tasksPerPage);           
         fetchData();        
     }, [currentPage, totalPages, minimumTasks, maxTasks]);
-
-    return (
+    
+  return (
         <>
             <Helmet>
                 <title>Web3Task - Profile</title>
@@ -175,25 +186,25 @@ const UserProfile = () => {
                         <Typography gutterBottom variant="h5" component="div" textAlign="center">
                             {shortenAddressFromUser()}
                         </Typography>
+                        User Task Score: { isNaN(userScore) ? "Not loaded." : userScore }
                     </BoxCoverAction>
 
                 </BoxCover>
-                <Box mt={'7%'}>
-                    <Box>
-                        <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={'max-content'} >
-                            <Box>
+                <Box>
 
-                            </Box>
+                    <Grid container spacing={2} mt={8} ml={15} style={{ width: '100%' }} >
+                        <Grid item xs={3} mt={5}>
+                            <SearchFilters maxReward={maxReward} />
+                        </Grid>
 
-                            <CardMultiTasks multiTasksData={multiTasksData} loading={loading} page={currentPage} />
-                        </Box >
-                    </Box>
+                        <Grid item xs={9} style={{ width: '100%' }}>
+                            <CardMultiTasks multiTasksData={filteredMultiTasks} loading={loading} page={currentPage} />
+                        </Grid>
+                    </Grid>
                 </Box>
 
                 <Box display={'flex'} justifyContent={'center'} alignItems={'center'} mt={10}>
-
                     <Pagination numPages={totalPages} />
-
                 </Box>
 
             </Box>

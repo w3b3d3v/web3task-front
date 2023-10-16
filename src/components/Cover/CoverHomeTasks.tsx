@@ -1,14 +1,18 @@
 import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
+import {
+    useTheme,
+} from "@mui/material";
 
 const CoverHomeTasks = () => {
+    const theme = useTheme();
     return (
         <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={304} flexDirection={"row"} >
 
             <Box>
                 <img
-                    src="/static/images/task/home/quebra-cabeca.svg"
-                    alt="Quebra Cabeca"
+                    src="/static/images/task/home/web3task-home-task.svg"
+                    alt="Logo Web3task"
                     width={200}
                     height={150}
                 />
@@ -16,8 +20,8 @@ const CoverHomeTasks = () => {
 
             <Box>
                 <Box>
-                    <Typography color={'green'} fontSize={50}>
-                        WEB3 TASK
+                    <Typography color={theme.colors.primary} fontWeight={"bold"} fontSize={50}>
+                        WEB3TASK
                     </Typography>
                 </Box>
                 <Box>

@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import { useSearchFilters } from 'src/hooks/useSearchFilters';
+import TuneIcon from '@mui/icons-material/Tune';
 
 interface SearchFiltersProps {
   maxReward?: number;
@@ -32,30 +33,27 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
 
   return (
     <Box display="flex" flexDirection="column">
-      <Box display="inline-flex" alignItems="center">
-        <img src="/static/images/task/home/filtroIcon.svg" alt="Filtro" />
-
-        <Typography fontSize={20}>Filtro</Typography>
+      <Box display="inline-flex" alignItems="center" justifyContent={'left'} ml={4}>
+        <TuneIcon color='primary' />
+        <Typography fontSize={20}>Filter</Typography>
       </Box>
 
       <Accordion>
         <AccordionSummary
           expandIcon={
             <ExpandMoreTwoToneIcon
-              sx={{
-                color: theme.palette.mode === 'dark' ? 'white' : 'black',
-              }}
+              color='primary'
             />
           }
         >
-          <Typography>Título</Typography>
+          <Typography>Title</Typography>
         </AccordionSummary>
 
         <AccordionDetails>
           <TextField
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            label="Pesquisar por título"
+            label="Search for title"
             variant="standard"
             fullWidth
           />
@@ -66,20 +64,18 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
         <AccordionSummary
           expandIcon={
             <ExpandMoreTwoToneIcon
-              sx={{
-                color: theme.palette.mode === 'dark' ? 'white' : 'black',
-              }}
+              color='primary'
             />
           }
         >
-          <Typography>Criador</Typography>
+          <Typography>Creator</Typography>
         </AccordionSummary>
 
         <AccordionDetails>
           <TextField
             value={creatorRole}
             onChange={(e) => setCreatorRole(e.target.value)}
-            label="Pesquisar por criador"
+            label="Search for creator"
             variant="standard"
             fullWidth
           />
@@ -90,13 +86,11 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
         <AccordionSummary
           expandIcon={
             <ExpandMoreTwoToneIcon
-              sx={{
-                color: theme.palette.mode === 'dark' ? 'white' : 'black',
-              }}
+              color='primary'
             />
           }
         >
-          <Typography>Pagamento por hora</Typography>
+          <Typography>Hourly payment</Typography>
         </AccordionSummary>
 
         <AccordionDetails>
@@ -124,25 +118,28 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
         <AccordionSummary
           expandIcon={
             <ExpandMoreTwoToneIcon
-              sx={{
-                color: theme.palette.mode === 'dark' ? 'white' : 'black',
-              }}
-            />
+              color='primary' />
           }
         >
-          <Typography>Data de vencimento</Typography>
+          <Typography>End date</Typography>
         </AccordionSummary>
 
         <AccordionDetails>
           <DatePicker
-            label="Data de vencimento"
+            label="End date"
             value={dueDate}
             onChange={setDueDate}
-            format="DD/MM/YYYY"
+            format="MM/DD/YYYY"
+            slotProps={{
+              textField: { size: 'medium' },
+              openPickerIcon: { style: { color: theme.palette.primary.main } },
+              switchViewButton: { style: { color: 'info' } }
+            }}
           />
         </AccordionDetails>
       </Accordion>
-    </Box>
+
+    </Box >
   );
 }
 
