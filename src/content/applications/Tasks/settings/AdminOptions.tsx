@@ -1,4 +1,4 @@
-import { Button, Stack, TextField, Typography } from '@mui/material';
+import { Button, Card, CardContent, Stack, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import { useTaskService } from 'src/services/tasks-service';
@@ -139,6 +139,27 @@ const AdminOptions = () => {
                             <TextField label={'Role ID'} sx={{ mr: 2 }} onChange={(event) => (handleInputChange('operator', event))} name='roleId' />
                             <TextField label={'Bool'} sx={{ mr: 2 }} onChange={(event) => (handleInputChange('operator', event))} name='isAuthorized' />
                             <Button variant='contained' onClick={(event) => (handleSubmit('setOperator', event))}>Enviar</Button>
+                        </Box>
+                        <Box>
+                            <Card sx={{ width: 250 }}>
+                                <CardContent>
+                                    <Typography variant='h4'>
+                                        Interface ID
+                                    </Typography>
+                                    <Typography>
+                                        createTask - 0xe610a2dd
+                                    </Typography>
+                                    <Typography>
+                                        startTask - 0xf3ae70f0
+                                    </Typography>
+                                    <Typography>
+                                        reviewTask - 0xc66e9543
+                                    </Typography>
+                                    <Typography>
+                                        CompleteTask - 0xc66e9543
+                                    </Typography>
+                                </CardContent>
+                            </Card>
                         </Box>
                         <Box m={2}>
                             <Typography sx={{ alignItems: 'left' }} fontWeight={'bold'} fontSize={'24px'} mb={2}>setQuorum</Typography>

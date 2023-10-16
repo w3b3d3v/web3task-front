@@ -15,12 +15,13 @@ import SuspenseLoader from 'src/components/SuspenseLoader';
 import CoverCreateTask from '../../../../components/Cover/CoverCreateTask';
 import { useSnackBar } from 'src/contexts/SnackBarContext';
 import { Helmet } from 'react-helmet-async';
+import { BigNumber, ethers } from 'ethers';
 
 let newTask: Task = {
   status: 0,
   title: '',
   description: '',
-  reward: BigInt(''),
+  reward: BigNumber.from("0"),
   endDate: BigInt(''),
   authorizedRoles: [BigInt('')],
   creatorRole: BigInt(''),
@@ -91,7 +92,7 @@ const CreateTask = ({ data }) => {
   const [task, setTask] = useState<Task>();
   const [valueReward, setValueReward] = useState<string>();
   const [authorizedRolesStr, setAuthorizedRolesStr] = useState<string>();
-  const [expireDate, setExpireDate] = useState<DatePickerProps<Dayjs> | null>(null);
+  const [expireDate, setExpireDate] = useState<Dayjs | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [openError, setOpenError] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm({
@@ -145,9 +146,10 @@ const CreateTask = ({ data }) => {
       let authorizedRoles: string[] = (authorizedRolesStr).split(',');
       const splittedRoles: readonly bigint[] = authorizedRoles.map(str => BigInt(str));
       task.authorizedRoles = splittedRoles;
-      task.reward = BigInt(valueReward);
-      let data = String(Math.floor(Date.now() / 1000) + 3600)
-      task.endDate = BigInt(data);
+      task.reward = ethers.utils.parseEther(valueReward);
+      console.log('task.reward = ', task.reward);
+      let expireTimestamp = expireDate.unix();
+      task.endDate = BigInt(expireTimestamp);
       console.log("task.endDate: ", task.endDate);
 
       await createTask(task);
@@ -264,7 +266,7 @@ const CreateTask = ({ data }) => {
                     <div>
                       <DatePicker {...register("endDate")}
                         label={'Deliver Date'}
-                        onChange={(newValue: any) => setExpireDate(newValue)}
+                        onChange={(newValue: Dayjs) => setExpireDate(newValue)}
                         slotProps={{
                           textField: { size: 'medium' },
                           openPickerIcon: { style: { color: theme.palette.primary.main } },
