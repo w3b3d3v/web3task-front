@@ -68,11 +68,11 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                     handleSnackbar('Task Start process initiated with success!', 'info')
                     break;
                 case "Progress":
-                    await reviewTask(BigInt(taskId), "Teste");
+                    await reviewTask(BigInt(taskId), "Hello, I already finished");
                     handleSnackbar('Review Task process initiated with success!', 'info')
                     break;
                 case "Review":
-                    await reviewTask(BigInt(taskId), "Teste");
+                    await reviewTask(BigInt(taskId), "Awesome, contact me on Discord!");
                     handleSnackbar('Review Task process initiated with success!', 'info')
                     break;
                 default:

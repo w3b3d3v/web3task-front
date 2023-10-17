@@ -454,6 +454,8 @@ export function useTaskService() {
 		cancelTask,
 		getTask,
 		getMultiTasks,
+		countUserTasks,
+		countTasks,
 		setRole,
 		setOperator,
 		hasLeaderRole,

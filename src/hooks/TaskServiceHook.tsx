@@ -112,11 +112,9 @@ export const useTaskServiceHook = (task: TaskService) => {
             setError(null);
 
             const countTasks: any = await task.countUserTasks();
-            setCountTasks(countTasks);
-            
-
+            setCountUserTasks(countTasks);
         } catch (error) {
-            setError('Erro ao buscar quantidade de tarefas.');
+            setError('Error searching total of tasks.');
             handleSnackbar('Error searching total of tasks: '+error, 'error')
         }
         return countTasks;
@@ -165,7 +163,7 @@ export const useTaskServiceHook = (task: TaskService) => {
             nft.endDate = dateFormatted;
             setTaskData(nft);
         } catch (error) {
-            setError('Erro ao buscar tarefa');
+            setError('Error Searching Task');
             handleSnackbar('Error Searching Task: ' + error, 'error')
         } finally {
             setLoading(false);
