@@ -24,7 +24,7 @@ const AdminOptions = () => {
     });
 
     const [quorum, setQuorum] = useState({
-        quorum: ""
+        value: ""
     });
 
     const [deposit, setDeposit] = useState({
@@ -77,7 +77,7 @@ const AdminOptions = () => {
                     await handleRole(role.roleId, role.authorizedAddress, role.isAuthorized);
 
                 } catch (error) {
-                    console.error('Erro ao enviar o formulário:', error);
+                    console.error('Error when filling the form:', error);
                 }
                 break;
             }
@@ -85,15 +85,15 @@ const AdminOptions = () => {
                 try {
                     await handleOperator(operator.interfaceId, operator.roleId, operator.isAuthorized)
                 } catch (error) {
-                    console.error('Erro ao enviar o formulário:', error);
+                    console.error('Error when filling the form:', error);
                 }
                 break;
             }
             case "setQuorum": {
                 try {
-                    await handleQuorum(BigInt(quorum.quorum))
+                    await handleQuorum(BigInt(quorum.value))
                 } catch (error) {
-                    console.error('Erro ao enviar o formulário:', error);
+                    console.error('Error when filling the form:', error);
                 }
                 break;
             }
@@ -101,7 +101,7 @@ const AdminOptions = () => {
                 try {
                     await handleDeposit(deposit.roleId, deposit.amount)
                 } catch (error) {
-                    console.error('Erro ao enviar o formulário:', error);
+                    console.error('Error when filling the form:', error);
                 }
                 break;
             }
@@ -166,7 +166,7 @@ const AdminOptions = () => {
                         </Box>
                         <Box m={2}>
                             <Typography sx={{ alignItems: 'left' }} fontWeight={'bold'} fontSize={'24px'} mb={2}>setQuorum</Typography>
-                            <TextField label={'Value'} sx={{ mr: 2 }} onChange={(event) => (handleInputChange('quorum', event))} name='Value' />
+                            <TextField label={'Value'} sx={{ mr: 2 }} onChange={(event) => (handleInputChange('quorum', event))} name='value' />
                             <Button variant='contained' onClick={(event) => (handleSubmit('setQuorum', event))}>Enviar</Button>
                         </Box>
                     </Stack>

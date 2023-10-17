@@ -56,6 +56,10 @@ To run the frontend, you need to run a local node. To do this, you need to set u
 yarn start
 ```
 
+## Nonces
+
+You might encounter trouble due to the nonces of metamask or local wallet session. To fix that, please access you browser wallet and clear activity data. Thus resolving any nonce issues.
+
 ## Contact
 
 Advisor: 0xneves (@ownerlessinc)

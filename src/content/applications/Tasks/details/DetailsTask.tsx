@@ -14,11 +14,12 @@ const DetailsTask = () => {
     const taskService = useTaskService();
     const { taskId } = useParams();
 
-    const { handleTask, taskData, loading, error } = useTaskServiceHook(taskService);
+    const { handleTask, handleReview, taskData, taskReview, loading, error } = useTaskServiceHook(taskService);
 
     useEffect(() => {
         const fetchData = async () => {
             await handleTask(Number(taskId));
+            await handleReview(Number(taskId));
         };
 
         fetchData();
@@ -61,17 +62,23 @@ const DetailsTask = () => {
                                                 </Card>
 
                                                 <Card sx={{ width: isSmallScreen ? '100%' : 434, height: 119, justifyContent: isSmallScreen ? 'center' : 'left' }}>
-                                                    <CardContent>
+                                                    <CardContent style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                                                    {/* <CardContent> */}
                                                         <Typography gutterBottom variant="h4" textAlign={'left'} component="div">
                                                             Reviews
                                                         </Typography>
-                                                        <Divider />
+                                                        <Divider />                                                 
                                                         <Typography variant="h6" textAlign={'left'} mt={1} component="div">
-                                                            https://link1.com.br
-                                                        </Typography>
-                                                        <Typography variant="h6" textAlign={'left'} mt={1} component="div">
-                                                            https://link2.com.br
-                                                        </Typography>
+                                                            {taskReview ? (taskReview.map((review: any) => {
+                                                                return (
+                                                                    <Box>
+                                                                        <Typography variant="h6" textAlign={'left'} mt={1} component="div">
+                                                                            {review}
+                                                                        </Typography>
+                                                                    </Box>
+                                                                )
+                                                            })) : 'No reviews provided for this task.'}
+                                                        </Typography>                                                        
                                                     </CardContent>
                                                 </Card>
                                             </Box>

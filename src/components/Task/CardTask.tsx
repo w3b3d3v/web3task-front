@@ -8,8 +8,10 @@ import { useWeb3Utils } from 'src/hooks/Web3UtilsHook';
 import { useTheme } from '@mui/system';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import Close from '@mui/icons-material/Close';
+import Check from '@mui/icons-material/Check';
 import { useSnackBar } from 'src/contexts/SnackBarContext';
 import { ethers } from 'ethers';
+import { set } from 'date-fns';
 
 /**
  * CardTasks Component
@@ -25,11 +27,12 @@ import { ethers } from 'ethers';
 
 
 export const CardTask = ({ taskId, taskData, loading }: any) => {
-    const { startTask, reviewTask, completeTask, cancelTask, hasMemberRole, hasLeaderRole } = useTaskService();
+    const { startTask, reviewTask, completeTask, cancelTask, hasMemberRole, hasLeaderRole, hasVoted, getMinQuorum, getQuorumApprovals } = useTaskService();
     const [openError, setOpenError] = useState(false);
     const [error, setError] = useState<string>();
     const [action, setAction] = useState<string>();
     const { userAddress } = useWeb3Utils();
+    const [approvals, setApprovals] = useState<string>();
     const [isMember, setIsMember] = useState<boolean>(false);
     const [isLeader, setIsLeader] = useState<boolean>(false);
     const theme = useTheme();
@@ -41,16 +44,16 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
         showSnackBar(message, color)
     };
 
-    const getAction = (status: string) => {
+    const getAction = async (status: string) => {
         switch (status) {
             case "Created":
                 setAction("Start Task")
                 break;
-            case "In Progress":
+            case "Progress":
                 setAction("Review Task")
                 break;
-            case "In Review":
-                setAction("Complete Task")
+            case "Review":
+                setAction("Review Task")
                 break;
             default:
                 break;
@@ -64,13 +67,13 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                     await startTask(BigInt(taskId));
                     handleSnackbar('Task Start process initiated with success!', 'info')
                     break;
-                case "In Progress":
-                    await reviewTask(BigInt(taskId));
+                case "Progress":
+                    await reviewTask(BigInt(taskId), "Teste");
                     handleSnackbar('Review Task process initiated with success!', 'info')
                     break;
-                case "In Review":
-                    await completeTask(BigInt(taskId));
-                    handleSnackbar('Complete Task process initiated with success!', 'info')
+                case "Review":
+                    await reviewTask(BigInt(taskId), "Teste");
+                    handleSnackbar('Review Task process initiated with success!', 'info')
                     break;
                 default:
                     break;
@@ -92,10 +95,32 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
         }
     }
 
+    const handleConfirm = async () => {
+        try {
+            await completeTask(BigInt(taskId));
+            handleSnackbar('Complete Task process initiated with success!', 'info')
+        } catch (error) {
+            setError(error.message)
+            setOpenError(true);
+        }
+    }
+
+    const handleApprovals = async () => {
+        try {
+            const approvals = await getQuorumApprovals(taskId);
+            const minQuorum = await getMinQuorum();
+            const remain = " (" + String(approvals) + "/" + String(minQuorum) + ")";
+            setApprovals(remain);
+        } catch (error) {
+            setError(error.message)
+            setOpenError(true);
+        }        
+    }
+
     useEffect(() => {
-        console.log("taskData", taskData)
         if (taskData != null) {
             getAction(taskData.status);
+            handleApprovals();
             hasLeaderRole(userAddress()).then(result => {
                 setIsLeader(result);
                 hasMemberRole(userAddress()).then(result => {
@@ -170,19 +195,43 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                             <Typography gutterBottom variant="h3" component="div" textAlign={'left'} >
                                                 {taskData.title}
                                             </Typography>
-                                            <Box>
+                                            <Box display={'flex'} justifyContent="space-between" alignItems="center">
+                                        
                                             {
                                                 isLeader && taskData.status != "Canceled" &&
-                                                <IconButton color="primary" 
-                                                    onClick={handleCancel}>
-                                                <Close />
-                                                </IconButton>
+                                                <Tooltip key={"top"} placement={"top"} title="Approvals">
+                                                    <Typography >                                                    
+                                                        {approvals}
+                                                    </Typography>
+                                                </Tooltip>
+                                            }                                            
+
+                                            {
+                                                isLeader && taskData.status != "Canceled" &&
+                                                <Tooltip key={"top"} placement={"top"} title="Complete Task">
+                                                    <IconButton color="primary" 
+                                                        onClick={handleConfirm}>
+                                                    <Check />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            }
+                                                
+                                            {
+                                                isLeader && taskData.status != "Canceled" &&
+                                                <Tooltip key={"top"} placement={"top"} title="Review Task">
+                                                    <IconButton color="primary" 
+                                                        onClick={handleCancel}>
+                                                    <Close />
+                                                    </IconButton>
+                                                </Tooltip>
                                             }
 
-                                            <IconButton color="primary"
-                                                onClick={copyContent}>
-                                                <OpenInNewIcon />
-                                            </IconButton>
+                                            <Tooltip key={"top"} placement={"top"} title="Share URL">
+                                                <IconButton color="primary"
+                                                    onClick={copyContent}>
+                                                    <OpenInNewIcon />
+                                                </IconButton>
+                                            </Tooltip>
                                             </Box>
                                         </Box>
                                         <Typography gutterBottom variant='subtitle2' component="div">
