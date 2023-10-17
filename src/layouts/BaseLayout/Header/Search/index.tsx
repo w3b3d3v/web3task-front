@@ -97,13 +97,9 @@ function HeaderSearch() {
 
   return (
     <>
-      <Grid container alignItems="center" rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid item xs={1}>
-        </Grid>
-        
-        <Grid item xs={7}>          
+                
           <Hidden mdDown>
-            {/* <Box >
+            { <Box >
               <Tooltip arrow title="Search">
                   <SearchInputWrapper
                     value={searchValue}
@@ -120,20 +116,9 @@ function HeaderSearch() {
                     fullWidth
                   />
               </Tooltip>  
-            </Box>             */}
+            </Box>             }
           </Hidden>
-        </Grid>
-          
-        
-        <Grid item xs={4}>
-          <Box sx={{ mr: 1 }}>
-            <Box sx={{ mx: 0.5 }} component="span" display={"flex"} flexDirection={"row-reverse"}>
-              <HeaderNotifications />
-              <HeaderToggleTheme />
-            </Box>
-          </Box>
-        </Grid>
-      </Grid>
+
     </>
   );
 }

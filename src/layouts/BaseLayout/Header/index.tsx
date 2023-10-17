@@ -6,6 +6,7 @@ import {
   Divider,
   styled,
   useTheme,
+  Grid,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import Logo from "src/components/LogoSign";
@@ -14,6 +15,8 @@ import HeaderUserbox from "./Userbox";
 import HeaderSearch from "./Search";
 import HeaderUserConnect from "./UserConnect";
 import { useConnect, useDisconnect } from 'wagmi';
+import HeaderNotifications from "./Buttons/Notifications";
+import HeaderToggleTheme from "./Buttons/ToggleTheme";
 
 const HeaderWrapper = styled(Box)(
   ({ theme }) => `
@@ -52,6 +55,7 @@ function Header({ data }) {
       display="flex"
       alignItems="center"
       sx={{
+        width: "100%",
         boxShadow:
           theme.palette.mode === "dark"
             ? `0 1px 0 ${alpha(
@@ -80,22 +84,46 @@ function Header({ data }) {
 
         {data ? (
           <>
-            <HeaderSearch />
-            <Box display="flex" alignItems="center">
-              <HeaderUserbox disconnect={disconnect} account={data} />
-            </Box>
+            <Grid container alignItems="center" rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+              <Grid item xs={1}>
+              </Grid>
+              <Grid item xs={7}>          
+                {/* <HeaderSearch /> */}
+              </Grid>
+              <Grid item xs={4}>
+                <Box sx={{ mr: 1 }}>
+                  <Box sx={{ mx: 0.5 }} component="span" display={"flex"} flexDirection={"row-reverse"}>
+                    <HeaderUserbox disconnect={disconnect} account={data} />
+                    <HeaderNotifications />
+                    <HeaderToggleTheme />
+                  </Box>                  
+                </Box>
+              </Grid>
+            </Grid>                                      
           </>
         ) : (
           <>
-            <HeaderSearch />
-            <Box display="flex" alignItems="center">
-              <HeaderUserConnect
-                connectors={connectors}
-                activeConnector={activeConnector}
-                connect={connect}
-                isConnecting={isConnecting}
-                pendingConnector={pendingConnector} />
-            </Box>
+            <Grid container alignItems="center" rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+              <Grid item xs={1}>
+              </Grid>
+              <Grid item xs={7}>          
+                {/* <HeaderSearch /> */}
+              </Grid>
+              <Grid item xs={4}>
+                <Box sx={{ mr: 1 }}>
+                  <Box sx={{ mx: 0.5 }} component="span" display={"flex"} flexDirection={"row-reverse"}>
+                    <HeaderUserConnect
+                      connectors={connectors}
+                      activeConnector={activeConnector}
+                      connect={connect}
+                      isConnecting={isConnecting}
+                      pendingConnector={pendingConnector} />
+                    <HeaderNotifications />
+                    <HeaderToggleTheme />                    
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>              
           </>
         )}
       </>

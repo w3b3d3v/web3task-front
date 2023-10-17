@@ -138,19 +138,16 @@ function HeaderUserbox({ disconnect, account }) {
 
   return (
     <>
-      <UserBoxButton color="secondary" ref={ref} onClick={handleOpen} sx={{ ml: 1 }}>
-        <MuiAvatar variant="rounded" {...stringAvatar(shortenAddressFromUser())} />
-        <Hidden mdDown>
+      <UserBoxButton color="secondary" ref={ref} onClick={handleOpen} sx={{ ml: 1 }}>        
+        <Hidden smDown>
+          <MuiAvatar variant="rounded" {...stringAvatar(shortenAddressFromUser())} />
           <UserBoxText>
-            <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
-            <UserBoxDescription noWrap variant="body2">
+            <UserBoxDescription noWrap variant="body1">
               { isLeader ? "Leader" : isMember ? "Member" : "No Role" }
             </UserBoxDescription>
           </UserBoxText>
         </Hidden>
-        <Hidden smDown>
-          <ExpandMoreTwoToneIcon sx={{ ml: 1 }} />
-        </Hidden>
+        <ExpandMoreTwoToneIcon sx={{ ml: 1 }} />        
       </UserBoxButton>
       <Popover
         anchorEl={ref.current}
@@ -168,8 +165,7 @@ function HeaderUserbox({ disconnect, account }) {
         <MenuUserBox sx={{ minWidth: 210 }} display="flex">
           <MuiAvatar variant="rounded" {...stringAvatar(shortenAddressFromUser())} />
           <UserBoxText>
-            <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
-            <UserBoxDescription variant="body2">
+            <UserBoxDescription variant="body1">
               { isLeader ? "Leader" : isMember ? "Member" : "No Role" }
             </UserBoxDescription>
           </UserBoxText>
