@@ -42,6 +42,12 @@ The following features are currently implemented
 yarn
 ```
 
+You must manualy add the typescript package to the project in case the module failes to install using yarn.
+
+```bash
+yarn add typescript
+```
+
 ## Usage
 
 To run the frontend, you need to run a local node. To do this, you need to set up the [web3task-contracts](https://github.com/w3b3d3v/web3task-contracts) project on your machine.
@@ -49,6 +55,10 @@ To run the frontend, you need to run a local node. To do this, you need to set u
 ```bash
 yarn start
 ```
+
+## Nonces
+
+You might encounter trouble due to the nonces of metamask or local wallet session. To fix that, please access you browser wallet and clear activity data. Thus resolving any nonce issues.
 
 ## Contact
 

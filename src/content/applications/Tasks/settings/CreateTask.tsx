@@ -164,7 +164,6 @@ const CreateTask = ({ data }) => {
       const splittedRoles: readonly bigint[] = authorizedRoles.map(str => BigInt(str));
       task.authorizedRoles = splittedRoles;
       task.reward = ethers.utils.parseEther(valueReward);
-      console.log('task.reward = ', task.reward);
       let expireTimestamp = expireDate.unix();
       task.endDate = BigInt(expireTimestamp);
       console.log("task.endDate: ", task.endDate);
@@ -274,13 +273,13 @@ const CreateTask = ({ data }) => {
                     </Box>
                     <div>
                       <TextField  {...register("valueReward")}
-                        label={'Reward in USD'}
+                        label={'Reward in ETH'}
                         onBlur={handleReward}
                       />
                       <p>{errors.valueReward?.message}</p>
                     </div>
                     <div>
-                      <DatePicker {...register("endDate")}
+                      <DatePicker
                         label={'Deliver Date'}
                         onChange={(newValue: Dayjs) => handleExpireDate(newValue)}
                         slotProps={{
@@ -289,7 +288,7 @@ const CreateTask = ({ data }) => {
                           switchViewButton: { style: { color: 'info' } }
                         }}
                       />
-                      <p>{errors.endDate?.message}</p>
+                      <p></p>
                     </div>
                   </Stack>
 

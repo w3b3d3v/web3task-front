@@ -177,18 +177,18 @@ function HeaderUserbox({ disconnect, account }) {
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
           <ListItem button to="/users/profile" component={NavLink}>
-            <ListItemText primary="Perfil" />
+            <ListItemText primary="Profile" />
           </ListItem>
           {
             isLeader && 
             <ListItem button to="/tasks/create-task" component={NavLink}>
-              <ListItemText primary="Criar Tarefa" />
+              <ListItemText primary="Create Task" />
             </ListItem>            
           }
           {
             isLeader && 
             <ListItem button to="/settings" component={NavLink}>
-              <ListItemText primary="Configurações" />
+              <ListItemText primary="Admin" />
             </ListItem>
           }
         </List>

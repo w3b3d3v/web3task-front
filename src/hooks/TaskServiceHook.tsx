@@ -17,6 +17,7 @@ interface TaskService {
     setMinQuorum: (quorum: any) => Promise<any>
     deposit: (roleId: any, amount: any) => Promise<any>
     getScore: (address: any) => Promise<any>
+    getReviews: (taskId: any) => Promise<any>
 }
 
 /**
@@ -27,6 +28,7 @@ interface TaskService {
  */
 export const useTaskServiceHook = (task: TaskService) => {
     const [taskData, setTaskData] = useState(null);
+    const [taskReview, setTaskReview] = useState<string[]>(null);
     const [multiTasksData, setMultiTasksData] = useState(null);
     const [countTasks, setCountTasks] = useState(null);
     const [countUserTasks, setCountUserTasks] = useState(null);
@@ -57,9 +59,9 @@ export const useTaskServiceHook = (task: TaskService) => {
             case TaskStatus.Canceled:
                 return "Canceled"
             case TaskStatus.Review:
-                return "In Review"
+                return "Review"
             case TaskStatus.Progress:
-                return "In Progress"
+                return "Progress"
             case TaskStatus.Completed:
                 return "Completed"
             default:
@@ -272,8 +274,19 @@ export const useTaskServiceHook = (task: TaskService) => {
         }
     };
 
+    const handleReview = async (taskId: any) => {
+        try {
+            const result: any = await task.getReviews(taskId)
+            setTaskReview(result)
+            return result;
+        } catch (error) {
+            handleSnackbar('Error getting the reviews array', 'error')
+        }
+    }
+
     return {
         taskData,
+        taskReview,
         multiTasksData,
         countTasks,
         countUserTasks,
@@ -287,6 +300,7 @@ export const useTaskServiceHook = (task: TaskService) => {
         handleOperator,
         handleQuorum,
         handleDeposit,
-        handleUserScore
+        handleUserScore,
+        handleReview,
     };
 };
