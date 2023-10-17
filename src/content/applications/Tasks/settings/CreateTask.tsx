@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { AlertColor } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
-import { Box, useTheme } from '@mui/material';
+import { Box, useMediaQuery, useTheme } from '@mui/material';
 import { Dayjs } from 'dayjs';
 import { DatePicker, DatePickerProps } from '@mui/x-date-pickers';
 import { useTaskService } from "src/services/tasks-service";
@@ -32,6 +32,8 @@ let newTask: Task = {
 
 const CreateTask = ({ data }) => {
   const theme = useTheme();
+  const  mdDown  = useMediaQuery(theme.breakpoints.down('md'));
+  const  smDown  = useMediaQuery(theme.breakpoints.down('sm'));
   const { createTask } = useTaskService();
   const [task, setTask] = useState<Task>();
   const [valueReward, setValueReward] = useState<string>();
@@ -207,7 +209,7 @@ const CreateTask = ({ data }) => {
             </Box>
             {
               loading ? <SuspenseLoader /> : (
-                <Box marginTop={2} component="form" onSubmit={handleSubmit(onSubmit)}>
+                <Box marginTop={2} marginRight={ mdDown ? 5 : smDown ? 5 : 0 } component="form" onSubmit={handleSubmit(onSubmit)}>
                   <Stack spacing={2} alignItems={'center'} >
                     <TextField  {...register("title")}
                       fullWidth
