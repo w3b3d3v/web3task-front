@@ -218,7 +218,10 @@ export function useTaskService() {
 		try {
 			return await tasksManagerContract.getTaskId();
 		} catch (error) {
-			handleSnackbar("Error when looking for the amount of tasks.", "error");
+			handleSnackbar(
+				"Error when looking for the amount of tasks. Please connect to the website.",
+				"error"
+			);
 		}
 	}
 
