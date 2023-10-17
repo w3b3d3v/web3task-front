@@ -52,7 +52,9 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
           },
         }}
       >
-        <Header data={accountData} />
+        <Box sx={{ width: "100%" }}>
+          <Header data={accountData} />
+        </Box>        
         {accountData ? (
           <Box
             sx={{
