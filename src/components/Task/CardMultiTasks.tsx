@@ -90,7 +90,7 @@ export const CardMultiTasks = ({ multiTasksData, loading, page }) => {
                             {!loading && item?.title}
                         </Typography>
                         <Typography gutterBottom variant="h5" component="div">
-                            {!loading && `${ethers.utils.formatEther(item?.reward)} MATIC`}
+                            {!loading && `${ethers.utils.formatEther(item?.reward)} ETH`}
                         </Typography>
                         <Typography
                             gutterBottom
