@@ -94,7 +94,6 @@ const CreateTask = ({ data }) => {
     }),
     description: yup.string().required('Mandatory field.').test({
       test(value, ctx) {
-        console.log("value",value)
         if (value.length < 100)
           return ctx.createError({ message: 'Invalid description. Minimum 100 characters' });
         return true;
@@ -166,12 +165,11 @@ const CreateTask = ({ data }) => {
       task.reward = ethers.utils.parseEther(valueReward);
       let expireTimestamp = expireDate.unix();
       task.endDate = BigInt(expireTimestamp);
-      console.log("task.endDate: ", task.endDate);
 
       await createTask(task);
 
     } catch (error) {
-      console.log("Erro: ", error);
+      console.log("Error when submitting the createTask form: ", error);
       setOpenError(true);
     }
   };
@@ -179,7 +177,6 @@ const CreateTask = ({ data }) => {
   useEffect(() => {
     if (loading && data != undefined) {
       setTask(data);
-      console.log('data = ', data);
       setLoading(false);
     }
     else {

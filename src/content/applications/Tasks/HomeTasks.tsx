@@ -25,8 +25,6 @@ const HomeTasks = () => {
         try {                            
             await handleCountTasks().then(count => {
                 const total = (parseInt(count)/tasksPerPage)
-                console.log("total", total)
-                console.log("total", Math.floor(total))
                 if ((parseInt(count)%tasksPerPage) > 0)
                     setTotalPages(Math.floor(total) + 1)                                 
                 else

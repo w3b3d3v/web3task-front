@@ -63,7 +63,7 @@ const AdminOptions = () => {
                 break;
             }
             default: {
-                console.log('default');
+                console.log('defaulted handleInputChange');
             }
         }
     }

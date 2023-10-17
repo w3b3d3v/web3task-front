@@ -72,8 +72,7 @@ function HeaderSearch() {
   const smDown = useMediaQuery(theme.breakpoints.down('sm'));
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setSearchValue(event.target.value);
-    console.log("search value = ", searchValue);
-
+    
     if (event.target.value) {
       if (!openSearchResults) {
         setOpen(true);
