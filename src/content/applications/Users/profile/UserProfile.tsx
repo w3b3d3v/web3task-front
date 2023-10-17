@@ -45,15 +45,11 @@ const UserProfile = () => {
         try {                            
             await handleCountUserTasks().then(count => {
                 const total = (parseInt(count)/tasksPerPage)
-                console.log("total", total)
-                console.log("total", Math.floor(total))
                 if ((parseInt(count)%tasksPerPage) > 0)
                     setTotalPages(Math.floor(total) + 1)                                 
                 else
                     setTotalPages(total)                             
             });
-            console.log("minimumTasks", minimumTasks)
-            console.log("maxTasks", maxTasks)
             await handleMultiTask(minimumTasks, maxTasks, true);
         } catch (error) {
             console.error('Error fetching tasks:', error);

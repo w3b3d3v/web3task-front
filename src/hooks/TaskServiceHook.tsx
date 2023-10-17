@@ -90,7 +90,7 @@ export const useTaskServiceHook = (task: TaskService) => {
             
 
         } catch (error) {
-            setError('Erro ao buscar quantidade de tarefas.');
+            setError('Error searching total of tasks.');
             handleSnackbar('Error searching total of tasks: '+error, 'error')
         }
         return countTasks;
@@ -212,17 +212,13 @@ export const useTaskServiceHook = (task: TaskService) => {
                 }
             }
         } catch (error) {
-            setError('Erro ao buscar tarefas múltiplas' + error);
+            setError('Error when loading multiple tasks' + error);
         } finally {
             setLoading(false);
         }
     };
 
     const handleRole = async (roleId: any, authorizedAddress: any, isAuthorized: boolean) => {
-        console.log('roleId ', roleId)
-        console.log('authorizedAddress ', authorizedAddress)
-        console.log('isAuthorized ', isAuthorized)
-
         try {
             handleSnackbar('Set Role process initiated with success!', 'info')
             return await task.setRole(roleId, authorizedAddress, isAuthorized);
@@ -233,10 +229,6 @@ export const useTaskServiceHook = (task: TaskService) => {
     };
 
     const handleOperator = async (interfaceId: any, roleId: any, isAuthorized: boolean) => {
-        console.log('interfaceId ', interfaceId)
-        console.log('roleId ', roleId)
-        console.log('isAuthorized ', isAuthorized)
-
         try {
             handleSnackbar('Set Operator process initiated with success!', 'info')
             return await task.setOperator(interfaceId, roleId, isAuthorized);

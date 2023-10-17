@@ -229,7 +229,7 @@ export function useTaskService() {
 			return taskIds.length + 1;
 		} catch (error) {
 			handleSnackbar(
-				"Erro ao buscar a quantidade de tarefas do usuário.",
+				"Error when looking for the amount of tasks of the user.",
 				"error"
 			);
 		}
@@ -404,25 +404,8 @@ export function useTaskService() {
 
 	async function _validateTask(id: bigint): Promise<Task> {
 		try {
-			// Get the current block timestamp
-			// const currentBlockTimeStamp = (
-			// 	await ethers.providers.getDefaultProvider().getBlock("latest")
-			// ).timestamp;
-
 			// Fetch the task to test if its still valid
 			const task = await getTask(id);
-
-			// Check if the timestamp respects the end date
-			// if (task.endDate < currentBlockTimeStamp) {
-			if (task.endDate < task.endDate - 86400) {
-				_throwError(
-					"Expired task! Expected due on" +
-						String(task.endDate) +
-						". But returned " +
-						// String(currentBlockTimeStamp)
-						String(task.endDate + 86400)
-				);
-			}
 
 			// Return the task for external handling
 			return task;
