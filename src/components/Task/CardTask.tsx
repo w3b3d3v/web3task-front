@@ -218,7 +218,7 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                                 
                                             {
                                                 isLeader && taskData.status != "Canceled" &&
-                                                <Tooltip key={"top"} placement={"top"} title="Review Task">
+                                                <Tooltip key={"top"} placement={"top"} title="Cancel Task">
                                                     <IconButton color="primary" 
                                                         onClick={handleCancel}>
                                                     <Close />

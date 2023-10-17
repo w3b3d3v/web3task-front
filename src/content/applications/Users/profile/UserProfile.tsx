@@ -34,7 +34,7 @@ const UserProfile = () => {
     const  mdDown  = useMediaQuery(theme.breakpoints.down('md'));
     const { shortenAddressFromUser, userAddress } = useWeb3Utils();
     const taskService = useTaskService();
-    const { handleCountUserTasks, countUserTasks, handleMultiTask, multiTasksData, loading } = useTaskServiceHook(taskService);
+    const { handleCountUserTasks, handleUserScore, countUserTasks, handleMultiTask, multiTasksData, loading } = useTaskServiceHook(taskService);
     const [tasksPerPage, setTasksPerPage] = useState<number>(4);
     const [totalPages, setTotalPages] = useState<number>(1);
     const [maxTasks, setMaxTasks] = useState<number>(4);
@@ -44,7 +44,9 @@ const UserProfile = () => {
     const [userScore, setUserScore] = useState<number>();
     
     const fetchData = async () => {
-        try {                            
+        try {           
+            const score = await handleUserScore(userAddress());       
+            setUserScore(Number(score));          
             await handleCountUserTasks().then(count => {
                 const total = (parseInt(count)/tasksPerPage)
                 if ((parseInt(count)%tasksPerPage) > 0)
@@ -184,7 +186,7 @@ const UserProfile = () => {
                         <Typography gutterBottom variant="h5" component="div" textAlign="center">
                             {shortenAddressFromUser()}
                         </Typography>
-                        User Task Score: { isNaN(userScore) ? "Not loaded." : userScore }
+                        User Task Score: { isNaN(userScore) ? "No score yet." : userScore }
                     </BoxCoverAction>
 
                 </BoxCover>
