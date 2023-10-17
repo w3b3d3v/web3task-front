@@ -1,7 +1,7 @@
 import { useTaskService } from "src/services/tasks-service";
 import { useTaskServiceHook } from "src/hooks/TaskServiceHook";
 import { useEffect, useState } from "react";
-import { Box, Grid, useTheme } from "@mui/material";
+import { Box, Grid, useMediaQuery, useTheme } from "@mui/material";
 import CardMultiTasks from "../../../components/Task/CardMultiTasks";
 import CoverHomeTasks from "../../../components/Cover/CoverHomeTasks";
 import usePagination from "src/components/Pagination";
@@ -10,10 +10,10 @@ import { useSearchFilters } from "src/hooks/useSearchFilters";
 import { Helmet } from "react-helmet-async";
 
 const HomeTasks = () => {
-    const taskService = useTaskService();
-
+    const taskService = useTaskService();    
     const { handleCountTasks, handleMultiTask, multiTasksData, loading } = useTaskServiceHook(taskService);
     const theme = useTheme();
+    const  mdDown  = useMediaQuery(theme.breakpoints.down('md'));
     const { filter: filterTasks } = useSearchFilters();
     const [tasksPerPage, setTasksPerPage] = useState<number>(20);
     const [totalPages, setTotalPages] = useState<number>(1);
@@ -63,12 +63,12 @@ const HomeTasks = () => {
                 <Box>
                     <Box height={40} bgcolor={'#8EFFC2'} />
 
-                    <Grid container spacing={2} ml={15} style={{ width: '92%' }} >
-                        <Grid item xs={2} mt={5}>
+                    <Grid container spacing={2} ml={mdDown ? 3 : 15} style={{ width: '92%' }} >
+                        <Grid item xs={mdDown ? 4 : 2} mt={5} display={'flex'}>
                             <SearchFilters maxReward={maxReward} />
                         </Grid>
 
-                        <Grid item xs={10} style={{ width: '92%' }}>
+                        <Grid item xs={mdDown ? 8 : 10}  style={{ width: '92%' }}>
                             <CardMultiTasks multiTasksData={filteredMultiTasks} loading={loading} page={currentPage} />
                         </Grid>
                     </Grid>

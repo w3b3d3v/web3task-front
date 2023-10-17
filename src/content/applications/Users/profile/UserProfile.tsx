@@ -1,5 +1,5 @@
-import { Box, Grid, Typography } from "@mui/material";
-import { styled } from '@mui/material/styles';
+import { Box, Grid, Typography, useMediaQuery } from "@mui/material";
+import { styled, useTheme } from '@mui/material/styles';
 import { Helmet } from 'react-helmet-async';
 import { useTaskService } from "src/services/tasks-service";
 import { useTaskServiceHook } from "src/hooks/TaskServiceHook";
@@ -30,6 +30,8 @@ const BoxCoverAction = styled(Box)(
 );
 
 const UserProfile = () => {
+    const theme = useTheme();
+    const  mdDown  = useMediaQuery(theme.breakpoints.down('md'));
     const { shortenAddressFromUser, userAddress } = useWeb3Utils();
     const taskService = useTaskService();
     const { handleCountUserTasks, countUserTasks, handleMultiTask, multiTasksData, loading } = useTaskServiceHook(taskService);
@@ -188,12 +190,12 @@ const UserProfile = () => {
                 </BoxCover>
                 <Box>
 
-                    <Grid container spacing={5} mt={10} ml={10} mr={15} style={{ width: '100%' }} >
-                        <Grid item xs={2} mt={5}>
+                    <Grid container spacing={5} mt={10} ml={mdDown ? 3 : 15} mr={15} style={{ width: '100%' }} >
+                        <Grid item xs={mdDown ? 4 : 2} mt={5}>
                             <SearchFilters maxReward={maxReward} />
                         </Grid>
 
-                        <Grid item xs={10} style={{ width: '100%' }}>
+                        <Grid item xs={mdDown ? 8 : 10} style={{ width: '100%' }}>
                             <CardMultiTasks multiTasksData={filteredMultiTasks} loading={loading} page={currentPage} />
                         </Grid>
                     </Grid>
