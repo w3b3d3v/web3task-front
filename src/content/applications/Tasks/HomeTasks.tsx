@@ -57,8 +57,7 @@ const HomeTasks = () => {
                 <title>Web3Task</title>
             </Helmet>
 
-            <Box
-            >
+            <Box>
                 <CoverHomeTasks />
                 <Box>
                     <Box height={40} bgcolor={'#8EFFC2'} />
