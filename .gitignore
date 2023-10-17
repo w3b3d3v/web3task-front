@@ -1,6 +1,10 @@
 # vscode
 .vscode
 
+# packages
+yarn.lock
+package-lock.json
+
 # hardhat
 artifacts
 cache
