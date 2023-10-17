@@ -2,9 +2,9 @@ import { alpha, createTheme, lighten, darken } from "@mui/material";
 import "@mui/lab/themeAugmentation";
 
 const themeColors = {
-  primary: "#000000", 
+  primary: "#000000",
   secondary: "#000000",
-  success: "#57CA22",
+  success: "#000000",
   warning: "#FFA319",
   error: "#FF1943",
   info: "#33C2FF",
@@ -14,24 +14,24 @@ const themeColors = {
 };
 
 const colors = {
-  // gradients: {
-  //   blue1: "linear-gradient(135deg, #6B73FF 0%, #000DFF 100%)",
-  //   blue2: "linear-gradient(135deg, #ABDCFF 0%, #0396FF 100%)",
-  //   blue3: "linear-gradient(127.55deg, #141E30 3.73%, #243B55 92.26%)",
-  //   blue4: "linear-gradient(-20deg, #2b5876 0%, #4e4376 100%)",
-  //   blue5: "linear-gradient(135deg, #97ABFF 10%, #123597 100%)",
-  //   orange1: "linear-gradient(135deg, #FCCF31 0%, #F55555 100%)",
-  //   orange2: "linear-gradient(135deg, #FFD3A5 0%, #FD6585 100%)",
-  //   orange3: "linear-gradient(120deg, #f6d365 0%, #fda085 100%)",
-  //   purple1: "linear-gradient(135deg, #43CBFF 0%, #9708CC 100%)",
-  //   purple3: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-  //   pink1: "linear-gradient(135deg, #F6CEEC 0%, #D939CD 100%)",
-  //   pink2: "linear-gradient(135deg, #F761A1 0%, #8C1BAB 100%)",
-  //   green1: "linear-gradient(135deg, #FFF720 0%, #3CD500 100%)",
-  //   green2: "linear-gradient(to bottom, #00b09b, #96c93d)",
-  //   black1: "linear-gradient(100.66deg, #434343 6.56%, #000000 93.57%)",
-  //   black2: "linear-gradient(60deg, #29323c 0%, #485563 100%)",
-  // },
+  gradients: {
+    blue1: "linear-gradient(135deg, #6B73FF 0%, #000DFF 100%)",
+    blue2: "linear-gradient(135deg, #ABDCFF 0%, #0396FF 100%)",
+    blue3: "linear-gradient(127.55deg, #141E30 3.73%, #243B55 92.26%)",
+    blue4: "linear-gradient(-20deg, #2b5876 0%, #4e4376 100%)",
+    blue5: "linear-gradient(135deg, #97ABFF 10%, #123597 100%)",
+    orange1: "linear-gradient(135deg, #FCCF31 0%, #F55555 100%)",
+    orange2: "linear-gradient(135deg, #FFD3A5 0%, #FD6585 100%)",
+    orange3: "linear-gradient(120deg, #f6d365 0%, #fda085 100%)",
+    purple1: "linear-gradient(135deg, #43CBFF 0%, #9708CC 100%)",
+    purple3: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    pink1: "linear-gradient(135deg, #F6CEEC 0%, #D939CD 100%)",
+    pink2: "linear-gradient(135deg, #F761A1 0%, #8C1BAB 100%)",
+    green1: "linear-gradient(135deg, #FFF720 0%, #3CD500 100%)",
+    green2: "linear-gradient(to bottom, #00b09b, #96c93d)",
+    black1: "linear-gradient(100.66deg, #434343 6.56%, #000000 93.57%)",
+    black2: "linear-gradient(60deg, #29323c 0%, #485563 100%)",
+  },
   shadows: {
     success:
       "0px 1px 4px rgba(68, 214, 0, 0.25), 0px 3px 12px 2px rgba(68, 214, 0, 0.35)",
@@ -132,24 +132,24 @@ const colors = {
 export const LightTheme = createTheme({
   // direction: i18n.dir(),
   colors: {
-    // gradients: {
-    //   blue1: colors.gradients.blue1,
-    //   blue2: colors.gradients.blue2,
-    //   blue3: colors.gradients.blue3,
-    //   blue4: colors.gradients.blue4,
-    //   blue5: colors.gradients.blue5,
-    //   orange1: colors.gradients.orange1,
-    //   orange2: colors.gradients.orange2,
-    //   orange3: colors.gradients.orange3,
-    //   purple1: colors.gradients.purple1,
-    //   purple3: colors.gradients.purple3,
-    //   pink1: colors.gradients.pink1,
-    //   pink2: colors.gradients.pink2,
-    //   green1: colors.gradients.green1,
-    //   green2: colors.gradients.green2,
-    //   black1: colors.gradients.black1,
-    //   black2: colors.gradients.black2,
-    // },
+    gradients: {
+      blue1: colors.gradients.blue1,
+      blue2: colors.gradients.blue2,
+      blue3: colors.gradients.blue3,
+      blue4: colors.gradients.blue4,
+      blue5: colors.gradients.blue5,
+      orange1: colors.gradients.orange1,
+      orange2: colors.gradients.orange2,
+      orange3: colors.gradients.orange3,
+      purple1: colors.gradients.purple1,
+      purple3: colors.gradients.purple3,
+      pink1: colors.gradients.pink1,
+      pink2: colors.gradients.pink2,
+      green1: colors.gradients.green1,
+      green2: colors.gradients.green2,
+      black1: colors.gradients.black1,
+      black2: colors.gradients.black2,
+    },
     shadows: {
       success: colors.shadows.success,
       error: colors.shadows.error,
@@ -328,6 +328,7 @@ export const LightTheme = createTheme({
       styleOverrides: {
         root: {
           boxShadow: "none",
+          background: "transparent",
 
           "&.Mui-expanded": {
             margin: 0,
@@ -361,9 +362,9 @@ export const LightTheme = createTheme({
         },
         root: {
           ".MuiAutocomplete-inputRoot.MuiOutlinedInput-root .MuiAutocomplete-endAdornment":
-            {
-              right: 14,
-            },
+          {
+            right: 14,
+          },
         },
         clearIndicator: {
           background: colors.error.lighter,
@@ -398,7 +399,7 @@ export const LightTheme = createTheme({
         },
       },
     },
-    
+
     MuiAvatarGroup: {
       styleOverrides: {
         root: {
@@ -417,7 +418,7 @@ export const LightTheme = createTheme({
         },
       },
     },
-    
+
     MuiBackdrop: {
       styleOverrides: {
         root: {
@@ -676,7 +677,7 @@ export const LightTheme = createTheme({
         },
       },
     },
-    
+
     MuiLink: {
       defaultProps: {
         underline: "hover",
@@ -1183,6 +1184,9 @@ export const LightTheme = createTheme({
           fontSize: 17,
           lineHeight: 1.7,
         },
+        root: {
+          fontFamily: 'Public Sans'
+        },
       },
     },
 
@@ -1192,7 +1196,7 @@ export const LightTheme = createTheme({
   },
   typography: {
     fontFamily:
-      '"Istok", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
+      '"Istok", Public Sans,  -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
     h1: {
       fontWeight: 700,
       fontSize: 35,

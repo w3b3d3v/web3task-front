@@ -14,6 +14,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { BsGithub, BsYoutube } from "react-icons/bs";
 import { BsDiscord } from "react-icons/bs";
 import { BsTwitch } from "react-icons/bs";
+import Logo from "../LogoSign";
 
 const FooterWrapper = styled(Container)(
   ({ theme }) => `
@@ -23,6 +24,7 @@ const FooterWrapper = styled(Container)(
 
 function Footer() {
   const theme = useTheme();
+  const logoImage = "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
 
   return (
     <FooterWrapper
@@ -37,33 +39,32 @@ function Footer() {
         justifyContent="space-between"
         height="400"
       >
-        <img src="/static/images/logo/web3task1.png" alt="Web3TaskIcon" width={254} height={191} />
-
+        <Logo logoImage={logoImage} />
         <Box>
           <ListItem>
-            <Link href="/sobre-nos" underline="none">
-              {'Sobre Nós'}
+            <Link href="/about-us" underline="none">
+              {'About us'}
             </Link>
           </ListItem>
 
           <ListItem>
-            <Link href="/comunidade" underline="none">
-              {'Comunidade'}
+            <Link href="/" underline="none">
+              {'Explore'}
             </Link>
           </ListItem>
 
           <ListItem>
-            <Link href="/postagens" underline="none">
-              {'Postagens'}
+            <Link href="/documentation" underline="none">
+              {'Docs'}
             </Link>
           </ListItem>
 
           <ListItem>
-            <Link href="/perguntas-frequentes" underline="none">
-              {'Perguntas Frequentes'}
+            <Link href="/faq" underline="none">
+              {'FAQ'}
             </Link>
           </ListItem>
-          
+
         </Box>
 
         <Box>
@@ -77,7 +78,7 @@ function Footer() {
             }}
             variant="subtitle1"
           >
-            Junte-se a nós
+            Join us!
           </Typography>
           <Box
             display="flex"
@@ -98,7 +99,7 @@ function Footer() {
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Typography variant="subtitle1">
-          &copy; 2023 Marketplace de Tarefas Web3Task
+          &copy; 2023 Web3Task - Tasks Marketplace
         </Typography>
       </Box>
     </FooterWrapper>

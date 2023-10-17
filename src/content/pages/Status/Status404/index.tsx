@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { Helmet } from "react-helmet-async";
 import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
-
 import { styled } from "@mui/material/styles";
 
 const MainContent = styled(Box)(
@@ -82,7 +81,7 @@ function Status404() {
                 />
               </FormControl>
               <Divider sx={{ my: 4 }}>OR</Divider>
-              <Button href="/overview" variant="outlined">
+              <Button href="/" variant="outlined">
                 Go to homepage
               </Button>
             </Card>
