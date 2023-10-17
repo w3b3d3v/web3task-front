@@ -63,7 +63,7 @@ const HomeTasks = () => {
                 <Box>
                     <Box height={40} bgcolor={'#8EFFC2'} />
 
-                    <Grid container spacing={2} ml={mdDown ? 3 : 15} style={{ width: '92%' }} >
+                    <Grid container spacing={2} ml={mdDown ? 0 : 15} style={{ width: '92%' }} >
                         <Grid item xs={mdDown ? 4 : 2} mt={5} display={'flex'}>
                             <SearchFilters maxReward={maxReward} />
                         </Grid>
