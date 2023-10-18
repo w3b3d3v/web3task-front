@@ -2,11 +2,8 @@ import { Suspense, lazy } from "react";
 import { Navigate } from "react-router-dom";
 import { RouteObject } from "react-router";
 
-import SidebarLayout from "src/layouts/SidebarLayout";
 import BaseLayout from "src/layouts/BaseLayout";
-
 import SuspenseLoader from "src/components/SuspenseLoader";
-import Overview from "./content/overview";
 
 const Loader = (Component) => (props) =>
 (
@@ -16,7 +13,7 @@ const Loader = (Component) => (props) =>
 );
 
 const UserProfile = Loader(
-  lazy(() => import('src/content/applications/Users/profile'))
+  lazy(() => import('src/content/applications/Users/profile/UserProfile'))
 )
 
 const AdminOptions = Loader(
@@ -31,12 +28,8 @@ const DetailsTasks = Loader(
   lazy(() => import('src/content/applications/Tasks/details/DetailsTask'))
 )
 
-const ListTasks = Loader(
-  lazy(() => import('src/content/applications/Tasks/tasks/ListTasks'))
-)
-
-const HomeTask = Loader(
-  lazy(() => import('src/content/applications/Tasks/tasks/HomeTasks'))
+const HomeTasks = Loader(
+  lazy(() => import('src/content/applications/Tasks/HomeTasks'))
 )
 
 const Status404 = Loader(
@@ -54,11 +47,7 @@ const routes: RouteObject[] = [
     children: [
       {
         path: "/",
-        element: <HomeTask />,
-      },
-      {
-        path: "overview",
-        element: <Navigate to="/" replace />,
+        element: <HomeTasks />,
       },
       {
         path: 'status',
@@ -86,7 +75,7 @@ const routes: RouteObject[] = [
         children: [
           {
             path: '',
-            element: < HomeTask />
+            element: < HomeTasks />
           },
           {
             path: 'profile',
@@ -99,7 +88,7 @@ const routes: RouteObject[] = [
         children: [
           {
             path: '',
-            element: < HomeTask />
+            element: < HomeTasks />
           },
           {
             path: 'create-task',
@@ -108,10 +97,6 @@ const routes: RouteObject[] = [
           {
             path: 'details-task/:taskId',
             element: <DetailsTasks />
-          },
-          {
-            path: 'list-task',
-            element: <ListTasks />
           }
         ]
       },
@@ -120,41 +105,6 @@ const routes: RouteObject[] = [
         element: <AdminOptions />
       },
     ],
-  },
-  {
-    path: "home-side",
-    element: <SidebarLayout />,
-    children: [
-      {
-        path: "",
-        element: <Navigate to="overview" replace />,
-      },
-      {
-        path: "overview",
-        element: <Overview />,
-      },
-      {
-        path: 'status',
-        children: [
-          {
-            path: '',
-            element: <Navigate to="404" replace />
-          },
-          {
-            path: '404',
-            element: <Status404 />
-          },
-          {
-            path: '500',
-            element: <Status500 />
-          }
-        ]
-      },
-      {
-        path: "*",
-        element: <Status404 />,
-      },
-    ]
   },
 ];
 

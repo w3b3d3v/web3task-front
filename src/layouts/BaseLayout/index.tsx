@@ -5,18 +5,15 @@ import Header from "./Header";
 import SuspenseLoader from "src/components/SuspenseLoader";
 import Footer from 'src/components/Footer';
 import { useAccount } from 'wagmi';
-import HomeTask from "src/content/applications/Tasks/tasks/HomeTasks";
-import Overview from "src/content/overview";
+import HomeTasks from "src/content/applications/Tasks/HomeTasks";
 
 const Loader = (Component) => (props) =>
-  (
-    <Suspense fallback={<SuspenseLoader />}>
-      <Component {...props} />
-    </Suspense>
-  );
+(
+  <Suspense fallback={<SuspenseLoader />}>
+    <Component {...props} />
+  </Suspense>
+);
 
-// Pages
-//const Overview = Loader(lazy(() => import('src/content/overview')));
 
 interface BaseLayoutProps {
   children?: ReactNode;
@@ -42,27 +39,29 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
             boxShadow:
               theme.palette.mode === "dark"
                 ? `0 1px 0 ${alpha(
-                    lighten(theme.colors.primary.main, 0.7),
-                    0.15
-                  )}, 0px 2px 4px -3px rgba(0, 0, 0, 0.2), 0px 5px 12px -4px rgba(0, 0, 0, .1)`
+                  lighten(theme.colors.primary.main, 0.7),
+                  0.15
+                )}, 0px 2px 4px -3px rgba(0, 0, 0, 0.2), 0px 5px 12px -4px rgba(0, 0, 0, .1)`
                 : `0px 2px 4px -3px ${alpha(
-                    theme.colors.alpha.black[100],
-                    0.1
-                  )}, 0px 5px 12px -4px ${alpha(
-                    theme.colors.alpha.black[100],
-                    0.05
-                  )}`,
+                  theme.colors.alpha.black[100],
+                  0.1
+                )}, 0px 5px 12px -4px ${alpha(
+                  theme.colors.alpha.black[100],
+                  0.05
+                )}`,
           },
         }}
       >
-        <Header data={accountData} />
-        { accountData ? (  
+        <Box sx={{ width: "100%" }}>
+          <Header data={accountData} />
+        </Box>        
+        {accountData ? (
           <Box
             sx={{
-            position: 'relative',
-            zIndex: 5,
-            display: 'block',
-            flex: 1
+              position: 'relative',
+              zIndex: 5,
+              display: 'block',
+              flex: 1
             }}
           >
             <Box display="block">
@@ -71,18 +70,18 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
           </Box>
         ) : (
           <Box
-          sx={{
-          position: 'relative',
-          zIndex: 5,
-          display: 'block',
-          flex: 1
-          }}
-        >
-          <Box display="block">
-            <Overview />
-          </Box>          
-        </Box>
-        )        
+            sx={{
+              position: 'relative',
+              zIndex: 5,
+              display: 'block',
+              flex: 1
+            }}
+          >
+            <Box display="block">
+              <HomeTasks />
+            </Box>
+          </Box>
+        )
         }
         <Footer />
       </Box>

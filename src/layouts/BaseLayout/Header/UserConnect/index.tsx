@@ -76,17 +76,16 @@ function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting
 
   return (
     <>
-      <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
+      <UserBoxButton color="secondary" ref={ref} onClick={handleOpen} sx={{ ml: 1 }}>
         <Hidden mdDown>
           <UserBoxText>
-            <UserBoxLabel variant="body1">Entrar</UserBoxLabel>
+            <UserBoxLabel variant="body1">Connect</UserBoxLabel>
           </UserBoxText>
         </Hidden>
-        <Hidden smDown>
-          <ExpandMoreTwoToneIcon sx={{ ml: 1 }} />
-        </Hidden>
+        <ExpandMoreTwoToneIcon sx={{ mr: 3 }} />        
       </UserBoxButton>
       <Popover
+        sx={{ mr: 1 }}
         anchorEl={ref.current}
         onClose={handleClose}
         open={isOpen}
@@ -109,13 +108,16 @@ function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting
             ))
           }
         </List>
-        <Divider />
-        <Box sx={{ m: 1 }}>
-          <Button color="primary" fullWidth>
-            <MessageIcon sx={{ mr: 1 }} />
-            Contact us to add new network.
-          </Button>
-        </Box>
+ 
+        {/* <Hidden smDown> */}
+          <Divider />
+          <Box sx={{ mr: 1 }}>
+            <Button color="primary" >
+              <MessageIcon />
+              Contact us to add new network.
+            </Button>
+          </Box>
+        {/* </Hidden> */}
       </Popover>
     </>
   );

@@ -5,7 +5,7 @@ import SuspenseLoader from 'src/components/SuspenseLoader'
 import { useTaskService } from "src/services/tasks-service";
 import { useTaskServiceHook } from "src/hooks/TaskServiceHook";
 import { useEffect } from "react";
-import CardTasks from "../tasks/CardTasks";
+import CardTasks from "../../../../components/Task/CardTask";
 
 const DetailsTask = () => {
     const theme = useTheme();
@@ -14,11 +14,12 @@ const DetailsTask = () => {
     const taskService = useTaskService();
     const { taskId } = useParams();
 
-    const { handleTask, taskData, loading, error } = useTaskServiceHook(taskService);
+    const { handleTask, handleReview, taskData, taskReview, loading, error } = useTaskServiceHook(taskService);
 
     useEffect(() => {
         const fetchData = async () => {
             await handleTask(Number(taskId));
+            await handleReview(Number(taskId));
         };
 
         fetchData();
@@ -27,7 +28,7 @@ const DetailsTask = () => {
     return (
         <>
             <Helmet>
-                <title>Web3Task - Profile</title>
+                <title>Web3Task - Task Details</title>
             </Helmet>
 
             <Container sx={{
@@ -51,7 +52,7 @@ const DetailsTask = () => {
                                                 <Card sx={{ width: isSmallScreen ? '100%' : 192, height: 119, justifyContent: 'center', marginBottom: isSmallScreen ? '16px' : '0' }}>
                                                     <CardContent>
                                                         <Typography gutterBottom variant="h4" component="div" textAlign={'center'}>
-                                                            Task Status
+                                                            Status
                                                         </Typography>
                                                         <Divider variant="fullWidth" />
                                                         <Typography variant="h6" textAlign={'center'} mt={1}>
@@ -60,18 +61,37 @@ const DetailsTask = () => {
                                                     </CardContent>
                                                 </Card>
 
-
                                                 <Card sx={{ width: isSmallScreen ? '100%' : 434, height: 119, justifyContent: isSmallScreen ? 'center' : 'left' }}>
+                                                    <CardContent style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                                                    {/* <CardContent> */}
+                                                        <Typography gutterBottom variant="h4" textAlign={'left'} component="div">
+                                                            Reviews
+                                                        </Typography>
+                                                        <Divider />                                                 
+                                                        <Typography variant="h6" textAlign={'left'} mt={1} component="div">
+                                                            {taskReview ? (taskReview.map((review: any) => {
+                                                                return (
+                                                                    <Box>
+                                                                        <Typography variant="h6" textAlign={'left'} mt={1} component="div">
+                                                                            {review}
+                                                                        </Typography>
+                                                                    </Box>
+                                                                )
+                                                            })) : 'No reviews provided for this task.'}
+                                                        </Typography>                                                        
+                                                    </CardContent>
+                                                </Card>
+                                            </Box>
+
+                                            <Box mt={4} width={isSmallScreen ? '100%' : 679} display={'flex'} flexDirection={isSmallScreen ? 'column' : 'row'} justifyContent={isSmallScreen ? 'center' : 'space-between'} alignItems={'center'}>
+                                                <Card sx={{ width: '100%', height: 200, justifyContent: isSmallScreen ? 'center' : 'left' }}>
                                                     <CardContent>
                                                         <Typography gutterBottom variant="h4" textAlign={'left'} component="div">
-                                                            Task Reviews
+                                                            Description
                                                         </Typography>
                                                         <Divider />
                                                         <Typography variant="h6" textAlign={'left'} mt={1} component="div">
-                                                            https://link1.com.br
-                                                        </Typography>
-                                                        <Typography variant="h6" textAlign={'left'} mt={1} component="div">
-                                                            https://link2.com.br
+                                                            {taskData ? taskData.description : 'No description provided for this task.'}
                                                         </Typography>
                                                     </CardContent>
                                                 </Card>
