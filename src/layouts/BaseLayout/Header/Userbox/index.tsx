@@ -192,7 +192,7 @@ function HeaderUserbox({ disconnect, account }) {
         <Box sx={{ m: 1 }}>
           <Button onClick={handleDisconnect} color="primary" fullWidth>
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
-            <Typography fontWeight={'bold'}> Sair</Typography>
+            <Typography fontWeight={'bold'}> Logout</Typography>
           </Button>
         </Box>
       </Popover>
