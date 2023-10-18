@@ -2,9 +2,11 @@ import {
   Box,
   Container,
   Link,
+  List,
   ListItem,
   Typography,
   styled,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -15,6 +17,7 @@ import { BsGithub, BsYoutube } from "react-icons/bs";
 import { BsDiscord } from "react-icons/bs";
 import { BsTwitch } from "react-icons/bs";
 import Logo from "../LogoSign";
+import { spacing } from "@mui/system";
 
 const FooterWrapper = styled(Container)(
   ({ theme }) => `
@@ -24,6 +27,8 @@ const FooterWrapper = styled(Container)(
 
 function Footer() {
   const theme = useTheme();
+  const  mdDown  = useMediaQuery(theme.breakpoints.down('md'));
+  const  smDown  = useMediaQuery(theme.breakpoints.down('sm'));
   const logoImage = "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
 
   return (
@@ -33,38 +38,42 @@ function Footer() {
     >
       <Box
         pb={4}
-        display={{ xs: "block", md: "flex" }}
+        sx={{ display: mdDown ? 'block': 'flex', justifyContent:  mdDown ? 'center' : 'space-between', ml: mdDown && 5 }}
         alignItems="center"
-        textAlign={{ xs: "center", md: "left" }}
-        justifyContent="space-between"
+        textAlign={{ xs: "center", md: "center" }}        
         height="400"
       >
-        <Logo logoImage={logoImage} />
-        <Box>
-          <ListItem>
-            <Link href="/about-us" underline="none">
-              {'About us'}
-            </Link>
-          </ListItem>
+        <Box sx={{ display: mdDown && 'flex', justifyContent: mdDown && 'center' }}>
+          <Logo logoImage={logoImage} />
+        </Box>
+        
+        <Box sx={{ display: mdDown && 'flex', justifyContent: mdDown && 'center', textAlign: 'center' }}>
+          <List sx={{ spacing: mdDown && 1 }}>
+            <ListItem sx={{ textAlign:'center'}}>
+              <Link href="/about-us" underline="none">
+                {'About us'}
+              </Link>
+            </ListItem>
 
-          <ListItem>
-            <Link href="/" underline="none">
-              {'Explore'}
-            </Link>
-          </ListItem>
+            <ListItem sx={{ textAlign:'center'}}>
+              <Link href="/" underline="none">
+                {'Explore'}
+              </Link>
+            </ListItem>
 
-          <ListItem>
-            <Link href="/documentation" underline="none">
-              {'Docs'}
-            </Link>
-          </ListItem>
+            <ListItem sx={{ textAlign:'center'}}>
+              <Link href="/documentation" underline="none">
+                {'Docs'}
+              </Link>
+            </ListItem>
 
-          <ListItem>
-            <Link href="/faq" underline="none">
-              {'FAQ'}
-            </Link>
-          </ListItem>
+            <ListItem sx={{ textAlign:'center'}}>
+              <Link sx={{ textAlign:'center'}} href="/faq" underline="none">
+                {'FAQ'}
+              </Link>
+            </ListItem>
 
+            </List>          
         </Box>
 
         <Box>
@@ -81,10 +90,9 @@ function Footer() {
             Join us!
           </Typography>
           <Box
-            display="flex"
-            justifyContent="center"
+            sx={{ display: "flex", justifyContent: "center" }}
             alignItems="center"
-            gap={2}
+            gap={mdDown ? 0.1 : 2}
           >
             <FacebookIcon fontSize="large" />
             <TwitterIcon fontSize="large" />
@@ -97,7 +105,7 @@ function Footer() {
           </Box>
         </Box>
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <Box sx={{ display: "flex", justifyContent: "center",  ml: mdDown && 1, width: '100%' }}>
         <Typography variant="subtitle1">
           &copy; 2023 Web3Task - Tasks Marketplace
         </Typography>
