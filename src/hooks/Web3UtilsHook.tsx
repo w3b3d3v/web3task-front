@@ -22,8 +22,12 @@ export function useWeb3Utils() {
 
     function shortenAddressFromUser(length = 5): string {
       const address = userAddress();
-      const prefix = address.slice(0, length + 2);
-      const suffix = address.slice(address.length - length);
+      let prefix = "";
+      let suffix = "";  
+      if (address != null) {
+        prefix = address.slice(0, length + 2);
+        suffix = address.slice(address.length - length);  
+      }
   
       return `${prefix}...${suffix}`;
     }
