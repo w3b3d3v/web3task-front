@@ -91,7 +91,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
             />
           }
         >
-          <Typography>Hourly payment</Typography>
+          <Typography>Payment</Typography>
         </AccordionSummary>
 
         <AccordionDetails>
