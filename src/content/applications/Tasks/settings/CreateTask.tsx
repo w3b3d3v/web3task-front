@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { AlertColor } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
-import { Box, useTheme } from '@mui/material';
+import { Box, useMediaQuery, useTheme } from '@mui/material';
 import { Dayjs } from 'dayjs';
 import { DatePicker, DatePickerProps } from '@mui/x-date-pickers';
 import { useTaskService } from "src/services/tasks-service";
@@ -32,6 +32,8 @@ let newTask: Task = {
 
 const CreateTask = ({ data }) => {
   const theme = useTheme();
+  const  mdDown  = useMediaQuery(theme.breakpoints.down('md'));
+  const  smDown  = useMediaQuery(theme.breakpoints.down('sm'));
   const { createTask } = useTaskService();
   const [task, setTask] = useState<Task>();
   const [valueReward, setValueReward] = useState<string>();
@@ -192,113 +194,115 @@ const CreateTask = ({ data }) => {
       <Helmet>
         <title>Web3Task - Create Task</title>
       </Helmet>
-      <Stack spacing={2} sx={{ width: '100%' }}>
-        <Box
-          display={'flex'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          height={'100%'}
-          flexDirection={'column'}>
-
+      <Box sx={{ ml: 5, width: '100%' }}>
+        <Stack spacing={2} >
           <Box
-            width={'100%'}>
-            <CoverCreateTask />
-          </Box>
-          {
-            loading ? <SuspenseLoader /> : (
-              <Box marginTop={2} component="form" onSubmit={handleSubmit(onSubmit)}>
-                <Stack spacing={2} alignItems={'center'} >
-                  <TextField  {...register("title")}
-                    fullWidth
-                    id="outlined-required"
-                    label={'Title'}
-                    onBlur={handleTitle}
-                    placeholder={'Describe the activity or link to a document'}
-                  />
-                  <p>{errors.title?.message}</p>
+            display={'flex'}
+            justifyContent={'center'}
+            alignItems={'center'}
+            height={'100%'}
+            flexDirection={'column'}>
 
-                  <TextField {...register("authorizedRoles")}
-                    fullWidth
-                    id="outlined-required"
-                    label={'Authorized Roles (separate by `,`)'}
-                    onBlur={handleAuthorizedRoles}
-                    placeholder={'The authorized roles to perform the task'}
-                  />
-                  <p>{errors.authorizedRoles?.message}</p>
+            <Box
+              width={'100%'}>
+              <CoverCreateTask />
+            </Box>
+            {
+              loading ? <SuspenseLoader /> : (
+                <Box marginTop={2} marginRight={ mdDown ? 5 : smDown ? 5 : 0 } component="form" onSubmit={handleSubmit(onSubmit)}>
+                  <Stack spacing={2} alignItems={'center'} >
+                    <TextField  {...register("title")}
+                      fullWidth
+                      id="outlined-required"
+                      label={'Title'}
+                      onBlur={handleTitle}
+                      placeholder={'Describe the activity or link to a document'}
+                    />
+                    <p>{errors.title?.message}</p>
 
-                  <TextField {...register("creatorRole")}
-                    fullWidth
-                    id="outlined-required"
-                    label={'Creator Role'}
-                    onBlur={handleCreatorRole}
-                    placeholder={'Creator Role 5..10..'}
-                  />
-                  <p>{errors.creatorRole?.message}</p>
+                    <TextField {...register("authorizedRoles")}
+                      fullWidth
+                      id="outlined-required"
+                      label={'Authorized Roles (separate by `,`)'}
+                      onBlur={handleAuthorizedRoles}
+                      placeholder={'The authorized roles to perform the task'}
+                    />
+                    <p>{errors.authorizedRoles?.message}</p>
 
-                  <TextField {...register("assignee")}
-                    fullWidth
-                    id="outlined-required"
-                    label={'Assignee Address (leave blank to allow anyone to perform the task)'}
-                    onBlur={handleAssignee}
-                    placeholder={'Assignee address'}
-                  />
-                  <p>{errors.assignee?.message}</p>
+                    <TextField {...register("creatorRole")}
+                      fullWidth
+                      id="outlined-required"
+                      label={'Creator Role'}
+                      onBlur={handleCreatorRole}
+                      placeholder={'Creator Role 5..10..'}
+                    />
+                    <p>{errors.creatorRole?.message}</p>
 
-                  <TextField {...register("metadata")}
-                    fullWidth
-                    id="outlined-required"
-                    label={'Metadata (IPFS)'}
-                    onBlur={handleMetadata}
-                    placeholder={'https://ipfs.io/ipfs/QmY5D...7CEh'}
-                  />
-                  <p>{errors.metadata?.message}</p>
+                    <TextField {...register("assignee")}
+                      fullWidth
+                      id="outlined-required"
+                      label={'Assignee Address (leave blank to allow anyone to perform the task)'}
+                      onBlur={handleAssignee}
+                      placeholder={'Assignee address'}
+                    />
+                    <p>{errors.assignee?.message}</p>
 
-                  <TextField {...register("description")}
-                    fullWidth
-                    id="outlined-required"
-                    label={'Description'}
-                    onBlur={handleDescription}
-                    placeholder={'A full description about the ativity.'}
-                    multiline
-                    maxRows="18"
-                  />
-                  <p>{errors.description?.message}</p>
+                    <TextField {...register("metadata")}
+                      fullWidth
+                      id="outlined-required"
+                      label={'Metadata (IPFS)'}
+                      onBlur={handleMetadata}
+                      placeholder={'https://ipfs.io/ipfs/QmY5D...7CEh'}
+                    />
+                    <p>{errors.metadata?.message}</p>
 
-                  <Stack spacing={2} direction={'row'} alignItems="center" justifyContent="center">
-                    <Box>
-                      <img src={logoImage} width={'100px'} height={'100px'} alt='Pod3LabsRecompensaIcon' />
-                    </Box>
-                    <div>
-                      <TextField  {...register("valueReward")}
-                        label={'Reward in ETH'}
-                        onBlur={handleReward}
-                      />
-                      <p>{errors.valueReward?.message}</p>
-                    </div>
-                    <div>
-                      <DatePicker
-                        label={'Deliver Date'}
-                        onChange={(newValue: Dayjs) => handleExpireDate(newValue)}
-                        slotProps={{
-                          textField: { size: 'medium' },
-                          openPickerIcon: { style: { color: theme.palette.primary.main } },
-                          switchViewButton: { style: { color: 'info' } }
-                        }}
-                      />
-                      <p></p>
-                    </div>
+                    <TextField {...register("description")}
+                      fullWidth
+                      id="outlined-required"
+                      label={'Description'}
+                      onBlur={handleDescription}
+                      placeholder={'A full description about the ativity.'}
+                      multiline
+                      maxRows="18"
+                    />
+                    <p>{errors.description?.message}</p>
+
+                    <Stack spacing={2} direction={'row'} alignItems="center" justifyContent="center">
+                      <Box>
+                        <img src={logoImage} width={'100px'} height={'100px'} alt='Pod3LabsRecompensaIcon' />
+                      </Box>
+                      <div>
+                        <TextField  {...register("valueReward")}
+                          label={'Reward in ETH'}
+                          onBlur={handleReward}
+                        />
+                        <p>{errors.valueReward?.message}</p>
+                      </div>
+                      <div>
+                        <DatePicker
+                          label={'Deliver Date'}
+                          onChange={(newValue: Dayjs) => handleExpireDate(newValue)}
+                          slotProps={{
+                            textField: { size: 'medium' },
+                            openPickerIcon: { style: { color: theme.palette.primary.main } },
+                            switchViewButton: { style: { color: 'info' } }
+                          }}
+                        />
+                        <p></p>
+                      </div>
+                    </Stack>
+
+                    <Button type="submit" variant='contained' color='primary'>
+                      Create
+                    </Button>
+
                   </Stack>
-
-                  <Button type="submit" variant='contained' color='primary'>
-                    Create
-                  </Button>
-
-                </Stack>
-              </Box>
-            )
-          }
-        </Box>
-      </Stack>
+                </Box>
+              )
+            }
+          </Box>
+        </Stack>
+      </Box>      
     </>
   );
 }
