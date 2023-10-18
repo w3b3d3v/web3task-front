@@ -40,6 +40,7 @@ The following features are currently implemented
 
 ```bash
 yarn
+npm i
 ```
 
 You must manualy add the typescript package to the project in case the module failes to install using yarn.
