@@ -7,6 +7,7 @@ import {
   styled,
   useTheme,
   Grid,
+  useMediaQuery,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import Logo from "src/components/LogoSign";
@@ -39,7 +40,7 @@ const HeaderWrapper = styled(Box)(
 function Header({ data }) {
   const theme = useTheme();
   const logoImage = "/static/images/logo/logo-" + theme.palette.mode + ".svg";
-
+  const  smDown  = useMediaQuery(theme.breakpoints.down('sm'));
   const {
     activeConnector,
     connect,
@@ -55,7 +56,7 @@ function Header({ data }) {
       display="flex"
       alignItems="center"
       sx={{
-        width: "100%",
+        width: smDown ? "125%" : "100%",
         boxShadow:
           theme.palette.mode === "dark"
             ? `0 1px 0 ${alpha(

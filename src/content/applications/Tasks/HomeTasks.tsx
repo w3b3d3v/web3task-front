@@ -14,6 +14,7 @@ const HomeTasks = () => {
     const { handleCountTasks, handleMultiTask, multiTasksData, loading } = useTaskServiceHook(taskService);
     const theme = useTheme();
     const  mdDown  = useMediaQuery(theme.breakpoints.down('md'));
+    const  smDown  = useMediaQuery(theme.breakpoints.down('sm'));
     const { filter: filterTasks } = useSearchFilters();
     const [tasksPerPage, setTasksPerPage] = useState<number>(20);
     const [totalPages, setTotalPages] = useState<number>(1);
@@ -60,14 +61,14 @@ const HomeTasks = () => {
             <Box>
                 <CoverHomeTasks />
                 <Box>
-                    <Box height={40} bgcolor={'#8EFFC2'} />
+                    <Grid height={40} bgcolor={'#8EFFC2'} style={{ width: smDown ? '125%' :'100%' }}  />
 
-                    <Grid container spacing={2} ml={mdDown ? 0 : 15} style={{ width: '92%' }} >
-                        <Grid item xs={mdDown ? 4 : 2} mt={5} display={'flex'}>
+                    <Grid display={'flex'} spacing={1} ml={mdDown ? -3 : 15} style={{ width: '92%' }} >
+                        <Grid item xs={mdDown ? 4 : 2} ml={smDown && 1.5 }  mt={5} display={'flex'}>
                             <SearchFilters maxReward={maxReward} />
                         </Grid>
 
-                        <Grid item xs={mdDown ? 8 : 10}  style={{ width: '92%' }}>
+                        <Grid item xs={mdDown ? 8 : 10} ml={smDown && -2 } mt={smDown && -2 }  style={{ width: '92%' }}>
                             <CardMultiTasks multiTasksData={filteredMultiTasks} loading={loading} page={currentPage} />
                         </Grid>
                     </Grid>
