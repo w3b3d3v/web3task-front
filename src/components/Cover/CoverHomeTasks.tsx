@@ -7,7 +7,6 @@ import {
 const CoverHomeTasks = () => {
     const theme = useTheme();
     const  mdDown  = useMediaQuery(theme.breakpoints.down('md'));
-    const  xsDown  = useMediaQuery(theme.breakpoints.down('xs'));
     const  smDown  = useMediaQuery(theme.breakpoints.down('sm'));
     return (
         <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={304} >
@@ -23,7 +22,7 @@ const CoverHomeTasks = () => {
 
             <Box >
                 <Box>
-                    <Typography color={theme.colors.primary} fontWeight={"bold"} fontSize={mdDown ? 35 : xsDown ? 20 : 50}>
+                    <Typography color={theme.colors.primary} fontWeight={"bold"} fontSize={smDown ? 20 : mdDown ? 30 : 50}>
                         WEB3TASK
                     </Typography>
                 </Box>
