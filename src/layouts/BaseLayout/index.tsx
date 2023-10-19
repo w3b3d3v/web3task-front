@@ -61,7 +61,8 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
               position: 'relative',
               zIndex: 5,
               display: 'block',
-              flex: 1
+              flex: 1,
+              mb: 1
             }}
           >
             <Box display="block">
@@ -74,7 +75,8 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
               position: 'relative',
               zIndex: 5,
               display: 'block',
-              flex: 1
+              flex: 1,
+              mb: 0
             }}
           >
             <Box display="block">
