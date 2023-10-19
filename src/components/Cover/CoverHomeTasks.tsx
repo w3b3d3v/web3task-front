@@ -31,7 +31,7 @@ const CoverHomeTasks = () => {
                     <img
                         src="/static/images/task/home/detail.svg"
                         alt="4 Pontos Interligados"
-                        width={75}
+                        width={mdDown ? 55 : 75}
                     />
                 </Box>
             </Box>
