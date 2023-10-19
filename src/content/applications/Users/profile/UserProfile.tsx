@@ -108,7 +108,7 @@ const UserProfile = () => {
                             style={{
                                 position: 'absolute',
                                 top: 'calc(50%  + 180px)',
-                                left: smDown ? 'calc(50%  + 165px)' : mdDown ? 'calc(50%  + 210px)' : 'calc(50%  - 250px)',
+                                left: smDown ? 'calc(50%  + 200px)' : mdDown ? 'calc(50%  + 210px)' : 'calc(50%  - 250px)',
                                 transform: 'translate(-50%, -50%)',
                                 zIndex: 2,
                                 pointerEvents: 'none'
