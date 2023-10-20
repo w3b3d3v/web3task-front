@@ -26,7 +26,7 @@ import FormDialog from '../Form';
  */
 
 
-export const CardTask = ({ taskId, taskData, loading }: any) => {
+export const CardTask = ({ taskId, taskData, loading, setNewReview }: any) => {
     const { startTask, reviewTask, completeTask, cancelTask, hasMemberRole, hasLeaderRole, hasVoted, getMinQuorum, getQuorumApprovals } = useTaskService();
     const [openError, setOpenError] = useState(false);
     const [error, setError] = useState<string>();
@@ -36,18 +36,19 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
     const [isMember, setIsMember] = useState<boolean>(false);
     const [isLeader, setIsLeader] = useState<boolean>(false);
     const [openForm, setOpenForm] = useState<boolean>(false);
-    const [dataForm, setDataForm] = useState<string>('');
 
     const handleOpenForm = async () => {
         setOpenForm(true);
     };
 
-    const handleFormSubmit = (metadata: any) => {
-        setDataForm(metadata);
+    const handleFormSubmit = async (metadata: any) => {
+        console.log('metadata ', metadata);
         setOpenForm(false);
-    }
+        console.log('taskId HANDLEFORMSUBMIT - CARDTASK', taskId);
+        console.log('dataForm HANDLEFORMSUBMIT - CARDTASK', metadata)
+        await reviewTask(BigInt(taskId), metadata).then(result => { setNewReview(true), handleSnackbar('Review Task process initiated with success!', 'info'), console.log('result', result) });
 
-    console.log('dataForm', dataForm)
+    }
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -83,12 +84,12 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                     break;
                 case "Progress":
                     handleOpenForm();
-                    await reviewTask(BigInt(taskId), dataForm);
-                    handleSnackbar('Review Task process initiated with success!', 'info')
+
+
                     break;
                 case "Review":
-                    await reviewTask(BigInt(taskId), "Awesome, contact me on Discord!");
-                    handleSnackbar('Review Task process initiated with success!', 'info')
+                    handleOpenForm();
+
                     break;
                 default:
                     break;

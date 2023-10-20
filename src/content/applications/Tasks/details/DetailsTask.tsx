@@ -4,26 +4,30 @@ import { Helmet } from 'react-helmet-async';
 import SuspenseLoader from 'src/components/SuspenseLoader'
 import { useTaskService } from "src/services/tasks-service";
 import { useTaskServiceHook } from "src/hooks/TaskServiceHook";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CardTasks from "../../../../components/Task/CardTask";
 
 const DetailsTask = () => {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
     const taskService = useTaskService();
     const { taskId } = useParams();
-
+    const [newReview, setNewReview] = useState<boolean>(false);
     const { handleTask, handleReview, taskData, taskReview, loading, error } = useTaskServiceHook(taskService);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            await handleTask(Number(taskId));
-            await handleReview(Number(taskId));
-        };
+    const fetchData = async () => {
+        await handleTask(Number(taskId));
+        await handleReview(Number(taskId));
+        setNewReview(true)
+    };
 
+    useEffect(() => {
         fetchData();
-    }, []);
+        console.log('newReview = ', newReview);
+        if (newReview) {
+            fetchData()
+        }
+    }, [newReview]);
 
     return (
         <>
@@ -46,7 +50,7 @@ const DetailsTask = () => {
                                 (
                                     <>
                                         <Box width={isSmallScreen ? '100%' : 709} mt={isSmallScreen ? 2 : 0}>
-                                            <CardTasks taskId={taskId} taskData={taskData} loading={loading} />
+                                            <CardTasks taskId={taskId} taskData={taskData} loading={loading} setNewReview={setNewReview} />
 
                                             <Box mt={4} width={isSmallScreen ? '100%' : 679} display={'flex'} flexDirection={isSmallScreen ? 'column' : 'row'} justifyContent={isSmallScreen ? 'center' : 'space-between'} alignItems={'center'}>
                                                 <Card sx={{ width: isSmallScreen ? '100%' : 192, height: 119, justifyContent: 'center', marginBottom: isSmallScreen ? '16px' : '0' }}>
@@ -63,11 +67,11 @@ const DetailsTask = () => {
 
                                                 <Card sx={{ width: isSmallScreen ? '100%' : 434, height: 119, justifyContent: isSmallScreen ? 'center' : 'left' }}>
                                                     <CardContent style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                                                    {/* <CardContent> */}
+                                                        {/* <CardContent> */}
                                                         <Typography gutterBottom variant="h4" textAlign={'left'} component="div">
                                                             Reviews
                                                         </Typography>
-                                                        <Divider />                                                 
+                                                        <Divider />
                                                         <Typography variant="h6" textAlign={'left'} mt={1} component="div">
                                                             {taskReview ? (taskReview.map((review: any) => {
                                                                 return (
@@ -78,7 +82,7 @@ const DetailsTask = () => {
                                                                     </Box>
                                                                 )
                                                             })) : 'No reviews provided for this task.'}
-                                                        </Typography>                                                        
+                                                        </Typography>
                                                     </CardContent>
                                                 </Card>
                                             </Box>

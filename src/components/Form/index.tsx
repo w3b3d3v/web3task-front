@@ -7,11 +7,10 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useEffect, useState } from 'react';
 
-export default function FormDialog(openForm, onSubmit) {
+export default function FormDialog({ openForm, onSubmit }) {
     const [open, setOpen] = useState<boolean>(false)
     const [descriptionReview, setDescriptionReview] = useState()
 
-    console.log('onSubmit', onSubmit);
 
     const handleConfirmation = (event: { target: { value: any; }; }) => {
         let description = event.target.value;
@@ -23,7 +22,7 @@ export default function FormDialog(openForm, onSubmit) {
     };
 
     const handleSubmit = () => {
-        onSubmit(descriptionReview)
+        onSubmit(descriptionReview);
         handleClose();
     };
 
