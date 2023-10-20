@@ -37,13 +37,6 @@ const HomeTasks = () => {
         }
     };
 
-    useEffect(() => {  
-        setMinimumTasks(((currentPage - 1) * tasksPerPage) + 1);
-        setMaxTasks(currentPage * tasksPerPage);           
-        fetchData();        
-    }, [currentPage, totalPages, minimumTasks, maxTasks]);
-
-
     const maxReward = multiTasksData?.reduce((acc, curr) => {
         const parsedReward = Number.parseFloat(curr.reward)
 
@@ -52,6 +45,12 @@ const HomeTasks = () => {
 
     const filteredMultiTasks = filterTasks(multiTasksData || [])
 
+    useEffect(() => {  
+        setMinimumTasks(((currentPage - 1) * tasksPerPage) + 1);
+        setMaxTasks(currentPage * tasksPerPage);           
+        fetchData();        
+    }, [currentPage, totalPages, minimumTasks, maxTasks]);
+    
     return (
         <>
             <Helmet>
