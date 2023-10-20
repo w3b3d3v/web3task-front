@@ -4,25 +4,23 @@ import { Helmet } from 'react-helmet-async';
 import SuspenseLoader from 'src/components/SuspenseLoader'
 import { useTaskService } from "src/services/tasks-service";
 import { useTaskServiceHook } from "src/hooks/TaskServiceHook";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CardTasks from "../../../../components/Task/CardTask";
 
 const DetailsTask = () => {
     const theme = useTheme();
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
+    const  smDown  = useMediaQuery(theme.breakpoints.down('sm'));
     const taskService = useTaskService();
     const { taskId } = useParams();
-
     const { handleTask, handleReview, taskData, taskReview, loading, error } = useTaskServiceHook(taskService);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            await handleTask(Number(taskId));
-            await handleReview(Number(taskId));
-        };
+    const fetchData = async () => {
+        await handleTask(Number(taskId));
+        await handleReview(Number(taskId));        
+    };
 
-        fetchData();
+    useEffect(() => {
+        fetchData();        
     }, []);
 
     return (
@@ -45,11 +43,11 @@ const DetailsTask = () => {
                                 :
                                 (
                                     <>
-                                        <Box width={isSmallScreen ? '100%' : 709} mt={isSmallScreen ? 2 : 0}>
+                                        <Box width={smDown ? '100%' : 709} mt={smDown ? 2 : 0}>
                                             <CardTasks taskId={taskId} taskData={taskData} loading={loading} />
 
-                                            <Box mt={4} width={isSmallScreen ? '100%' : 679} display={'flex'} flexDirection={isSmallScreen ? 'column' : 'row'} justifyContent={isSmallScreen ? 'center' : 'space-between'} alignItems={'center'}>
-                                                <Card sx={{ width: isSmallScreen ? '100%' : 192, height: 119, justifyContent: 'center', marginBottom: isSmallScreen ? '16px' : '0' }}>
+                                            <Box mt={4} width={smDown ? '100%' : 679} display={'flex'} flexDirection={smDown ? 'column' : 'row'} justifyContent={smDown ? 'center' : 'space-between'} alignItems={'center'}>
+                                                <Card sx={{ width: smDown ? '100%' : 192, height: 119, justifyContent: 'center', marginBottom: smDown ? '16px' : '0', ml: smDown ? 10 : 0 }}>
                                                     <CardContent>
                                                         <Typography gutterBottom variant="h4" component="div" textAlign={'center'}>
                                                             Status
@@ -61,30 +59,45 @@ const DetailsTask = () => {
                                                     </CardContent>
                                                 </Card>
 
-                                                <Card sx={{ width: isSmallScreen ? '100%' : 434, height: 119, justifyContent: isSmallScreen ? 'center' : 'left' }}>
+                                                <Card sx={{ width: smDown ? '100%' : 434, height: 119, justifyContent: smDown ? 'center' : 'left', ml: smDown ? 10 : 0}}>
                                                     <CardContent style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                                                    {/* <CardContent> */}
+                                                        {/* <CardContent> */}
                                                         <Typography gutterBottom variant="h4" textAlign={'left'} component="div">
                                                             Reviews
                                                         </Typography>
-                                                        <Divider />                                                 
-                                                        <Typography variant="h6" textAlign={'left'} mt={1} component="div">
-                                                            {taskReview ? (taskReview.map((review: any) => {
-                                                                return (
-                                                                    <Box>
-                                                                        <Typography variant="h6" textAlign={'left'} mt={1} component="div">
-                                                                            {review}
-                                                                        </Typography>
-                                                                    </Box>
-                                                                )
-                                                            })) : 'No reviews provided for this task.'}
-                                                        </Typography>                                                        
+                                                        <Divider />
+                                                        <Box 
+                                                            component="div"
+                                                            sx={{
+                                                                whiteSpace: 'nowrap',
+                                                                mb: 7.5,
+                                                                p: 1,
+                                                                bgcolor: (theme) =>
+                                                                    theme.palette.mode === 'dark' ? '#101010' : 'grey.100',
+                                                                color: (theme) =>
+                                                                    theme.palette.mode === 'dark' ? 'grey.300' : 'grey.800',
+                                                                fontSize: '0.875rem',
+                                                                fontWeight: '700',
+                                                            }}
+                                                        >
+                                                            <Typography variant="h6" textAlign={'left'} mt={1} height={119} component="div">
+                                                                {taskReview ? (taskReview.map((review: any, index: React.Key) => {
+                                                                    return (
+                                                                        
+                                                                            <Typography variant="h6" textAlign={'left'} key={'review'+index} mt={1} component="div">
+                                                                                {review}
+                                                                            </Typography>
+                                                                        
+                                                                    )
+                                                                })) : 'No reviews provided for this task.'}
+                                                            </Typography>
+                                                        </Box>
                                                     </CardContent>
                                                 </Card>
                                             </Box>
 
-                                            <Box mt={4} width={isSmallScreen ? '100%' : 679} display={'flex'} flexDirection={isSmallScreen ? 'column' : 'row'} justifyContent={isSmallScreen ? 'center' : 'space-between'} alignItems={'center'}>
-                                                <Card sx={{ width: '100%', height: 200, justifyContent: isSmallScreen ? 'center' : 'left' }}>
+                                            <Box mt={4} width={smDown ? '100%' : 679} display={'flex'} flexDirection={smDown ? 'column' : 'row'} justifyContent={smDown ? 'center' : 'space-between'} alignItems={'center'}>
+                                                <Card sx={{ width: '100%', height: 200, justifyContent: smDown ? 'center' : 'left', ml: smDown ? 10 : 0 }}>
                                                     <CardContent>
                                                         <Typography gutterBottom variant="h4" textAlign={'left'} component="div">
                                                             Description
