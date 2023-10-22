@@ -61,7 +61,6 @@ const DetailsTask = () => {
 
                                                 <Card sx={{ width: smDown ? '100%' : 434, height: 119, justifyContent: smDown ? 'center' : 'left', ml: smDown ? 10 : 0}}>
                                                     <CardContent style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                                                        {/* <CardContent> */}
                                                         <Typography gutterBottom variant="h4" textAlign={'left'} component="div">
                                                             Reviews
                                                         </Typography>
