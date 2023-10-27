@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import { Typography, useMediaQuery } from '@mui/material'
 import { Box } from '@mui/system'
 import {
     useTheme,
@@ -6,10 +6,12 @@ import {
 
 const CoverHomeTasks = () => {
     const theme = useTheme();
+    const  mdDown  = useMediaQuery(theme.breakpoints.down('md'));
+    const  smDown  = useMediaQuery(theme.breakpoints.down('sm'));
     return (
-        <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={304} flexDirection={"row"} >
+        <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={304} >
 
-            <Box>
+            <Box ml={smDown && 3}>
                 <img
                     src="/static/images/task/home/web3task-home-task.svg"
                     alt="Logo Web3task"
@@ -18,9 +20,9 @@ const CoverHomeTasks = () => {
                 />
             </Box>
 
-            <Box>
+            <Box >
                 <Box>
-                    <Typography color={theme.colors.primary} fontWeight={"bold"} fontSize={50}>
+                    <Typography color={theme.colors.primary} fontWeight={"bold"} fontSize={smDown ? 20 : mdDown ? 30 : 50}>
                         WEB3TASK
                     </Typography>
                 </Box>
@@ -28,7 +30,7 @@ const CoverHomeTasks = () => {
                     <img
                         src="/static/images/task/home/detail.svg"
                         alt="4 Pontos Interligados"
-                        width={75}
+                        width={mdDown ? 55 : 75}
                     />
                 </Box>
             </Box>

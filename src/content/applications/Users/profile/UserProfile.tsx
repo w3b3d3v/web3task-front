@@ -32,6 +32,7 @@ const BoxCoverAction = styled(Box)(
 const UserProfile = () => {
     const theme = useTheme();
     const  mdDown  = useMediaQuery(theme.breakpoints.down('md'));
+    const  smDown  = useMediaQuery(theme.breakpoints.down('sm'));
     const { shortenAddressFromUser, userAddress } = useWeb3Utils();
     const taskService = useTaskService();
     const { handleCountUserTasks, handleUserScore, countUserTasks, handleMultiTask, multiTasksData, loading } = useTaskServiceHook(taskService);
@@ -79,6 +80,7 @@ const UserProfile = () => {
             <Helmet>
                 <title>Web3Task - Profile</title>
             </Helmet>
+
             <Box>
                 <BoxCover display={'flex'} justifyContent={'center'} alignItems={'center'} height={304} flexDirection={"row"} >
                     <Box style={{ position: 'relative' }} >
@@ -86,7 +88,7 @@ const UserProfile = () => {
                             style={{
                                 position: 'absolute',
                                 top: 'calc(50%  + 0px)',
-                                left: 'calc(50%  - 315px)',
+                                left: smDown ? 'calc(50%  + 50px)' : mdDown ? 'calc(50%  + 0px)' : 'calc(50%  - 315px)',
                                 transform: 'translate(-50%, -50%)',
                                 zIndex: 2,
                                 pointerEvents: 'none'
@@ -95,7 +97,7 @@ const UserProfile = () => {
                             <img
                                 src="/static/images/user/profile/cube.svg"
                                 alt="astronaut"
-                                width={251}
+                                width={smDown ? 181 : 251}
                                 style={{
                                     pointerEvents: 'none'
                                 }}
@@ -106,7 +108,7 @@ const UserProfile = () => {
                             style={{
                                 position: 'absolute',
                                 top: 'calc(50%  + 180px)',
-                                left: 'calc(50%  - 250px)',
+                                left: smDown ? 'calc(50%  + 185px)' : mdDown ? 'calc(50%  + 210px)' : 'calc(50%  - 250px)',
                                 transform: 'translate(-50%, -50%)',
                                 zIndex: 2,
                                 pointerEvents: 'none'
@@ -115,7 +117,7 @@ const UserProfile = () => {
                             <img
                                 src="/static/images/user/profile/profile.svg"
                                 alt="astronaut"
-                                width={251}
+                                width={mdDown ? 181 : 251}
                                 style={{
                                     pointerEvents: 'none'
                                 }}
@@ -130,7 +132,7 @@ const UserProfile = () => {
                             style={{
                                 position: 'absolute',
                                 top: 'calc(50%  + 230px)',
-                                left: 'calc(50% - 250px)',
+                                left: smDown ? 'calc(50% + 150px)' : mdDown ? 'calc(50% + 50px)' : 'calc(50% - 250px)',
                                 transform: 'translate(-50%, -50%)',
                                 zIndex: 1,
                                 pointerEvents: 'none',
@@ -139,17 +141,16 @@ const UserProfile = () => {
 
                     </Box>
 
-                    <Box>
+                    <Box  justifyContent={"center"} alignItems="center">
                         <CoverUserProfile />
                     </Box>
 
                     <Box style={{ position: 'relative' }} >
-
                         <Box
                             style={{
                                 position: 'absolute',
                                 top: 'calc(50%  + 100px)',
-                                left: 'calc(50%  + 150px)',
+                                left: smDown? 'calc(50% - 110px)' : mdDown ? 'calc(50% - 50px)' : 'calc(50%  + 150px)',
                                 transform: 'translate(-50%, -50%)',
                                 zIndex: 2,
                                 pointerEvents: 'none'
@@ -174,7 +175,7 @@ const UserProfile = () => {
                             style={{
                                 position: 'absolute',
                                 top: 'calc(50%  + 230px)',
-                                left: 'calc(50% + 300px)',
+                                left: smDown ? 'calc(50% + 80px)' : mdDown ? 'calc(50% + 70px)' : 'calc(50% + 300px)',
                                 transform: 'translate(-50%, -50%)',
                                 zIndex: 1,
                                 pointerEvents: 'none',
@@ -182,7 +183,7 @@ const UserProfile = () => {
                         />
 
                     </Box>
-                    <BoxCoverAction>
+                    <BoxCoverAction mt={smDown ? 13 : mdDown ? 15 : 0}>
                         <Typography gutterBottom variant="h5" component="div" textAlign="center">
                             {shortenAddressFromUser()}
                         </Typography>
@@ -192,12 +193,12 @@ const UserProfile = () => {
                 </BoxCover>
                 <Box>
 
-                    <Grid container spacing={5} mt={10} ml={mdDown ? 3 : 15} mr={15} style={{ width: '100%' }} >
-                        <Grid item xs={mdDown ? 4 : 2} mt={5}>
+                <Grid display={'flex'} spacing={1} mt={mdDown ? 20 : 15} ml={smDown ? -3 : mdDown ? 2 : 15} style={{ width: '92%' }} >
+                        <Grid item xs={smDown ? 4 : 2} ml={smDown && 1.5 }  mt={5} display={'flex'}>
                             <SearchFilters maxReward={maxReward} />
                         </Grid>
 
-                        <Grid item xs={mdDown ? 8 : 10} style={{ width: '100%' }}>
+                        <Grid item xs={smDown ? 8 : 10} ml={smDown && -2 } mt={smDown && -2 }  style={{ width: '92%' }}>
                             <CardMultiTasks multiTasksData={filteredMultiTasks} loading={loading} page={currentPage} />
                         </Grid>
                     </Grid>

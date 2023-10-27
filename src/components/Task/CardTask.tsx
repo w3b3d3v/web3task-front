@@ -11,7 +11,7 @@ import Close from '@mui/icons-material/Close';
 import Check from '@mui/icons-material/Check';
 import { useSnackBar } from 'src/contexts/SnackBarContext';
 import { ethers } from 'ethers';
-import { set } from 'date-fns';
+import FormDialog from '../FormDialog';
 
 /**
  * CardTasks Component
@@ -27,6 +27,8 @@ import { set } from 'date-fns';
 
 
 export const CardTask = ({ taskId, taskData, loading }: any) => {
+    const theme = useTheme();
+    const  smDown  = useMediaQuery(theme.breakpoints.down('sm'));
     const { startTask, reviewTask, completeTask, cancelTask, hasMemberRole, hasLeaderRole, hasVoted, getMinQuorum, getQuorumApprovals } = useTaskService();
     const [openError, setOpenError] = useState(false);
     const [error, setError] = useState<string>();
@@ -35,14 +37,26 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
     const [approvals, setApprovals] = useState<string>();
     const [isMember, setIsMember] = useState<boolean>(false);
     const [isLeader, setIsLeader] = useState<boolean>(false);
-    const theme = useTheme();
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const [openForm, setOpenForm] = useState<boolean>(false);
 
     const { showSnackBar } = useSnackBar();
 
     const handleSnackbar = (message: string, color: AlertColor) => {
         showSnackBar(message, color)
     };
+
+    const handleOpenForm = async () => {
+        setOpenForm(true);
+    };
+
+    const handleCloseForm = async () => {
+        setOpenForm(false)
+    };
+
+    const handleFormSubmit = async (metadata: any) => {
+        setOpenForm(false);
+        await reviewTask(BigInt(taskId), metadata).then(result => { handleSnackbar('Review Task process initiated with success!', 'info') });
+    }
 
     const getAction = async (status: string) => {
         switch (status) {
@@ -68,12 +82,10 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                     handleSnackbar('Task Start process initiated with success!', 'info')
                     break;
                 case "Progress":
-                    await reviewTask(BigInt(taskId), "Hello, I already finished");
-                    handleSnackbar('Review Task process initiated with success!', 'info')
+                    handleOpenForm();
                     break;
                 case "Review":
-                    await reviewTask(BigInt(taskId), "Awesome, contact me on Discord!");
-                    handleSnackbar('Review Task process initiated with success!', 'info')
+                    handleOpenForm();
                     break;
                 default:
                     break;
@@ -109,12 +121,22 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
         try {
             const approvals = await getQuorumApprovals(taskId);
             const minQuorum = await getMinQuorum();
-            const remain = " (" + String(approvals) + "/" + String(minQuorum) + ")";
+            const remain = " (" + String(approvals == null ? 0 : approvals) + "/" + String(minQuorum) + ")";
             setApprovals(remain);
         } catch (error) {
             setError(error.message)
             setOpenError(true);
-        }        
+        }
+    }
+
+    const copyContent = async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            handleSnackbar("Copy to Clipboard", 'info')
+        } catch (err) {
+            console.error('Failed to copy: ', err);
+            handleSnackbar("Failed to copy to clipboard", 'error')
+        }
     }
 
     useEffect(() => {
@@ -130,16 +152,6 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
         }
     }, [])
 
-    const copyContent = async () => {
-        try {
-            await navigator.clipboard.writeText(window.location.href);
-            handleSnackbar("Copy to Clipboard", 'info')
-        } catch (err) {
-            console.error('Failed to copy: ', err);
-            handleSnackbar("Failed to copy to clipboard", 'error')
-        }
-    }
-
     return (
 
         <Grid item xs={'auto'} sm={'auto'} md={'auto'} lg={'auto'}>
@@ -150,8 +162,8 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                 <>
                     {taskData ? (
 
-                        <Box display="flex" flexDirection={isSmallScreen ? 'column' : 'row'} alignItems="center" >
-                            <Box display='flex' justifyContent={'center'} alignContent={'center'} >
+                        <Box display="flex" flexDirection={smDown ? 'column' : 'row'} alignItems="center" >
+                            <Box display='flex' justifyContent={'center'} alignContent={'center'} sx={{ mb: smDown ? 5 : 0, ml: smDown ? 10 : 0 }}>
                                 <Box sx={{ position: 'relative' }}>
                                     <Card sx={{ width: 277, height: 277 }}>
                                         <CardMedia
@@ -176,8 +188,7 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                                 gutterBottom
                                                 variant="body2"
                                                 style={{
-                                                    textAlign: isSmallScreen ? 'left' : 'center',
-                                                    // marginLeft: isSmallScreen ? 'auto' : 'unset',
+                                                    textAlign: smDown ? 'left' : 'center',
                                                     backgroundColor: '#000000',
                                                 }}
                                             >
@@ -188,7 +199,7 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                 </Box>
                             </Box>
 
-                            <Box flexDirection={'column'} height={'282px'} width={'432px'} >
+                            <Box flexDirection={'column'} height={'282px'} width={'432px'} sx={{ ml: smDown ? 10 : 0 }}>
                                 <CardContent>
                                     <Box>
                                         <Box display={'flex'} justifyContent="space-between" alignItems="center"  >
@@ -196,42 +207,42 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                                 {taskData.title}
                                             </Typography>
                                             <Box display={'flex'} justifyContent="space-between" alignItems="center">
-                                        
-                                            {
-                                                isLeader && taskData.status != "Canceled" &&
-                                                <Tooltip key={"top"} placement={"top"} title="Approvals">
-                                                    <Typography >                                                    
-                                                        {approvals}
-                                                    </Typography>
-                                                </Tooltip>
-                                            }                                            
 
-                                            {
-                                                isLeader && taskData.status != "Canceled" &&
-                                                <Tooltip key={"top"} placement={"top"} title="Complete Task">
-                                                    <IconButton color="primary" 
-                                                        onClick={handleConfirm}>
-                                                    <Check />
+                                                {
+                                                    isLeader && taskData.status != "Canceled" &&
+                                                    <Tooltip key={"topApprovals"} placement={"top"} title="Approvals">
+                                                        <Typography >
+                                                            {approvals}
+                                                        </Typography>
+                                                    </Tooltip>
+                                                }
+
+                                                {
+                                                    isLeader && taskData.status != "Canceled" &&
+                                                    <Tooltip key={"topComplete"} placement={"top"} title="Complete Task">
+                                                        <IconButton color="primary"
+                                                            onClick={handleConfirm}>
+                                                            <Check />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                }
+
+                                                {
+                                                    isLeader && taskData.status != "Canceled" &&
+                                                    <Tooltip key={"top"} placement={"top"} title="Review Task">
+                                                        <IconButton color="primary"
+                                                            onClick={handleCancel}>
+                                                            <Close />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                }
+
+                                                <Tooltip key={"topContent"} placement={"top"} title="Share URL">
+                                                    <IconButton color="primary"
+                                                        onClick={copyContent}>
+                                                        <OpenInNewIcon />
                                                     </IconButton>
                                                 </Tooltip>
-                                            }
-                                                
-                                            {
-                                                isLeader && taskData.status != "Canceled" &&
-                                                <Tooltip key={"top"} placement={"top"} title="Cancel Task">
-                                                    <IconButton color="primary" 
-                                                        onClick={handleCancel}>
-                                                    <Close />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            }
-
-                                            <Tooltip key={"top"} placement={"top"} title="Share URL">
-                                                <IconButton color="primary"
-                                                    onClick={copyContent}>
-                                                    <OpenInNewIcon />
-                                                </IconButton>
-                                            </Tooltip>
                                             </Box>
                                         </Box>
                                         <Typography gutterBottom variant='subtitle2' component="div">
@@ -252,17 +263,22 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                         </Typography>
                                     </Box>
 
-                                    <Box display={'flex'} justifyContent="space-between" mt={6} >
+                                    <Box display={'flex'} justifyContent="space-between" mt={6}  sx={{ justifyContent: smDown ? 'center' : 'space-between' }}>
                                         {
                                             taskData.status != "Completed" && taskData.status != "Canceled" &&
-                                            <Button
+                                            <>
+                                                <Button
+                                                    variant="contained"
+                                                    component="span"
+                                                    onClick={handleAction}
+                                                >
+                                                    {action}
+                                                </Button>
 
-                                                variant="contained"
-                                                component="span"
-                                                onClick={handleAction}
-                                            >
-                                                {action}
-                                            </Button>
+                                                {openForm && <FormDialog openForm={openForm} closeForm={handleCloseForm} onSubmit={handleFormSubmit} />}
+
+                                            </>
+
                                         }
                                         <Button
                                             startIcon={<AccessTime />}
