@@ -9,10 +9,11 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import Logo from "@/components/02-molecules/LogoSign";
+import HeaderButtons from "../../layouts/BaseLayout/Header/Buttons";
+import HeaderUserbox from "../../layouts/BaseLayout/Header/Userbox";
+import HeaderSearch from "../../layouts/BaseLayout/Header/Search";
+import HeaderUserConnect from "../../layouts/BaseLayout/Header/UserConnect";
 import { useConnect, useDisconnect } from "wagmi";
-import HeaderSearch from "./Search";
-import HeaderUserbox from "./Userbox";
-import HeaderUserConnect from "./UserConnect";
 
 const HeaderWrapper = styled(Box)(
   ({ theme }) => `
