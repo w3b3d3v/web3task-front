@@ -14,7 +14,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { BsGithub, BsYoutube } from "react-icons/bs";
 import { BsDiscord } from "react-icons/bs";
 import { BsTwitch } from "react-icons/bs";
-import Logo from "../LogoSign";
+import Logo from "./LogoSign";
 
 const FooterWrapper = styled(Container)(
   ({ theme }) => `
@@ -24,7 +24,8 @@ const FooterWrapper = styled(Container)(
 
 function Footer() {
   const theme = useTheme();
-  const logoImage = "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
+  const logoImage =
+    "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
 
   return (
     <FooterWrapper
@@ -43,28 +44,27 @@ function Footer() {
         <Box>
           <ListItem>
             <Link href="/sobre-nos" underline="none">
-              {'Sobre Nós'}
+              {"Sobre Nós"}
             </Link>
           </ListItem>
 
           <ListItem>
             <Link href="/comunidade" underline="none">
-              {'Comunidade'}
+              {"Comunidade"}
             </Link>
           </ListItem>
 
           <ListItem>
             <Link href="/postagens" underline="none">
-              {'Postagens'}
+              {"Postagens"}
             </Link>
           </ListItem>
 
           <ListItem>
             <Link href="/perguntas-frequentes" underline="none">
-              {'Perguntas Frequentes'}
+              {"Perguntas Frequentes"}
             </Link>
           </ListItem>
-
         </Box>
 
         <Box>

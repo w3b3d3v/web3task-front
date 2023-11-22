@@ -1,4 +1,4 @@
-import { DatePicker } from '@mui/x-date-pickers';
+import { DatePicker } from "@mui/x-date-pickers";
 import {
   Accordion,
   AccordionDetails,
@@ -9,9 +9,9 @@ import {
   TextField,
   Typography,
   useTheme,
-} from '@mui/material';
-import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
-import { useSearchFilters } from '@/hooks/useSearchFilters';
+} from "@mui/material";
+import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
+import { useSearchFilters } from "@/hooks/useSearchFilters";
 
 interface SearchFiltersProps {
   maxReward?: number;
@@ -43,7 +43,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
           expandIcon={
             <ExpandMoreTwoToneIcon
               sx={{
-                color: theme.palette.mode === 'dark' ? 'white' : 'black',
+                color: theme.palette.mode === "dark" ? "white" : "black",
               }}
             />
           }
@@ -67,7 +67,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
           expandIcon={
             <ExpandMoreTwoToneIcon
               sx={{
-                color: theme.palette.mode === 'dark' ? 'white' : 'black',
+                color: theme.palette.mode === "dark" ? "white" : "black",
               }}
             />
           }
@@ -91,7 +91,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
           expandIcon={
             <ExpandMoreTwoToneIcon
               sx={{
-                color: theme.palette.mode === 'dark' ? 'white' : 'black',
+                color: theme.palette.mode === "dark" ? "white" : "black",
               }}
             />
           }
@@ -101,9 +101,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
 
         <AccordionDetails>
           <Stack spacing={2} direction="row" alignItems="center">
-            <Typography>
-              0
-            </Typography>
+            <Typography>0</Typography>
 
             <Slider
               valueLabelDisplay="auto"
@@ -113,9 +111,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
               max={maxReward}
             />
 
-            <Typography>
-              {maxReward}
-            </Typography>
+            <Typography>{maxReward}</Typography>
           </Stack>
         </AccordionDetails>
       </Accordion>
@@ -125,7 +121,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
           expandIcon={
             <ExpandMoreTwoToneIcon
               sx={{
-                color: theme.palette.mode === 'dark' ? 'white' : 'black',
+                color: theme.palette.mode === "dark" ? "white" : "black",
               }}
             />
           }

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import Scrollbar from "@/components/Scrollbar";
+import Scrollbar from "@/components/01-atoms/Scrollbar";
 import { SidebarContext } from "@/contexts/SidebarContext";
 
 import {
@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 
 import SidebarMenu from "./SidebarMenu";
-import Logo from "@/components/LogoSign";
+import Logo from "@/components/02-molecules/LogoSign";
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -34,7 +34,7 @@ function Sidebar() {
   const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
   const closeSidebar = () => toggleSidebar();
   const theme = useTheme();
-  const logoImage = "/static/images/logo/logo-" + theme.palette.mode + ".svg"
+  const logoImage = "/static/images/logo/logo-" + theme.palette.mode + ".svg";
 
   return (
     <>
