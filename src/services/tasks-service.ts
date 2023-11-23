@@ -13,54 +13,56 @@ import { AlertColor } from '@mui/material/Alert';
 import { Task } from '@/models/task';
 import { UserRole } from '@/models/user';
 import { useSnackBar } from '@/contexts/SnackBarContext';
-import { WEB3TASK_CONTRACT_ADDRESS, web3taskABI } from '@/contracts/web3taskABI';
+import { web3taskABI } from '@/contracts/web3taskABI';
+import { useContractAddress } from '@/hooks/useContractAddress';
 
 export function useTaskService() {
   const { address: userAddress } = useAccount();
   const { showSnackBar } = useSnackBar();
+  const { contractAddress } = useContractAddress();
 
   const createTaskMutation = useContractWrite({
-    address: WEB3TASK_CONTRACT_ADDRESS,
+    address: contractAddress,
     abi: web3taskABI,
     functionName: 'createTask',
   });
   const startTaskMutation = useContractWrite({
-    address: WEB3TASK_CONTRACT_ADDRESS,
+    address: contractAddress,
     abi: web3taskABI,
     functionName: 'startTask',
   });
   const reviewTaskMutation = useContractWrite({
-    address: WEB3TASK_CONTRACT_ADDRESS,
+    address: contractAddress,
     abi: web3taskABI,
     functionName: 'reviewTask',
   });
   const completeTaskMutation = useContractWrite({
-    address: WEB3TASK_CONTRACT_ADDRESS,
+    address: contractAddress,
     abi: web3taskABI,
     functionName: 'completeTask',
   });
   const cancelTaskMutation = useContractWrite({
-    address: WEB3TASK_CONTRACT_ADDRESS,
+    address: contractAddress,
     abi: web3taskABI,
     functionName: 'cancelTask',
   });
   const setRoleMutation = useContractWrite({
-    address: WEB3TASK_CONTRACT_ADDRESS,
+    address: contractAddress,
     abi: web3taskABI,
     functionName: 'setRole',
   });
   const setOperatorMutation = useContractWrite({
-    address: WEB3TASK_CONTRACT_ADDRESS,
+    address: contractAddress,
     abi: web3taskABI,
     functionName: 'setOperator',
   });
   const setMinQuorumMutation = useContractWrite({
-    address: WEB3TASK_CONTRACT_ADDRESS,
+    address: contractAddress,
     abi: web3taskABI,
     functionName: 'setMinQuorum',
   });
   const depositMutation = useContractWrite({
-    address: WEB3TASK_CONTRACT_ADDRESS,
+    address: contractAddress,
     abi: web3taskABI,
     functionName: 'deposit',
   });
@@ -85,7 +87,7 @@ export function useTaskService() {
       );
 
       const isOperator = await readContract({
-        address: WEB3TASK_CONTRACT_ADDRESS,
+        address: contractAddress,
         abi: web3taskABI,
         functionName: 'isOperator',
         args: [createTaskInterfaceID, BigInt(UserRole.Leader)],
@@ -119,7 +121,7 @@ export function useTaskService() {
 
       if (isLeader) {
         const isOperator = await readContract({
-          address: WEB3TASK_CONTRACT_ADDRESS,
+          address: contractAddress,
           abi: web3taskABI,
           functionName: 'isOperator',
           args: [startTaskInterfaceID, BigInt(UserRole.Leader)],
@@ -137,7 +139,7 @@ export function useTaskService() {
       }
 
       const isOperator = await readContract({
-        address: WEB3TASK_CONTRACT_ADDRESS,
+        address: contractAddress,
         abi: web3taskABI,
         functionName: 'isOperator',
         args: [startTaskInterfaceID, BigInt(UserRole.Member)],
@@ -175,7 +177,7 @@ export function useTaskService() {
       );
 
       const isOperator = await readContract({
-        address: WEB3TASK_CONTRACT_ADDRESS,
+        address: contractAddress,
         abi: web3taskABI,
         functionName: 'isOperator',
         args: [reviewTaskInterfaceID, BigInt(UserRole.Leader)],
@@ -213,7 +215,7 @@ export function useTaskService() {
       );
 
       const isOperator = await readContract({
-        address: WEB3TASK_CONTRACT_ADDRESS,
+        address: contractAddress,
         abi: web3taskABI,
         functionName: 'isOperator',
         args: [completeTaskInterfaceID, BigInt(UserRole.Leader)],
@@ -251,7 +253,7 @@ export function useTaskService() {
       );
 
       const isOperator = await readContract({
-        address: WEB3TASK_CONTRACT_ADDRESS,
+        address: contractAddress,
         abi: web3taskABI,
         functionName: 'isOperator',
         args: [cancelTaskInterfaceID, BigInt(UserRole.Leader)],
@@ -276,7 +278,7 @@ export function useTaskService() {
   async function getTask(taskId: bigint) {
     try {
       return readContract({
-        address: WEB3TASK_CONTRACT_ADDRESS,
+        address: contractAddress,
         abi: web3taskABI,
         functionName: 'getTask',
         args: [taskId],
@@ -301,7 +303,7 @@ export function useTaskService() {
 
     if (isUserProfile) {
       taskIds = await readContract({
-        address: WEB3TASK_CONTRACT_ADDRESS,
+        address: contractAddress,
         abi: web3taskABI,
         functionName: 'getUserTasks',
         args: [userAddress],
@@ -334,7 +336,7 @@ export function useTaskService() {
     }
 
     const response = await readContract({
-      address: WEB3TASK_CONTRACT_ADDRESS,
+      address: contractAddress,
       abi: web3taskABI,
       functionName: 'multicallRead',
       args: [payloadArray],
@@ -436,7 +438,7 @@ export function useTaskService() {
 
   async function hasLeaderRole(address: Address) {
     const hasRole = await readContract({
-      address: WEB3TASK_CONTRACT_ADDRESS,
+      address: contractAddress,
       abi: web3taskABI,
       functionName: 'hasRole',
       args: [BigInt(UserRole.Leader), address],
@@ -447,7 +449,7 @@ export function useTaskService() {
 
   async function hasMemberRole(address: Address) {
     const hasRole = await readContract({
-      address: WEB3TASK_CONTRACT_ADDRESS,
+      address: contractAddress,
       abi: web3taskABI,
       functionName: 'hasRole',
       args: [BigInt(UserRole.Member), address],

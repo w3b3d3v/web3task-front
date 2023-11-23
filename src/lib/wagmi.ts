@@ -7,6 +7,7 @@ import { getDefaultWallets } from "@rainbow-me/rainbowkit";
 export enum SupportedNetworks {
   "Polygon" = 137,
   "Mumbai" = 80001,
+  "GoChain" = 31337
 }
 
 export const ENV_DEFAULT_CHAIN_ID = process.env.NEXT_PUBLIC_USE_TESTNET
