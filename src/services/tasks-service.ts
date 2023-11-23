@@ -1,223 +1,476 @@
-import { useState } from "react";
-import { Task } from '@/models/task';
-import { UserRole } from '@/models/user';
-import { tasksManagerContract } from '@/lib/wagmi'
-import { useWeb3Utils } from "@/hooks/Web3UtilsHook";
-import { useSnackBar } from "@/contexts/SnackBarContext";
+import { useAccount, useContractWrite } from 'wagmi';
+import { readContract } from '@wagmi/core';
+import {
+  Address,
+  decodeFunctionResult,
+  encodeFunctionData,
+  getAbiItem,
+  getFunctionSelector,
+  parseEther,
+} from 'viem';
 import { AlertColor } from '@mui/material/Alert';
 
+import { Task } from '@/models/task';
+import { UserRole } from '@/models/user';
+import { useSnackBar } from '@/contexts/SnackBarContext';
+import { web3taskABI } from '@/contracts/web3taskABI';
+import { useContractAddress } from '@/hooks/useContractAddress';
 
 export function useTaskService() {
-    const { userAddress, parseUnits } = useWeb3Utils();
-    const { showSnackBar } = useSnackBar();
+  const { address: userAddress } = useAccount();
+  const { showSnackBar } = useSnackBar();
+  const { contractAddress } = useContractAddress();
 
-    const handleSnackbar = (message: string, color: AlertColor) => {
-        showSnackBar(message, color)
-    };
+  const createTaskMutation = useContractWrite({
+    address: contractAddress,
+    abi: web3taskABI,
+    functionName: 'createTask',
+  });
+  const startTaskMutation = useContractWrite({
+    address: contractAddress,
+    abi: web3taskABI,
+    functionName: 'startTask',
+  });
+  const reviewTaskMutation = useContractWrite({
+    address: contractAddress,
+    abi: web3taskABI,
+    functionName: 'reviewTask',
+  });
+  const completeTaskMutation = useContractWrite({
+    address: contractAddress,
+    abi: web3taskABI,
+    functionName: 'completeTask',
+  });
+  const cancelTaskMutation = useContractWrite({
+    address: contractAddress,
+    abi: web3taskABI,
+    functionName: 'cancelTask',
+  });
+  const setRoleMutation = useContractWrite({
+    address: contractAddress,
+    abi: web3taskABI,
+    functionName: 'setRole',
+  });
+  const setOperatorMutation = useContractWrite({
+    address: contractAddress,
+    abi: web3taskABI,
+    functionName: 'setOperator',
+  });
+  const setMinQuorumMutation = useContractWrite({
+    address: contractAddress,
+    abi: web3taskABI,
+    functionName: 'setMinQuorum',
+  });
+  const depositMutation = useContractWrite({
+    address: contractAddress,
+    abi: web3taskABI,
+    functionName: 'deposit',
+  });
 
-    // Leader
-    async function createTask(task: Task) {
-        try {
-            if (hasLeaderRole(userAddress())) {
-                const intefaceID = tasksManagerContract.interface.getSighash("createTask");
-                const isOperator = await tasksManagerContract.isOperator(intefaceID, UserRole.Leader);
+  const handleSnackbar = (message: string, color: AlertColor) => {
+    showSnackBar(message, color);
+  };
 
-                if (!isOperator) {
-                    throw new Error("User unauthorized to perform createTask!");
-                }
+  async function createTask(task: Task) {
+    try {
+      const isLeader = !!userAddress && (await hasLeaderRole(userAddress));
 
-                await tasksManagerContract.createTask(task);
+      if (!isLeader) {
+        throw new Error('User does not have the leader role!');
+      }
 
-            } else {
-                throw new Error("User does not have the leader role!");
-            }
-        } catch (error) {
-            handleSnackbar(error.message, 'error');
-        }
+      const createTaskInterfaceID = getFunctionSelector(
+        getAbiItem({
+          abi: web3taskABI,
+          name: 'createTask',
+        })
+      );
+
+      const isOperator = await readContract({
+        address: contractAddress,
+        abi: web3taskABI,
+        functionName: 'isOperator',
+        args: [createTaskInterfaceID, BigInt(UserRole.Leader)],
+      });
+
+      if (!isOperator) {
+        throw new Error('User unauthorized to perform createTask!');
+      }
+
+      await createTaskMutation.writeAsync({
+        args: [task],
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        handleSnackbar(error.message, 'error');
+      } else {
+        handleSnackbar('Unexpected error', 'error');
+      }
     }
+  }
 
-    // Leader or Member
-    async function startTask(id: bigint) {
+  async function startTask(id: bigint) {
+    try {
+      const isLeader = !!userAddress && (await hasLeaderRole(userAddress));
+      const startTaskInterfaceID = getFunctionSelector(
+        getAbiItem({
+          abi: web3taskABI,
+          name: 'startTask',
+        })
+      );
 
-        const isLeader = await hasLeaderRole(userAddress())
-        const isMember = await hasMemberRole(userAddress())
-
-        if (isLeader == true) {
-
-            let intefaceID = tasksManagerContract.interface.getSighash("startTask");
-            await tasksManagerContract.isOperator(intefaceID, (UserRole.Leader)).then(isOperator => {
-                if (!isOperator) {
-                    handleSnackbar("User unauthorized to perform startTask", 'error')
-                    throw Error("User unauthorized to perform startTask!");
-                } else {
-                    tasksManagerContract.startTask(id, UserRole.Leader);
-                }
-            });
-        } else {
-
-            let intefaceID = tasksManagerContract.interface.getSighash("startTask");
-            await tasksManagerContract.isOperator(intefaceID, (UserRole.Member)).then(isOperator => {
-                if (!isOperator) {
-                    handleSnackbar("User unauthorized to perform startTask", 'error')
-                    throw Error("User unauthorized to perform startTask!");
-                } else {
-                    tasksManagerContract.startTask(id, UserRole.Member);
-                }
-            });
-        }
-
-    }
-
-    // LEADER 
-    async function reviewTask(id: bigint) {
-        let metadata = "";
-        if (hasLeaderRole(userAddress())) {
-            let intefaceID = tasksManagerContract.interface.getSighash("reviewTask");
-            const isOperator = await tasksManagerContract.isOperator(intefaceID, UserRole.Leader)
-            if (!isOperator) {
-                handleSnackbar("User unauthorized to perform reviewTask!", "error");
-                throw Error("User unauthorized to perform reviewTask!");
-            } else {
-                tasksManagerContract.reviewTask(id, UserRole.Leader, metadata);
-            }
-        }
-    }
-
-    // 1 Leader que pegou tarefa completeTask e 2 LEADERS Aprovam
-    // 1 Membro que pegou tarefa completeTask e 2 LEADERS Aprovam
-    async function completeTask(id: bigint) {
-        if (hasLeaderRole(userAddress())) {
-            let intefaceID = tasksManagerContract.interface.getSighash("completeTask");
-            const isOperator = await tasksManagerContract.isOperator(intefaceID, UserRole.Leader)
-            if (!isOperator) {
-                handleSnackbar("User unauthorized to perform completeTask!", "error");
-                throw Error("User unauthorized to perform completeTask!");
-            } else {
-                tasksManagerContract.completeTask(id, UserRole.Leader);
-            }
-        }
-    }
-
-    // 1 Leader que pegou tarefa cancela a task e 2 LEADERS Aprovam
-    // 1 Membro que pegou tarefa cancela a task e 2 LEADERS Aprovam
-    async function cancelTask(id: bigint) {
-        if (hasLeaderRole(userAddress())) {
-            let intefaceID = tasksManagerContract.interface.getSighash("cancelTask");
-            const isOperator = await tasksManagerContract.isOperator(intefaceID, UserRole.Leader)
-            if (!isOperator) {
-                handleSnackbar("User unauthorized to perform cancelTask!", "error");
-                throw Error("User unauthorized to perform cancelTask!");
-            } else {
-                tasksManagerContract.cancelTask(id, UserRole.Leader);
-            }
-        }
-    }
-
-    async function getTask(taskId: any) {
-        try {
-            return await tasksManagerContract.getTask(taskId);
-        } catch (error) {
-            handleSnackbar('Error searching Task', 'error')
-        }
-    }
-
-    async function getMultiTasks(min: number, max: number, isUserProfile: boolean) {
-        /// Prepare the encoding of data and submit it to the contract
-        const payloadArray = [];
-        let taskIds: bigint[] = [];
-
-        if (isUserProfile) {
-            taskIds = await tasksManagerContract.getUserTasks(userAddress());
-            if (taskIds && taskIds.length > 0) {
-                for (var i = 0; i < taskIds.length; i++) {
-                    let id = Number(taskIds[i]);
-                    payloadArray.push(tasksManagerContract.interface.encodeFunctionData("getTask", [id]));
-                }
-            }
-        } else {
-            for (var i = min; i <= max; i++) {
-                payloadArray.push(tasksManagerContract.interface.encodeFunctionData("getTask", [i]));
-            }
-        }
-
-        const response = await tasksManagerContract.multicallRead(payloadArray);
-
-        /// Decode the results
-        let decodedResults = [];
-        /// Get the sighash of the function
-        let getTaskID = tasksManagerContract.interface.getSighash("getTask(uint256)");
-        /// Map the results to the function name and the decoded arguments
-        decodedResults = response.map((res: any) => {
-            try {
-                const decodedArgs = tasksManagerContract.interface.decodeFunctionResult(
-                    getTaskID,
-                    res
-                );
-                return {
-                    name: tasksManagerContract.interface.getFunction(getTaskID).name,
-                    args: decodedArgs,
-                };
-            } catch (error) {
-                console.log("Could not decode result", error);
-            }
+      if (isLeader) {
+        const isOperator = await readContract({
+          address: contractAddress,
+          abi: web3taskABI,
+          functionName: 'isOperator',
+          args: [startTaskInterfaceID, BigInt(UserRole.Leader)],
         });
-        return decodedResults;
-    }
 
-    async function setRole(roleId: any, authorizedAddress: any, isAuthorized: boolean) {
-        try {
-            return await tasksManagerContract.setRole(roleId, authorizedAddress, isAuthorized);
-        } catch (error) {
-            handleSnackbar('Error setting Role', 'error')
+        if (!isOperator) {
+          throw Error('User unauthorized to perform startTask!');
         }
+
+        await startTaskMutation.writeAsync({
+          args: [id, BigInt(UserRole.Leader)],
+        });
+
+        return;
+      }
+
+      const isOperator = await readContract({
+        address: contractAddress,
+        abi: web3taskABI,
+        functionName: 'isOperator',
+        args: [startTaskInterfaceID, BigInt(UserRole.Member)],
+      });
+
+      if (!isOperator) {
+        throw Error('User unauthorized to perform startTask!');
+      }
+
+      await startTaskMutation.writeAsync({
+        args: [id, BigInt(UserRole.Member)],
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        handleSnackbar(error.message, 'error');
+      } else {
+        handleSnackbar('Unexpected error', 'error');
+      }
+    }
+  }
+
+  async function reviewTask(id: bigint, metadata = '') {
+    try {
+      const isLeader = !!userAddress && (await hasLeaderRole(userAddress));
+
+      if (!userAddress || !isLeader) {
+        throw new Error('User does not have the leader role!');
+      }
+
+      const reviewTaskInterfaceID = getFunctionSelector(
+        getAbiItem({
+          abi: web3taskABI,
+          name: 'reviewTask',
+        })
+      );
+
+      const isOperator = await readContract({
+        address: contractAddress,
+        abi: web3taskABI,
+        functionName: 'isOperator',
+        args: [reviewTaskInterfaceID, BigInt(UserRole.Leader)],
+      });
+
+      if (!isOperator) {
+        throw Error('User unauthorized to perform reviewTask!');
+      }
+
+      reviewTaskMutation.writeAsync({
+        args: [id, BigInt(UserRole.Leader), metadata],
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        handleSnackbar(error.message, 'error');
+      } else {
+        handleSnackbar('Unexpected error', 'error');
+      }
+    }
+  }
+
+  async function completeTask(id: bigint) {
+    try {
+      const isLeader = !!userAddress && (await hasLeaderRole(userAddress));
+
+      if (!isLeader) {
+        throw new Error('User does not have the leader role!');
+      }
+
+      const completeTaskInterfaceID = getFunctionSelector(
+        getAbiItem({
+          abi: web3taskABI,
+          name: 'completeTask',
+        })
+      );
+
+      const isOperator = await readContract({
+        address: contractAddress,
+        abi: web3taskABI,
+        functionName: 'isOperator',
+        args: [completeTaskInterfaceID, BigInt(UserRole.Leader)],
+      });
+
+      if (!isOperator) {
+        throw Error('User unauthorized to perform completeTask!');
+      }
+
+      completeTaskMutation.writeAsync({
+        args: [id, BigInt(UserRole.Leader)],
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        handleSnackbar(error.message, 'error');
+      } else {
+        handleSnackbar('Unexpected error', 'error');
+      }
+    }
+  }
+
+  async function cancelTask(id: bigint) {
+    try {
+      const isLeader = !!userAddress && (await hasLeaderRole(userAddress));
+
+      if (!isLeader) {
+        throw new Error('User does not have the leader role!');
+      }
+
+      const cancelTaskInterfaceID = getFunctionSelector(
+        getAbiItem({
+          abi: web3taskABI,
+          name: 'cancelTask',
+        })
+      );
+
+      const isOperator = await readContract({
+        address: contractAddress,
+        abi: web3taskABI,
+        functionName: 'isOperator',
+        args: [cancelTaskInterfaceID, BigInt(UserRole.Leader)],
+      });
+
+      if (!isOperator) {
+        throw Error('User unauthorized to perform cancelTask!');
+      }
+
+      cancelTaskMutation.writeAsync({
+        args: [id, BigInt(UserRole.Leader)],
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        handleSnackbar(error.message, 'error');
+      } else {
+        handleSnackbar('Unexpected error', 'error');
+      }
+    }
+  }
+
+  async function getTask(taskId: bigint) {
+    try {
+      return readContract({
+        address: contractAddress,
+        abi: web3taskABI,
+        functionName: 'getTask',
+        args: [taskId],
+      });
+    } catch (error) {
+      handleSnackbar(`Error searching task id: ${taskId}`, 'error');
+    }
+  }
+
+  async function getMultiTasks(
+    min: number,
+    max: number,
+    isUserProfile: boolean
+  ) {
+    /// Prepare the encoding of data and submit it to the contract
+    const payloadArray: Address[] = [];
+    let taskIds: readonly bigint[] = [];
+
+    if (!userAddress) {
+      throw new Error('User address not found');
     }
 
-    async function setOperator(interfaceId: any, roleId: any, isAuthorized: boolean) {
-        try {
-            return await tasksManagerContract.setOperator(interfaceId, roleId, isAuthorized);
-        } catch (error) {
-            handleSnackbar('Error setting Operator', 'error')
+    if (isUserProfile) {
+      taskIds = await readContract({
+        address: contractAddress,
+        abi: web3taskABI,
+        functionName: 'getUserTasks',
+        args: [userAddress],
+      });
+
+      if (taskIds && taskIds.length > 0) {
+        for (var i = 0; i < taskIds.length; i++) {
+          let id = Number(taskIds[i]);
+          payloadArray.push(
+            encodeFunctionData({
+              // @ts-ignore
+              abi: web3taskABI,
+              name: 'getTask',
+              args: [BigInt(id)],
+            })
+          );
         }
+      }
+    } else {
+      for (var i = min; i <= max; i++) {
+        payloadArray.push(
+          encodeFunctionData({
+            // @ts-ignore
+            abi: web3taskABI,
+            name: 'getTask',
+            args: [BigInt(i)],
+          })
+        );
+      }
     }
 
-    async function setMinQuorum(quorum: any) {
-        try {
-            return await tasksManagerContract.setMinQuorum(quorum);
-        } catch (error) {
-            handleSnackbar('Error setting Quorum', 'error')
-        }
+    const response = await readContract({
+      address: contractAddress,
+      abi: web3taskABI,
+      functionName: 'multicallRead',
+      args: [payloadArray],
+    });
+
+    /// Decode the results
+    let decodedResults = [];
+    /// Get the sighash of the function
+    // let getTaskID = tasksManagerContract.interface.getSighash("getTask(uint256)");
+
+    // const getTaskInterfaceID = getFunctionSelector(
+    //   getAbiItem({
+    //     abi: web3taskABI,
+    //     name: 'getTask',
+    //   })
+    // );
+
+    /// Map the results to the function name and the decoded arguments
+    decodedResults = response.map((res: any) => {
+      try {
+        const decodedArgs = decodeFunctionResult({
+          abi: web3taskABI,
+          functionName: 'getTask',
+          data: res,
+        });
+
+        return {
+          name: getAbiItem({
+            abi: web3taskABI,
+            name: 'getTask',
+          }).name,
+          args: decodedArgs,
+        };
+      } catch (error) {
+        console.log('Could not decode result', error);
+      }
+    });
+
+    return decodedResults;
+  }
+
+  async function setRole(
+    roleId: bigint,
+    authorizedAddress: Address,
+    isAuthorized: boolean
+  ) {
+    try {
+      return setRoleMutation.writeAsync({
+        args: [roleId, authorizedAddress, isAuthorized],
+      });
+    } catch (error) {
+      handleSnackbar(
+        `Error setting role id ${roleId} to address ${authorizedAddress}`,
+        'error'
+      );
     }
+  }
 
-    async function deposit(roleId: any, amount: any) {
-        try {
-            return await tasksManagerContract.deposit(roleId, { value: parseUnits(amount) });
-        } catch (error) {
-            handleSnackbar('Error setting deposit', 'error')
-        }
+  async function setOperator(
+    interfaceId: Address,
+    roleId: bigint,
+    isAuthorized: boolean
+  ) {
+    try {
+      return setOperatorMutation.writeAsync({
+        args: [interfaceId, roleId, isAuthorized],
+      });
+    } catch (error) {
+      handleSnackbar(
+        `Error setting operator to interface id ${interfaceId}, role id ${roleId}`,
+        'error'
+      );
     }
+  }
 
-    async function hasLeaderRole(address: any) {
-        return await tasksManagerContract.hasRole(UserRole.Leader, address);
+  async function setMinQuorum(quorum: bigint) {
+    try {
+      return setMinQuorumMutation.writeAsync({
+        args: [quorum],
+      });
+    } catch (error) {
+      handleSnackbar(`Error setting quorum ${quorum}`, 'error');
     }
+  }
 
-    async function hasMemberRole(address: any) {
-        return await tasksManagerContract.hasRole(UserRole.Member, address);
+  async function deposit(roleId: bigint, amount: string) {
+    try {
+      return depositMutation.writeAsync({
+        args: [roleId],
+        value: parseEther(amount),
+      });
+    } catch (error) {
+      handleSnackbar(
+        `Error setting deposit for role id ${roleId} of amount ${amount}`,
+        'error'
+      );
     }
+  }
 
-    return {
-        createTask,
-        startTask,
-        reviewTask,
-        completeTask,
-        cancelTask,
-        getTask,
-        getMultiTasks,
-        setRole,
-        setOperator,
-        hasLeaderRole,
-        hasMemberRole,
-        setMinQuorum,
-        deposit
-    };
+  async function hasLeaderRole(address: Address) {
+    const hasRole = await readContract({
+      address: contractAddress,
+      abi: web3taskABI,
+      functionName: 'hasRole',
+      args: [BigInt(UserRole.Leader), address],
+    });
 
+    return hasRole;
+  }
+
+  async function hasMemberRole(address: Address) {
+    const hasRole = await readContract({
+      address: contractAddress,
+      abi: web3taskABI,
+      functionName: 'hasRole',
+      args: [BigInt(UserRole.Member), address],
+    });
+
+    return hasRole;
+  }
+
+  return {
+    createTask,
+    startTask,
+    reviewTask,
+    completeTask,
+    cancelTask,
+    getTask,
+    getMultiTasks,
+    setRole,
+    setOperator,
+    hasLeaderRole,
+    hasMemberRole,
+    setMinQuorum,
+    deposit,
+  };
 }

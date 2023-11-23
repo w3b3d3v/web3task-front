@@ -23,8 +23,8 @@ interface TaskService {
  * @returns An object containing task-related state and functions.
  */
 export const useTaskServiceHook = (task: TaskService) => {
-    const [taskData, setTaskData] = useState(null);
-    const [multiTasksData, setMultiTasksData] = useState(null);
+    const [taskData, setTaskData] = useState<TaskFront | null>(null);
+    const [multiTasksData, setMultiTasksData] = useState<TaskFront[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { shortenAddressFromAddress } = useWeb3Utils();
