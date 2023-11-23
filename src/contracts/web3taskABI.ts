@@ -1,8 +1,3 @@
-import { Address } from "viem";
-
-export const WEB3TASK_CONTRACT_ADDRESS = process.env
-  .NEXT_PUBLIC_WEB3TASK_CONTRACT_ADDRESS! as Address;
-
 export const web3taskABI = [
   {
     "inputs": [
