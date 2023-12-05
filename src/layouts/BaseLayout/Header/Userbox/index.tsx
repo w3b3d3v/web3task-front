@@ -14,8 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
-import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone";
+import { HiOutlineChevronDown, HiOutlineLockOpen } from "react-icons/hi";
 import { User } from "@/models/user";
 import { useWeb3Utils } from "@/hooks/Web3UtilsHook";
 import { useTaskService } from "@/services/tasks-service";
@@ -149,7 +148,7 @@ function HeaderUserbox({ disconnect, account }) {
           </UserBoxText>
         </Hidden>
         <Hidden smDown>
-          <ExpandMoreTwoToneIcon sx={{ ml: 1 }} />
+          <HiOutlineChevronDown sx={{ ml: 1 }} />
         </Hidden>
       </UserBoxButton>
       <Popover
@@ -195,7 +194,7 @@ function HeaderUserbox({ disconnect, account }) {
         <Divider />
         <Box sx={{ m: 1 }}>
           <Button onClick={handleDisconnect} color="primary" fullWidth>
-            <LockOpenTwoToneIcon sx={{ mr: 1 }} />
+            <HiOutlineLockOpen sx={{ mr: 1 }} />
             <Typography fontWeight={'bold'}> Sair</Typography>
           </Button>
         </Box>

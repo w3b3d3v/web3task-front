@@ -16,14 +16,8 @@ import {
   Typography,
 } from "@mui/material";
 
-import InboxTwoToneIcon from "@mui/icons-material/InboxTwoTone";
 import { styled } from "@mui/material/styles";
-import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
-import AccountBoxTwoToneIcon from "@mui/icons-material/AccountBoxTwoTone";
-import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone";
-import AccountTreeTwoToneIcon from "@mui/icons-material/AccountTreeTwoTone";
-import MessageIcon from "@mui/icons-material/Message";
-import { useConnect } from 'wagmi';
+import { HiOutlineChevronDown, HiOutlineAnnotation } from "react-icons/hi";
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -83,7 +77,7 @@ function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting
           </UserBoxText>
         </Hidden>
         <Hidden smDown>
-          <ExpandMoreTwoToneIcon sx={{ ml: 1 }} />
+          <HiOutlineChevronDown sx={{ ml: 1 }} />
         </Hidden>
       </UserBoxButton>
       <Popover
@@ -112,7 +106,7 @@ function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting
         <Divider />
         <Box sx={{ m: 1 }}>
           <Button color="primary" fullWidth>
-            <MessageIcon sx={{ mr: 1 }} />
+            <HiOutlineAnnotation sx={{ mr: 1 }} />
             Contact us to add new network.
           </Button>
         </Box>

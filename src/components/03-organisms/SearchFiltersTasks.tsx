@@ -10,7 +10,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
+import { HiOutlineChevronDown } from "react-icons/hi";
 import { useSearchFilters } from "@/hooks/useSearchFilters";
 
 interface SearchFiltersProps {
@@ -41,7 +41,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
       <Accordion>
         <AccordionSummary
           expandIcon={
-            <ExpandMoreTwoToneIcon
+            <HiOutlineChevronDown
               sx={{
                 color: theme.palette.mode === "dark" ? "white" : "black",
               }}
@@ -65,7 +65,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
       <Accordion>
         <AccordionSummary
           expandIcon={
-            <ExpandMoreTwoToneIcon
+            <HiOutlineChevronDown
               sx={{
                 color: theme.palette.mode === "dark" ? "white" : "black",
               }}
@@ -89,7 +89,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
       <Accordion>
         <AccordionSummary
           expandIcon={
-            <ExpandMoreTwoToneIcon
+            <HiOutlineChevronDown
               sx={{
                 color: theme.palette.mode === "dark" ? "white" : "black",
               }}
@@ -119,7 +119,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
       <Accordion>
         <AccordionSummary
           expandIcon={
-            <ExpandMoreTwoToneIcon
+            <HiOutlineChevronDown
               sx={{
                 color: theme.palette.mode === "dark" ? "white" : "black",
               }}

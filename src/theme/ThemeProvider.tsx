@@ -9,8 +9,7 @@ import React, {
 import { LightTheme } from "./schemes/LightTheme";
 import { DarkTheme } from "./schemes/DarkTheme";
 import { ThemeProvider } from "@mui/system";
-import ModeNightIcon from "@mui/icons-material/ModeNight";
-import LightModeIcon from "@mui/icons-material/LightMode";
+import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 
 interface IThemeContextData {
   themeName: "light" | "dark";
@@ -34,7 +33,7 @@ const ThemeProviderWrapper: React.FC<IThemeProviderWrapper> = ({
   const [storageTheme, setStorageTheme] = useState(storage);
   const [themeName, setThemeName] = useState<"light" | "dark">(storage);
   const [themeIcon, setThemeIcon] = useState<React.ReactNode>(
-    <ModeNightIcon /> || <LightModeIcon />
+    <HiOutlineMoon /> || <HiOutlineSun />
   );
 
   const toggleTheme = useCallback(() => {
@@ -45,10 +44,10 @@ const ThemeProviderWrapper: React.FC<IThemeProviderWrapper> = ({
 
   const theme = useMemo(() => {
     if (themeName === "light") {
-      setThemeIcon(<ModeNightIcon />);
+      setThemeIcon(<HiOutlineMoon />);
       return LightTheme;
     }
-    setThemeIcon(<LightModeIcon />);
+    setThemeIcon(<HiOutlineSun />);
     return DarkTheme;
   }, [themeName]);
 

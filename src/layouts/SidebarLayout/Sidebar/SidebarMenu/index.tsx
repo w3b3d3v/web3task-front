@@ -10,27 +10,8 @@ import {
 } from "@mui/material";
 import { NavLink as RouterLink } from "react-router-dom";
 import { SidebarContext } from "@/contexts/SidebarContext";
-
-import DesignServicesTwoToneIcon from "@mui/icons-material/DesignServicesTwoTone";
-import BrightnessLowTwoToneIcon from "@mui/icons-material/BrightnessLowTwoTone";
-import MmsTwoToneIcon from "@mui/icons-material/MmsTwoTone";
-import TableChartTwoToneIcon from "@mui/icons-material/TableChartTwoTone";
-import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
-import BallotTwoToneIcon from "@mui/icons-material/BallotTwoTone";
-import BeachAccessTwoToneIcon from "@mui/icons-material/BeachAccessTwoTone";
-import EmojiEventsTwoToneIcon from "@mui/icons-material/EmojiEventsTwoTone";
-import FilterVintageTwoToneIcon from "@mui/icons-material/FilterVintageTwoTone";
-import HowToVoteTwoToneIcon from "@mui/icons-material/HowToVoteTwoTone";
-import LocalPharmacyTwoToneIcon from "@mui/icons-material/LocalPharmacyTwoTone";
-import RedeemTwoToneIcon from "@mui/icons-material/RedeemTwoTone";
-import SettingsTwoToneIcon from "@mui/icons-material/SettingsTwoTone";
-import TrafficTwoToneIcon from "@mui/icons-material/TrafficTwoTone";
-import CheckBoxTwoToneIcon from "@mui/icons-material/CheckBoxTwoTone";
-import ChromeReaderModeTwoToneIcon from "@mui/icons-material/ChromeReaderModeTwoTone";
-import WorkspacePremiumTwoToneIcon from "@mui/icons-material/WorkspacePremiumTwoTone";
-import CameraFrontTwoToneIcon from "@mui/icons-material/CameraFrontTwoTone";
-import DisplaySettingsTwoToneIcon from "@mui/icons-material/DisplaySettingsTwoTone";
-import LogoDev from "@mui/icons-material/LogoDev";
+import { LuPencilRuler } from "react-icons/lu";
+import { MdBrightness5, MdLogoDev } from "react-icons/md";
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -189,7 +170,7 @@ function SidebarMenu() {
                   component={RouterLink}
                   onClick={closeSidebar}
                   to="/home-side/overview"
-                  startIcon={<DesignServicesTwoToneIcon />}
+                  startIcon={<LuPencilRuler />}
                 >
                   {'menu.item1.label'}
                 </Button>
@@ -213,7 +194,7 @@ function SidebarMenu() {
                   component={RouterLink}
                   onClick={closeSidebar}
                   to="/home-side/overview"
-                  startIcon={<BrightnessLowTwoToneIcon />}
+                  startIcon={<MdBrightness5 />}
                 >
                   {'menu.item3.label'}
                 </Button>
@@ -224,7 +205,7 @@ function SidebarMenu() {
                   component={RouterLink}
                   onClick={closeSidebar}
                   to="/home-side/overview"
-                  startIcon={<LogoDev />}
+                  startIcon={<MdLogoDev />}
                 >
                   {'menu.item4.label'}
                 </Button>

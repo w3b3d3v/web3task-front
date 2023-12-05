@@ -11,9 +11,8 @@ import {
   styled,
   useTheme,
 } from "@mui/material";
-import MenuTwoToneIcon from "@mui/icons-material/MenuTwoTone";
 import { SidebarContext } from "@/contexts/SidebarContext";
-import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
+import { HiMenu, HiOutlineX } from "react-icons/hi";
 
 import HeaderButtons from "./Buttons";
 import HeaderUserbox from "./Userbox";
@@ -106,9 +105,9 @@ function Header() {
           <Tooltip arrow title="Toggle Menu">
             <IconButton color="primary" onClick={toggleSidebar}>
               {!sidebarToggle ? (
-                <MenuTwoToneIcon fontSize="small" />
+                <HiMenu fontSize="small" />
               ) : (
-                <CloseTwoToneIcon fontSize="small" />
+                <HiOutlineX fontSize="small" />
               )}
             </IconButton>
           </Tooltip>
