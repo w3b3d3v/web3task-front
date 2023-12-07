@@ -1,12 +1,15 @@
 const axios = require("axios");
+require('dotenv').config({ path: __dirname + '/../../.env' });
+
+const {ENDPOINT_URL, AUTHORIZATION_kEY} =
+	process.env;
 
 async function main() {
-  const endpoint =
-    "https://api.studio.thegraph.com/query/57887/web3task-mumbai-testnet/version/latest";
-  const headers = {
-    "content-type": "application/json",
-    Authorization: "3b2048f02febad918a35bbafe78b2115",
-  };
+ const endpoint = process.env.ENDPOINT_URL;
+ const headers = {
+  "content-type": "application/json",
+  Authorization: process.env.AUTHORIZATION_kEY,
+ };
 
   //Example of query
   const graphqlQuery = {
