@@ -7,7 +7,7 @@ import {
   Grid,
 } from "@mui/material";
 import { Helmet } from "react-helmet-async";
-import RefreshTwoToneIcon from "@mui/icons-material/RefreshTwoTone";
+import { HiOutlineRefresh } from "react-icons/hi";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { styled } from "@mui/material/styles";
 
@@ -73,7 +73,7 @@ function Status500() {
                   loading={pending}
                   variant="outlined"
                   color="primary"
-                  startIcon={<RefreshTwoToneIcon />}
+                  startIcon={<HiOutlineRefresh />}
                 >
                   Refresh view
                 </LoadingButton>

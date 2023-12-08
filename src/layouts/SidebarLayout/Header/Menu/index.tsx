@@ -9,7 +9,7 @@ import {
 import { useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
+import { HiOutlineChevronDown } from "react-icons/hi";
 
 const ListWrapper = styled(Box)(
   ({ theme }) => `
@@ -122,7 +122,6 @@ function HeaderMenu() {
                 <Box display="flex" alignItems="center">
                   {'menu.item3.label'}
                   <Box display="flex" alignItems="center" pl={0.3}>
-                    <ExpandMoreTwoToneIcon fontSize="small" />
                   </Box>
                 </Box>
               }

@@ -10,7 +10,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Helmet } from "react-helmet-async";
-import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
+import { HiOutlineSearch } from "react-icons/hi";
 import { styled } from "@mui/material/styles";
 
 const MainContent = styled(Box)(
@@ -75,7 +75,7 @@ function Status404() {
                   }
                   startAdornment={
                     <InputAdornment position="start">
-                      <SearchTwoToneIcon color="primary" />
+                      <HiOutlineSearch color="primary" />
                     </InputAdornment>
                   }
                 />

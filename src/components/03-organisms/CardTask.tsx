@@ -10,12 +10,11 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import SuspenseLoader from "@/components/01-atoms/SuspenseLoader";
-import AccessTime from "@mui/icons-material/AccessTime";
+import { HiOutlineClock, HiOutlineExternalLink } from "react-icons/hi";
 import { AlertColor } from "@mui/material/Alert";
 import { useTaskService } from "@/services/tasks-service";
 import { useWeb3Utils } from "@/hooks/Web3UtilsHook";
 import { useTheme } from "@mui/system";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useSnackBar } from "@/contexts/SnackBarContext";
 
 /**
@@ -191,7 +190,7 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                         {taskData.title}
                       </Typography>
 
-                      <OpenInNewIcon
+                      <HiOutlineExternalLink
                         style={{
                           cursor: "pointer",
                         }}
@@ -245,7 +244,7 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                         </Button>
                       )}
                     <Button
-                      startIcon={<AccessTime />}
+                      startIcon={<HiOutlineClock />}
                       variant="contained"
                       component="span"
                     >

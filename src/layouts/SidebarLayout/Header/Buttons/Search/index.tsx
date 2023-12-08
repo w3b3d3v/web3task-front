@@ -23,10 +23,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { TransitionProps } from "@mui/material/transitions";
-import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
-import FindInPageTwoToneIcon from "@mui/icons-material/FindInPageTwoTone";
-
-import ChevronRightTwoToneIcon from "@mui/icons-material/ChevronRightTwoTone";
+import { HiOutlineSearch, HiOutlineDocumentSearch, HiOutlineChevronRight } from "react-icons/hi";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & { children: ReactElement<any, any> },
@@ -97,7 +94,7 @@ function HeaderSearch() {
     <>
       <Tooltip arrow title="Search">
         <IconButton color="primary" onClick={handleClickOpen}>
-          <SearchTwoToneIcon />
+          <HiOutlineSearch />
         </IconButton>
       </Tooltip>
 
@@ -118,7 +115,7 @@ function HeaderSearch() {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchTwoToneIcon />
+                  <HiOutlineSearch />
                 </InputAdornment>
               ),
             }}
@@ -161,7 +158,7 @@ function HeaderSearch() {
                           theme.palette.secondary.main,
                       }}
                     >
-                      <FindInPageTwoToneIcon />
+                      <HiOutlineDocumentSearch />
                     </Avatar>
                   </ListItemAvatar>
                 </Hidden>
@@ -186,9 +183,6 @@ function HeaderSearch() {
                   >
                     This page contains all the necessary information for
                     managing all hospital staff.
-                  </Typography>
-                </Box>
-                <ChevronRightTwoToneIcon />
               </ListItem>
               <Divider sx={{ my: 1 }} component="li" />
               <ListItem button>
@@ -200,7 +194,7 @@ function HeaderSearch() {
                           theme.palette.secondary.main,
                       }}
                     >
-                      <FindInPageTwoToneIcon />
+                      <HiOutlineDocumentSearch />
                     </Avatar>
                   </ListItemAvatar>
                 </Hidden>
@@ -224,9 +218,6 @@ function HeaderSearch() {
                     }}
                   >
                     This is yet another search result pointing to a app page.
-                  </Typography>
-                </Box>
-                <ChevronRightTwoToneIcon />
               </ListItem>
               <Divider sx={{ my: 1 }} component="li" />
               <ListItem button>
@@ -238,7 +229,7 @@ function HeaderSearch() {
                           theme.palette.secondary.main,
                       }}
                     >
-                      <FindInPageTwoToneIcon />
+                      <HiOutlineDocumentSearch />
                     </Avatar>
                   </ListItemAvatar>
                 </Hidden>
@@ -263,9 +254,6 @@ function HeaderSearch() {
                   >
                     Choose if you would like to show or not this typography
                     section here...
-                  </Typography>
-                </Box>
-                <ChevronRightTwoToneIcon />
               </ListItem>
             </List>
             <Divider sx={{ mt: 1, mb: 2 }} />
