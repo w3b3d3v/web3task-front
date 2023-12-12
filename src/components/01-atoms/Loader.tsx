@@ -1,21 +1,10 @@
-import { Box, CircularProgress } from "@mui/material";
+import { LuLoader2 } from 'react-icons/lu';
 
 function Loader() {
   return (
-    <Box
-      sx={{
-        position: "fixed",
-        left: 0,
-        top: 0,
-        width: "100%",
-        height: "100%",
-      }}
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-    >
-      <CircularProgress size={64} disableShrink thickness={3} />
-    </Box>
+    <div className="inset-0 w-full h-full flex justify-center items-center fixed">
+      <LuLoader2 className="w-16 h-16 animate-spin" />
+    </div>
   );
 }
 
