@@ -4,7 +4,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
-import { AlertColor } from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import { Box, useTheme } from "@mui/material";
 import { Dayjs } from "dayjs";
@@ -13,7 +12,7 @@ import { useTaskService } from "@/services/tasks-service";
 import { Task } from "@/models/task";
 import SuspenseLoader from "@/components/01-atoms/SuspenseLoader";
 import CoverCreateTask from "../../../../components/02-molecules/CoverCreateTask";
-import { useSnackBar } from "@/contexts/SnackBarContext";
+import { toast } from 'react-toastify';
 
 let newTask: Task = {
   status: 0,
@@ -93,12 +92,6 @@ const CreateTask = ({ data }) => {
     resolver: yupResolver(schema),
   });
 
-  const { showSnackBar } = useSnackBar();
-
-  const handleSnackbar = (message: string, color: AlertColor) => {
-    showSnackBar(message, color);
-  };
-
   const logoImage =
     "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
 
@@ -140,9 +133,8 @@ const CreateTask = ({ data }) => {
 
   const onSubmit = async (event: { preventDefault: () => void }) => {
     try {
-      handleSnackbar(
-        "Create Task Start process initiated with success!",
-        "info"
+      toast.info(
+        "Create Task Start process initiated with success!"
       );
       let authorizedRoles: string[] = authorizedRolesStr.split(",");
       const splittedRoles: readonly bigint[] = authorizedRoles.map((str) =>
