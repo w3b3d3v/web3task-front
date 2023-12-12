@@ -9,7 +9,7 @@ import {
   Card,
   useMediaQuery,
 } from "@mui/material";
-import SuspenseLoader from "@/components/01-atoms/SuspenseLoader";
+import Loader from "@/components/01-atoms/Loader";
 import { HiOutlineClock, HiOutlineExternalLink } from "react-icons/hi";
 import { AlertColor } from "@mui/material/Alert";
 import { useTaskService } from "@/services/tasks-service";
@@ -122,7 +122,7 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
   return (
     <Grid item xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"}>
       {loading ? (
-        <SuspenseLoader />
+        <Loader />
       ) : (
         <>
           {taskData ? (
