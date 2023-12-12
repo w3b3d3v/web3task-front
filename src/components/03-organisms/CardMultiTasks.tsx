@@ -1,6 +1,6 @@
 import { Grid, CardMedia, CardContent, Typography, Card } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import SuspenseLoader from "@/components/01-atoms/SuspenseLoader";
+import Loader from "@/components/01-atoms/Loader";
 import { TaskFront } from "@/models/task";
 
 const CardAddAction = styled(Card)(
@@ -49,7 +49,7 @@ export const CardMultiTasks = ({ multiTasksData, loading, page }) => {
     <>
       <Grid container spacing={4} ml={15} mt={5}>
         {loading ? (
-          <SuspenseLoader />
+          <Loader />
         ) : (
           <>
             {multiTasksData &&

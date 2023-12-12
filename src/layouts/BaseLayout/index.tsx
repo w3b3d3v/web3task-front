@@ -2,16 +2,9 @@ import { FC, ReactNode, Suspense, lazy } from "react";
 import { Box, alpha, lighten, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import Header from "../../components/02-molecules/Header";
-import SuspenseLoader from "@/components/01-atoms/SuspenseLoader";
 import Footer from "@/components/02-molecules/Footer";
 import { useAccount } from "wagmi";
 import HomeTasks from "@/content/applications/Tasks/HomeTasks";
-
-const Loader = (Component) => (props) => (
-  <Suspense fallback={<SuspenseLoader />}>
-    <Component {...props} />
-  </Suspense>
-);
 
 interface BaseLayoutProps {
   children?: ReactNode;

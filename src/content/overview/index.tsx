@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { styled } from "@mui/material/styles";
 import Logo from "@/components/02-molecules/LogoSign";
 import Hero from "./Hero";
-import SuspenseLoader from "@/components/01-atoms/SuspenseLoader";
+import Loader from "@/components/01-atoms/Loader";
 
 const OverviewWrapper = styled(Box)(
   () => `
@@ -25,7 +25,7 @@ function Overview() {
   return (
     <>
       {loading ? (
-        <SuspenseLoader />
+        <Loader />
       ) : (
         <OverviewWrapper>
           <Helmet>

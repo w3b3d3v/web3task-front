@@ -11,7 +11,7 @@ import { Dayjs } from "dayjs";
 import { DatePicker, DatePickerProps } from "@mui/x-date-pickers";
 import { useTaskService } from "@/services/tasks-service";
 import { Task } from "@/models/task";
-import SuspenseLoader from "@/components/01-atoms/SuspenseLoader";
+import Loader from "@/components/01-atoms/Loader";
 import CoverCreateTask from "../../../../components/02-molecules/CoverCreateTask";
 import { useSnackBar } from "@/contexts/SnackBarContext";
 
@@ -187,7 +187,7 @@ const CreateTask = ({ data }) => {
           <CoverCreateTask />
         </Box>
         {loading ? (
-          <SuspenseLoader />
+          <Loader />
         ) : (
           <Box marginTop={2} component="form" onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={2} alignItems={"center"}>

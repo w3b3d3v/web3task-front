@@ -26,7 +26,6 @@
     "ethers": "5.7.2",
     "lucide-react": "^0.292.0",
     "next": "^14.0.3",
-    "nprogress": "0.2.0",
     "react": "^18",
     "react-custom-scrollbars-2": "4.5.0",
     "react-dom": "^18",

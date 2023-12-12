@@ -1,3 +1,3 @@
 export * from "./ui";
-export * from "./SuspenseLoader";
+export * from "./Loader";
 export * from "./Scrollbar";

@@ -10,7 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { Helmet } from "react-helmet-async";
-import SuspenseLoader from "@/components/01-atoms/SuspenseLoader";
+import Loader from "@/components/01-atoms/Loader";
 import { useTaskService } from "@/services/tasks-service";
 import { useTaskServiceHook } from "@/hooks/TaskServiceHook";
 import { useEffect } from "react";
@@ -55,7 +55,7 @@ const DetailsTask = () => {
             height={"max-content"}
           >
             {loading ? (
-              <SuspenseLoader />
+              <Loader />
             ) : (
               <>
                 <Box
