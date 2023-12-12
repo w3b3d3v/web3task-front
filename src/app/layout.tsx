@@ -2,6 +2,7 @@
 
 import '@rainbow-me/rainbowkit/styles.css';
 import '@/app/globals.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 // import type { Metadata } from 'next'
 import { Inter } from 'next/font/google';
@@ -14,11 +15,11 @@ import {
   darkTheme,
   lightTheme,
 } from '@rainbow-me/rainbowkit';
+import { ToastContainer } from 'react-toastify';
 
 import ThemeProviderWrapper from '@/theme/ThemeProvider';
 import { SidebarProvider } from '@/contexts/SidebarContext';
 import { SearchFiltersProvider } from '@/contexts/SearchFiltersContext';
-import { SnackBarProvider } from '@/contexts/SnackBarContext';
 import { chains, wagmiConfig } from '@/lib/wagmi';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -56,7 +57,8 @@ export default function RootLayout({
                 <SearchFiltersProvider>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <CssBaseline />
-                    <SnackBarProvider>{children}</SnackBarProvider>
+                      {children}
+                      <ToastContainer position='bottom-left' autoClose={6000}  />
                   </LocalizationProvider>
                 </SearchFiltersProvider>
               </SidebarProvider>

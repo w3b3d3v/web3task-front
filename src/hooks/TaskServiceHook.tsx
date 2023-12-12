@@ -1,8 +1,7 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { Task, TaskStatus, TaskFront } from '@/models/task';
 import { useWeb3Utils } from '@/hooks/Web3UtilsHook';
-import { useSnackBar } from '@/contexts/SnackBarContext';
-import { AlertColor } from '@mui/material/Alert';
 
 /**
  * Interface for the Task Service, defining methods to interact with tasks.
@@ -28,12 +27,6 @@ export const useTaskServiceHook = (task: TaskService) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { shortenAddressFromAddress } = useWeb3Utils();
-    const { showSnackBar } = useSnackBar();
-
-    const handleSnackbar = (message: string, color: AlertColor) => {
-        showSnackBar(message, color)
-    };
-
 
     /**
      * getStatus
@@ -107,7 +100,7 @@ export const useTaskServiceHook = (task: TaskService) => {
             setTaskData(nft);
         } catch (error) {
             setError('Erro ao buscar tarefa');
-            handleSnackbar('Error Searching Task: ' + error, 'error')
+            toast.error('Error Searching Task: ' + error)
         } finally {
             setLoading(false);
         }
@@ -167,10 +160,10 @@ export const useTaskServiceHook = (task: TaskService) => {
         console.log('isAuthorized ', isAuthorized)
 
         try {
-            handleSnackbar('Set Role process initiated with success!', 'info')
+            toast.info('Set Role process initiated with success!')
             return await task.setRole(roleId, authorizedAddress, isAuthorized);
         } catch (error) {
-            handleSnackbar('Error Set Role!', 'error')
+            toast.error('Error Set Role!')
         }
 
     };
@@ -181,29 +174,29 @@ export const useTaskServiceHook = (task: TaskService) => {
         console.log('isAuthorized ', isAuthorized)
 
         try {
-            handleSnackbar('Set Operator process initiated with success!', 'info')
+            toast.info('Set Operator process initiated with success!')
             return await task.setOperator(interfaceId, roleId, isAuthorized);
         } catch (error) {
-            handleSnackbar('Error Set Operator!', 'error')
+            toast.error('Error Set Operator!')
         }
 
     };
 
     const handleQuorum = async (quorum: any) => {
         try {
-            handleSnackbar('Set Quorum process initiated with success!', 'info')
+            toast.info('Set Quorum process initiated with success!')
             return await task.setMinQuorum(quorum);
         } catch (error) {
-            handleSnackbar('Error Set Quorum!', 'error')
+            toast.error('Error Set Quorum!')
         }
     };
 
     const handleDeposit = async (roleId: any, amount: any) => {
         try {
-            handleSnackbar('Set Deposit process initiated with success!', 'info')
+            toast.info('Set Deposit process initiated with success!')
             return await task.deposit(roleId, amount);
         } catch (error) {
-            handleSnackbar('Error Set Deposit!', 'error')
+            toast.error('Error Set Deposit!')
         }
     };
 

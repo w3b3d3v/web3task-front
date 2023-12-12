@@ -8,17 +8,15 @@ import {
   getFunctionSelector,
   parseEther,
 } from 'viem';
-import { AlertColor } from '@mui/material/Alert';
 
 import { Task } from '@/models/task';
 import { UserRole } from '@/models/user';
-import { useSnackBar } from '@/contexts/SnackBarContext';
 import { web3taskABI } from '@/contracts/web3taskABI';
 import { useContractAddress } from '@/hooks/useContractAddress';
+import { toast } from 'react-toastify';
 
 export function useTaskService() {
   const { address: userAddress } = useAccount();
-  const { showSnackBar } = useSnackBar();
   const { contractAddress } = useContractAddress();
 
   const createTaskMutation = useContractWrite({
@@ -67,10 +65,6 @@ export function useTaskService() {
     functionName: 'deposit',
   });
 
-  const handleSnackbar = (message: string, color: AlertColor) => {
-    showSnackBar(message, color);
-  };
-
   async function createTask(task: Task) {
     try {
       const isLeader = !!userAddress && (await hasLeaderRole(userAddress));
@@ -102,9 +96,9 @@ export function useTaskService() {
       });
     } catch (error) {
       if (error instanceof Error) {
-        handleSnackbar(error.message, 'error');
+        toast.error(error.message);
       } else {
-        handleSnackbar('Unexpected error', 'error');
+        toast.error('Unexpected error');
       }
     }
   }
@@ -154,9 +148,9 @@ export function useTaskService() {
       });
     } catch (error) {
       if (error instanceof Error) {
-        handleSnackbar(error.message, 'error');
+        toast.error(error.message);
       } else {
-        handleSnackbar('Unexpected error', 'error');
+        toast.error('Unexpected error');
       }
     }
   }
@@ -192,9 +186,9 @@ export function useTaskService() {
       });
     } catch (error) {
       if (error instanceof Error) {
-        handleSnackbar(error.message, 'error');
+        toast.error(error.message);
       } else {
-        handleSnackbar('Unexpected error', 'error');
+        toast.error('Unexpected error');
       }
     }
   }
@@ -230,9 +224,9 @@ export function useTaskService() {
       });
     } catch (error) {
       if (error instanceof Error) {
-        handleSnackbar(error.message, 'error');
+        toast.error(error.message);
       } else {
-        handleSnackbar('Unexpected error', 'error');
+        toast.error('Unexpected error');
       }
     }
   }
@@ -268,9 +262,9 @@ export function useTaskService() {
       });
     } catch (error) {
       if (error instanceof Error) {
-        handleSnackbar(error.message, 'error');
+        toast.error(error.message);
       } else {
-        handleSnackbar('Unexpected error', 'error');
+        toast.error('Unexpected error');
       }
     }
   }
@@ -284,7 +278,7 @@ export function useTaskService() {
         args: [taskId],
       });
     } catch (error) {
-      handleSnackbar(`Error searching task id: ${taskId}`, 'error');
+      toast.error(`Error searching task id: ${taskId}`);
     }
   }
 
@@ -388,9 +382,8 @@ export function useTaskService() {
         args: [roleId, authorizedAddress, isAuthorized],
       });
     } catch (error) {
-      handleSnackbar(
-        `Error setting role id ${roleId} to address ${authorizedAddress}`,
-        'error'
+      toast.error(
+        `Error setting role id ${roleId} to address ${authorizedAddress}`
       );
     }
   }
@@ -405,9 +398,8 @@ export function useTaskService() {
         args: [interfaceId, roleId, isAuthorized],
       });
     } catch (error) {
-      handleSnackbar(
-        `Error setting operator to interface id ${interfaceId}, role id ${roleId}`,
-        'error'
+      toast.error(
+        `Error setting operator to interface id ${interfaceId}, role id ${roleId}`
       );
     }
   }
@@ -418,7 +410,7 @@ export function useTaskService() {
         args: [quorum],
       });
     } catch (error) {
-      handleSnackbar(`Error setting quorum ${quorum}`, 'error');
+      toast.error(`Error setting quorum ${quorum}`);
     }
   }
 
@@ -429,9 +421,8 @@ export function useTaskService() {
         value: parseEther(amount),
       });
     } catch (error) {
-      handleSnackbar(
-        `Error setting deposit for role id ${roleId} of amount ${amount}`,
-        'error'
+      toast.error(
+        `Error setting deposit for role id ${roleId} of amount ${amount}`
       );
     }
   }

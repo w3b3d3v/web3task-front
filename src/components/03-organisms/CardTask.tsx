@@ -11,11 +11,10 @@ import {
 } from "@mui/material";
 import Loader from "@/components/01-atoms/Loader";
 import { HiOutlineClock, HiOutlineExternalLink } from "react-icons/hi";
-import { AlertColor } from "@mui/material/Alert";
 import { useTaskService } from "@/services/tasks-service";
 import { useWeb3Utils } from "@/hooks/Web3UtilsHook";
 import { useTheme } from "@mui/system";
-import { useSnackBar } from "@/contexts/SnackBarContext";
+import { toast } from 'react-toastify';
 
 /**
  * CardTasks Component
@@ -47,12 +46,6 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const { showSnackBar } = useSnackBar();
-
-  const handleSnackbar = (message: string, color: AlertColor) => {
-    showSnackBar(message, color);
-  };
-
   const getAction = (status: string) => {
     switch (status) {
       case "Created":
@@ -74,17 +67,16 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
       switch (taskData.status) {
         case "Created":
           await startTask(BigInt(taskId));
-          handleSnackbar("Task Start process initiated with success!", "info");
+          toast.info("Task Start process initiated with success!");
           break;
         case "In Progress":
           await reviewTask(BigInt(taskId));
-          handleSnackbar("Review Task process initiated with success!", "info");
+          toast.info("Review Task process initiated with success!");
           break;
         case "In Review":
           await completeTask(BigInt(taskId));
-          handleSnackbar(
-            "Complete Task process initiated with success!",
-            "info"
+          toast.info(
+            "Complete Task process initiated with success!"
           );
           break;
         default:
@@ -99,7 +91,7 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
   const handleCancel = async () => {
     try {
       await cancelTask(BigInt(taskId));
-      handleSnackbar("Cancel Task process initiated with success!", "warning");
+      toast.warning("Cancel Task process initiated with success!");
     } catch (error) {
       setError(error.message);
       setOpenError(true);
