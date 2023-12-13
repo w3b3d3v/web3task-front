@@ -1,18 +1,19 @@
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, useTheme } from "@mui/material";
 import { Dayjs } from "dayjs";
 import { DatePicker, DatePickerProps } from "@mui/x-date-pickers";
+import { toast } from 'react-toastify';
+
+import Loader from "@/components/01-atoms/Loader";
+import CoverCreateTask from "@/components/02-molecules/CoverCreateTask";
 import { useTaskService } from "@/services/tasks-service";
 import { Task } from "@/models/task";
-import Loader from "@/components/01-atoms/Loader";
-import CoverCreateTask from "../../../../components/02-molecules/CoverCreateTask";
-import { toast } from 'react-toastify';
 
 let newTask: Task = {
   status: 0,
@@ -77,8 +78,8 @@ const CreateTask = ({ data }) => {
   const theme = useTheme();
   const { createTask } = useTaskService();
   const [task, setTask] = useState<Task>();
-  const [valueReward, setValueReward] = useState<string>();
-  const [authorizedRolesStr, setAuthorizedRolesStr] = useState<string>();
+  const [valueReward, setValueReward] = useState<string>('');
+  const [authorizedRolesStr, setAuthorizedRolesStr] = useState<string>('');
   const [expireDate, setExpireDate] = useState<DatePickerProps<Dayjs> | null>(
     null
   );
@@ -164,7 +165,7 @@ const CreateTask = ({ data }) => {
         setLoading(false);
       }
     }
-  }, [setLoading]);
+  }, [data, loading, setLoading]);
 
   return (
     <Stack spacing={2} sx={{ width: "100%" }}>
