@@ -42,7 +42,7 @@ const UserProfile = () => {
       try {
         await handleMultiTask(minimumTasks, maxTasks, true);
       } catch (error) {
-        console.error("Error fetching tasks2:", error);
+        console.error("Error fetching tasks:", error);
       }
     };
 
