@@ -1,12 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Helmet } from "react-helmet-async";
-import { useTaskService } from "@/services/tasks-service";
 import { useTaskServiceHook } from "@/hooks/TaskServiceHook";
 import { useEffect } from "react";
 import CardMultiTasks from "@/components/03-organisms/CardMultiTasks";
 import { useWeb3Utils } from "@/hooks/Web3UtilsHook";
-import usePagination from "@/components/Pagination/";
+import usePagination from "@/hooks/usePagination";
 import CoverUserProfile from "@/components/02-molecules/CoverUserProfile";
 
 const BoxCover = styled(Box)(
@@ -29,10 +28,8 @@ const BoxCoverAction = styled(Box)(
 
 const UserProfile = () => {
   const { shortenAddressFromUser } = useWeb3Utils();
-  const taskService = useTaskService();
-
   const { handleMultiTask, multiTasksData, loading, error } =
-    useTaskServiceHook(taskService);
+    useTaskServiceHook();
 
   const tasksPerPage = 20;
   const { currentPage, Pagination, setPage } = usePagination();
@@ -45,12 +42,12 @@ const UserProfile = () => {
       try {
         await handleMultiTask(minimumTasks, maxTasks, true);
       } catch (error) {
-        console.error("Error fetching tasks:", error);
+        console.error("Error fetching tasks2:", error);
       }
     };
 
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, handleMultiTask]);
 
   return (
     <>

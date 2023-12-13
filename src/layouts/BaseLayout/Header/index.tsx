@@ -7,9 +7,7 @@ import {
   styled,
   useTheme,
 } from "@mui/material";
-import { useEffect, useState } from "react";
 import Logo from "@/components/02-molecules/LogoSign";
-import { useConnect, useDisconnect } from "wagmi";
 import HeaderSearch from "./Search";
 import HeaderUserbox from "./Userbox";
 import HeaderUserConnect from "./UserConnect";
@@ -21,7 +19,7 @@ const HeaderWrapper = styled(Box)(
         padding: ${theme.spacing(0, 2)};
         right: 0;
         z-index: 6;
-        background-color: ${alpha(theme.header.background, 0.95)};
+        background-color: ${alpha(theme.header.background!, 0.95)};
         backdrop-filter: blur(3px);
         justify-content: space-between;
         width: 100%;
@@ -35,16 +33,6 @@ const HeaderWrapper = styled(Box)(
 function Header({ data }) {
   const theme = useTheme();
   const logoImage = "/static/images/logo/logo-" + theme.palette.mode + ".svg";
-
-  const {
-    activeConnector,
-    connect,
-    connectors,
-    error,
-    isConnecting,
-    pendingConnector,
-  } = useConnect();
-  const { disconnect } = useDisconnect();
 
   return (
     <HeaderWrapper
@@ -80,20 +68,14 @@ function Header({ data }) {
           <>
             <HeaderSearch />
             <Box display="flex" alignItems="center">
-              <HeaderUserbox disconnect={disconnect} account={data} />
+              <HeaderUserbox />
             </Box>
           </>
         ) : (
           <>
             <HeaderSearch />
             <Box display="flex" alignItems="center">
-              <HeaderUserConnect
-                connectors={connectors}
-                activeConnector={activeConnector}
-                connect={connect}
-                isConnecting={isConnecting}
-                pendingConnector={pendingConnector}
-              />
+              <HeaderUserConnect />
             </Box>
           </>
         )}

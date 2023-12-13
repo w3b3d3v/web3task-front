@@ -11,28 +11,24 @@ import {
 } from "@mui/material";
 import { Helmet } from "react-helmet-async";
 import Loader from "@/components/01-atoms/Loader";
-import { useTaskService } from "@/services/tasks-service";
 import { useTaskServiceHook } from "@/hooks/TaskServiceHook";
 import { useEffect } from "react";
-import CardTasks from "../../../../components/03-organisms/CardTask";
+import CardTasks from "@/components/03-organisms/CardTask";
 
 const DetailsTask = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const taskService = useTaskService();
   const { taskId } = useParams();
-
   const { handleTask, taskData, loading, error } =
-    useTaskServiceHook(taskService);
+    useTaskServiceHook();
 
   useEffect(() => {
     const fetchData = async () => {
-      await handleTask(Number(taskId));
+      await handleTask(BigInt(taskId!));
     };
 
     fetchData();
-  }, []);
+  }, [handleTask, taskId]);
 
   return (
     <>

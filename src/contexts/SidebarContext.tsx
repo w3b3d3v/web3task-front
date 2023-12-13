@@ -1,5 +1,7 @@
 "use client"
+
 import { useState, createContext } from "react";
+
 type SidebarContext = {
   sidebarToggle: any;
   toggleSidebar: () => void;

@@ -1,14 +1,12 @@
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
-import { useTaskService } from "@/services/tasks-service";
-import { useTaskServiceHook } from "../../../../hooks/TaskServiceHook";
 import CoverAdminOptions from "@/components/02-molecules/CoverAdminOptions";
+import { useTaskServiceHook } from "@/hooks/TaskServiceHook";
 
 const AdminOptions = () => {
-  const taskService = useTaskService();
   const { handleRole, handleOperator, handleQuorum, handleDeposit } =
-    useTaskServiceHook(taskService);
+    useTaskServiceHook();
 
   const [role, setRole] = useState({
     roleId: "",

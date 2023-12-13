@@ -7,12 +7,10 @@ import {
   styled,
   useTheme,
 } from "@mui/material";
-import { useEffect, useState } from "react";
 import Logo from "@/components/02-molecules/LogoSign";
-import HeaderButtons from "../../layouts/BaseLayout/Header/Buttons";
-import HeaderUserbox from "../../layouts/BaseLayout/Header/Userbox";
-import HeaderSearch from "../../layouts/BaseLayout/Header/Search";
-import HeaderUserConnect from "../../layouts/BaseLayout/Header/UserConnect";
+import HeaderUserbox from "@/layouts/BaseLayout/Header/Userbox";
+import HeaderSearch from "@/layouts/BaseLayout/Header/Search";
+import HeaderUserConnect from "@/layouts/BaseLayout/Header/UserConnect";
 import { useConnect, useDisconnect } from "wagmi";
 
 const HeaderWrapper = styled(Box)(
@@ -22,7 +20,7 @@ const HeaderWrapper = styled(Box)(
         padding: ${theme.spacing(0, 2)};
         right: 0;
         z-index: 6;
-        background-color: ${alpha(theme.header.background, 0.95)};
+        background-color: ${alpha(theme.header.background!, 0.95)};
         backdrop-filter: blur(3px);
         justify-content: space-between;
         width: 100%;
@@ -45,7 +43,6 @@ function Header({ data }) {
     isConnecting,
     pendingConnector,
   } = useConnect();
-  const { disconnect } = useDisconnect();
 
   return (
     <HeaderWrapper
@@ -81,7 +78,7 @@ function Header({ data }) {
           <>
             <HeaderSearch />
             <Box display="flex" alignItems="center">
-              <HeaderUserbox disconnect={disconnect} account={data} />
+              <HeaderUserbox />
             </Box>
           </>
         ) : (

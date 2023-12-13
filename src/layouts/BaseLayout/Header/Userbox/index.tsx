@@ -18,6 +18,7 @@ import { HiOutlineChevronDown, HiOutlineLockOpen } from "react-icons/hi";
 import { User } from "@/models/user";
 import { useWeb3Utils } from "@/hooks/Web3UtilsHook";
 import { useTaskService } from "@/services/tasks-service";
+import { useAccount, useDisconnect } from "wagmi";
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -92,12 +93,15 @@ function stringAvatar(name: string) {
   };
 }
 
-function HeaderUserbox({ disconnect, account }) {
+function HeaderUserbox() {
   const [avatar, setAvatar] = useState("/static/images/avatars/1.jpg");
-  const { shortenAddressFromUser, userAddress } = useWeb3Utils();
   const { hasMemberRole, hasLeaderRole } = useTaskService();
   const [isMember, setIsMember] = useState<boolean>(false);
   const [isLeader, setIsLeader] = useState<boolean>(false);
+  
+  const { shortenAddressFromUser } = useWeb3Utils();
+  const { address } = useAccount();
+  const { disconnect } = useDisconnect();
 
   const user: User = {
     name: "",
@@ -125,15 +129,19 @@ function HeaderUserbox({ disconnect, account }) {
   };
 
   useEffect(() => {
+    if (!address) {
+      return;
+    }
 
-    hasLeaderRole(userAddress()).then(result => {
+    hasLeaderRole(address).then(result => {
       setIsLeader(result);
-      hasMemberRole(userAddress()).then(result => {
-        setIsMember(result);
-      })
     })
 
-  }, [])
+    hasMemberRole(address).then(result => {
+      setIsMember(result);
+    })
+
+  }, [hasLeaderRole, hasMemberRole, address])
 
   return (
     <>

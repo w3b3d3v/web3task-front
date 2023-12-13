@@ -1,4 +1,6 @@
 "use client"
+
+import { TaskFront } from "@/models/task";
 import dayjs, { Dayjs } from "dayjs";
 import { useState, createContext, useCallback } from "react";
 
@@ -10,8 +12,8 @@ type SearchFiltersContext = {
   reward: number
   setReward: React.Dispatch<React.SetStateAction<number>>
   dueDate: Dayjs | null
-  setDueDate: React.Dispatch<React.SetStateAction<Dayjs>>
-  filter: (tasks: []) => []
+  setDueDate: React.Dispatch<React.SetStateAction<Dayjs | null>>
+  filter: (tasks: TaskFront[]) => TaskFront[]
 };
 
 
@@ -29,7 +31,7 @@ export const SearchFiltersProvider: React.FC<ISearchFiltersProvider> = ({ childr
   const [reward, setReward] = useState(0)
   const [dueDate, setDueDate] = useState<Dayjs | null>(null)
 
-  const filter = useCallback((tasks) => {
+  const filter = useCallback((tasks: TaskFront[]) => {
     return tasks.filter((task) => {
       if (title && !task.title.toLowerCase().includes(title.toLowerCase())) {
         return false
@@ -43,7 +45,7 @@ export const SearchFiltersProvider: React.FC<ISearchFiltersProvider> = ({ childr
         return false
       }
 
-      if (dueDate && dueDate.startOf('day').isBefore(dayjs.unix(task.endDate).startOf('day'))) {
+      if (dueDate && dueDate.startOf('day').isBefore(dayjs.unix(Number(task.endDate)).startOf('day'))) {
         return false
       }
 

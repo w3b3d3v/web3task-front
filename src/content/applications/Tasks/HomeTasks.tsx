@@ -1,26 +1,26 @@
-import { useTaskService } from "@/services/tasks-service";
+'use client'
+
 import { useTaskServiceHook } from "@/hooks/TaskServiceHook";
 import { useEffect } from "react";
 import { Box, Grid, useTheme } from "@mui/material";
-import CardMultiTasks from "../../../components/03-organisms/CardMultiTasks";
-import CoverHomeTasks from "../../../components/02-molecules/CoverHomeTasks";
-import usePagination from "@/components/Pagination/";
+import CardMultiTasks from "@/components/03-organisms/CardMultiTasks";
+import CoverHomeTasks from "@/components/02-molecules/CoverHomeTasks";
+import usePagination from "@/hooks/usePagination";
 import SearchFilters from "@/components/03-organisms/SearchFiltersTasks";
 import { useSearchFilters } from "@/hooks/useSearchFilters";
 
-const HomeTasks = () => {
-  const taskService = useTaskService();
+const TASKS_PER_PAGE = 20;
 
+const HomeTasks = () => {
   const { handleMultiTask, multiTasksData, loading } =
-    useTaskServiceHook(taskService);
+    useTaskServiceHook();
   const theme = useTheme();
   const { filter: filterTasks } = useSearchFilters();
-  const tasksPerPage = 20;
   const { currentPage, Pagination } = usePagination();
 
   useEffect(() => {
-    const minimumTasks = (currentPage - 1) * tasksPerPage + 1;
-    const maxTasks = currentPage * tasksPerPage;
+    const minimumTasks = (currentPage - 1) * TASKS_PER_PAGE + 1;
+    const maxTasks = currentPage * TASKS_PER_PAGE;
 
     const fetchData = async () => {
       try {
@@ -31,13 +31,7 @@ const HomeTasks = () => {
     };
 
     fetchData();
-  }, [currentPage]);
-
-  useEffect(() => {
-    if (multiTasksData && !loading) {
-      console.log("multiTasksData", multiTasksData);
-    }
-  }, []);
+  }, [currentPage, handleMultiTask]);
 
   const maxReward =
     multiTasksData?.reduce((acc, curr) => {
@@ -46,7 +40,7 @@ const HomeTasks = () => {
       return parsedReward > acc ? parsedReward : acc;
     }, 0) || 0;
 
-  const filteredMultiTasks = filterTasks(multiTasksData || []);
+  const filteredMultiTasks = filterTasks(multiTasksData);
 
   return (
     <>
