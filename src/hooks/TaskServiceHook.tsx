@@ -1,32 +1,26 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
-import { Task, TaskStatus, TaskFront } from '@/models/task';
+import { Address } from 'viem';
+
+import { TaskFront, TaskStatus } from '@/models/task';
 import { useWeb3Utils } from '@/hooks/Web3UtilsHook';
+import { useTaskService } from '@/services/tasks-service';
 
-/**
- * Interface for the Task Service, defining methods to interact with tasks.
- */
-interface TaskService {
-    getTask: (taskId: number) => Promise<Task>;
-    getMultiTasks: (start: number, end: number, isUserProfile: boolean) => Promise<Task[]>;
-    setRole: (roleId: any, authorizedAddress: any, isAuthorized: boolean) => Promise<any>
-    setOperator: (interfaceId: any, roleId: any, isAuthorized: boolean) => Promise<any>
-    setMinQuorum: (quorum: any) => Promise<any>
-    deposit: (roleId: any, amount: any) => Promise<any>
-}
-
-/**
- * Hook for managing task-related data and interactions.
- * 
- * @param task - An instance of the TaskService interface.
- * @returns An object containing task-related state and functions.
- */
-export const useTaskServiceHook = (task: TaskService) => {
+export const useTaskServiceHook = () => {
     const [taskData, setTaskData] = useState<TaskFront | null>(null);
     const [multiTasksData, setMultiTasksData] = useState<TaskFront[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
     const { shortenAddressFromAddress } = useWeb3Utils();
+    const {
+      getTask,
+      getMultiTasks,
+      setRole,
+      setOperator,
+      setMinQuorum,
+      deposit,
+    } = useTaskService();
 
     /**
      * getStatus
@@ -66,13 +60,13 @@ export const useTaskServiceHook = (task: TaskService) => {
      * @param taskId - The ID of the task to fetch.
      * @returns - A promise that resolves when data is fetched.
      */
-    const handleTask = async (taskId: number) => {
+    const handleTask = async (taskId: bigint) => {
 
         try {
             setLoading(true);
             setError(null);
 
-            const result: any = await task.getTask(taskId);
+            const result: any = await getTask(taskId);
 
             let nft: TaskFront = {
                 taskId: taskId,
@@ -118,83 +112,75 @@ export const useTaskServiceHook = (task: TaskService) => {
      * @returns  - A promise that resolves when data is fetched.
      */
 
-    const handleMultiTask = async (start: number, end: number, isUserProfile: boolean) => {
+    const handleMultiTask = useCallback(async (start: number, end: number, isUserProfile: boolean) => {
+      const result = await getMultiTasks(start, end, isUserProfile);
 
-        const result: any = await task.getMultiTasks(start, end, isUserProfile);
+      const multiTask = [];
+      try {
+          setLoading(true);
+          setError(null);
 
-        let multiTask = [];
-        try {
-            setLoading(true);
-            setError(null);
+          for (let i = 0; i < result.length; i++) {
+              const arg = result[i].args;
 
-            for (let i = 0; i < result.length; i++) {
-                const args = result[i].args[0];
-                let nft: TaskFront = {
-                    taskId: args.taskId,
-                    status: args.status,
-                    title: args.title,
-                    description: args.description,
-                    reward: args.reward.toString(),
-                    endDate: args.endDate.toString(),
-                    authorizedRoles: args.authorizedRoles.toString(),
-                    creatorRole: args.creatorRole.toString(),
-                    assignee: args.assignee,
-                    metadata: args.metadata
-                }
+              let nft: TaskFront = {
+                  taskId: arg.taskId,
+                  status: arg.status.toString(),
+                  title: arg.title,
+                  description: arg.description,
+                  reward: arg.reward.toString(),
+                  endDate: arg.endDate.toString(),
+                  authorizedRoles: arg.authorizedRoles.toString(),
+                  creatorRole: arg.creatorRole.toString(),
+                  assignee: arg.assignee,
+                  metadata: arg.metadata
+              }
 
-                if (Number(nft.creatorRole) != 0) {
-                    multiTask.push(nft);
-                    setMultiTasksData(multiTask);
-                }
-            }
-        } catch (error) {
-            setError('Erro ao buscar tarefas múltiplas' + error);
-        } finally {
-            setLoading(false);
-        }
-    };
+              if (Number(nft.creatorRole) != 0) {
+                  multiTask.push(nft);
+                  setMultiTasksData(multiTask);
+              }
+          }
+      } catch (error) {
+          setError('Erro ao buscar tarefas múltiplas' + error);
+      } finally {
+          setLoading(false);
+      }
+  }, [getMultiTasks]);
 
-    const handleRole = async (roleId: any, authorizedAddress: any, isAuthorized: boolean) => {
-        console.log('roleId ', roleId)
-        console.log('authorizedAddress ', authorizedAddress)
-        console.log('isAuthorized ', isAuthorized)
-
+    const handleRole = async (roleId: bigint, authorizedAddress: Address, isAuthorized: boolean) => {
         try {
             toast.info('Set Role process initiated with success!')
-            return await task.setRole(roleId, authorizedAddress, isAuthorized);
+            return await setRole(roleId, authorizedAddress, isAuthorized);
         } catch (error) {
             toast.error('Error Set Role!')
         }
 
     };
 
-    const handleOperator = async (interfaceId: any, roleId: any, isAuthorized: boolean) => {
-        console.log('interfaceId ', interfaceId)
-        console.log('roleId ', roleId)
-        console.log('isAuthorized ', isAuthorized)
-
+    const handleOperator = async (interfaceId: Address, roleId: bigint, isAuthorized: boolean) => {
         try {
             toast.info('Set Operator process initiated with success!')
-            return await task.setOperator(interfaceId, roleId, isAuthorized);
+            return await setOperator(interfaceId, roleId, isAuthorized);
         } catch (error) {
             toast.error('Error Set Operator!')
         }
 
     };
 
-    const handleQuorum = async (quorum: any) => {
+    const handleQuorum = async (quorum: bigint) => {
         try {
             toast.info('Set Quorum process initiated with success!')
-            return await task.setMinQuorum(quorum);
+            return await setMinQuorum(quorum);
         } catch (error) {
             toast.error('Error Set Quorum!')
         }
     };
 
-    const handleDeposit = async (roleId: any, amount: any) => {
+    const handleDeposit = async (roleId: bigint, amount: string) => {
         try {
             toast.info('Set Deposit process initiated with success!')
-            return await task.deposit(roleId, amount);
+            return await deposit(roleId, amount);
         } catch (error) {
             toast.error('Error Set Deposit!')
         }

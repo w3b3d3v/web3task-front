@@ -21,7 +21,7 @@ export interface Task {
 
 // Interface Equals Front
 export interface TaskFront {
-    taskId: number;
+    taskId: bigint;
     status: string;
     title: string;
     description: string;
