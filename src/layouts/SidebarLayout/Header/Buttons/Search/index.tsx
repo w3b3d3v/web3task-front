@@ -183,6 +183,8 @@ function HeaderSearch() {
                   >
                     This page contains all the necessary information for
                     managing all hospital staff.
+                  </Typography>
+                </Box>
               </ListItem>
               <Divider sx={{ my: 1 }} component="li" />
               <ListItem button>
@@ -218,6 +220,8 @@ function HeaderSearch() {
                     }}
                   >
                     This is yet another search result pointing to a app page.
+                  </Typography>
+                </Box>
               </ListItem>
               <Divider sx={{ my: 1 }} component="li" />
               <ListItem button>
@@ -233,6 +237,7 @@ function HeaderSearch() {
                     </Avatar>
                   </ListItemAvatar>
                 </Hidden>
+
                 <Box flex="1">
                   <Box display="flex" justifyContent="space-between">
                     <Link
@@ -254,8 +259,11 @@ function HeaderSearch() {
                   >
                     Choose if you would like to show or not this typography
                     section here...
+                  </Typography>
+                </Box>
               </ListItem>
             </List>
+
             <Divider sx={{ mt: 1, mb: 2 }} />
             <Box sx={{ textAlign: "center" }}>
               <Button color="primary">View all search results</Button>

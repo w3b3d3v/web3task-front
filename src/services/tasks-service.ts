@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useAccount, useContractWrite } from 'wagmi';
 import { readContract } from '@wagmi/core';
 import {
@@ -8,12 +9,13 @@ import {
   getFunctionSelector,
   parseEther,
 } from 'viem';
+import { toast } from 'react-toastify';
 
 import { Task } from '@/models/task';
 import { UserRole } from '@/models/user';
 import { web3taskABI } from '@/contracts/web3taskABI';
 import { useContractAddress } from '@/hooks/useContractAddress';
-import { toast } from 'react-toastify';
+import { isDefined } from '@/lib/utils';
 
 export function useTaskService() {
   const { address: userAddress } = useAccount();
@@ -65,7 +67,18 @@ export function useTaskService() {
     functionName: 'deposit',
   });
 
-  async function createTask(task: Task) {
+  const hasLeaderRole = useCallback(async (address: Address) => {
+    const hasRole = await readContract({
+      address: contractAddress,
+      abi: web3taskABI,
+      functionName: 'hasRole',
+      args: [BigInt(UserRole.Leader), address],
+    });
+
+    return hasRole;
+  }, [contractAddress])
+
+  const createTask = useCallback(async (task: Task) => {
     try {
       const isLeader = !!userAddress && (await hasLeaderRole(userAddress));
 
@@ -101,9 +114,9 @@ export function useTaskService() {
         toast.error('Unexpected error');
       }
     }
-  }
+  }, [contractAddress, createTaskMutation, hasLeaderRole, userAddress])
 
-  async function startTask(id: bigint) {
+  const startTask = useCallback(async (id: bigint) => {
     try {
       const isLeader = !!userAddress && (await hasLeaderRole(userAddress));
       const startTaskInterfaceID = getFunctionSelector(
@@ -153,9 +166,9 @@ export function useTaskService() {
         toast.error('Unexpected error');
       }
     }
-  }
+  }, [contractAddress, hasLeaderRole, startTaskMutation, userAddress])
 
-  async function reviewTask(id: bigint, metadata = '') {
+  const reviewTask = useCallback(async (id: bigint, metadata = '') => {
     try {
       const isLeader = !!userAddress && (await hasLeaderRole(userAddress));
 
@@ -191,9 +204,9 @@ export function useTaskService() {
         toast.error('Unexpected error');
       }
     }
-  }
+  }, [contractAddress, hasLeaderRole, reviewTaskMutation, userAddress])
 
-  async function completeTask(id: bigint) {
+  const completeTask = useCallback(async (id: bigint) => {
     try {
       const isLeader = !!userAddress && (await hasLeaderRole(userAddress));
 
@@ -229,9 +242,9 @@ export function useTaskService() {
         toast.error('Unexpected error');
       }
     }
-  }
+  }, [completeTaskMutation, contractAddress, hasLeaderRole, userAddress])
 
-  async function cancelTask(id: bigint) {
+  const cancelTask = useCallback(async (id: bigint) => {
     try {
       const isLeader = !!userAddress && (await hasLeaderRole(userAddress));
 
@@ -267,9 +280,9 @@ export function useTaskService() {
         toast.error('Unexpected error');
       }
     }
-  }
+  }, [cancelTaskMutation, contractAddress, hasLeaderRole, userAddress])
 
-  async function getTask(taskId: bigint) {
+  const getTask = useCallback(async (taskId: bigint) => {
     try {
       return readContract({
         address: contractAddress,
@@ -280,37 +293,36 @@ export function useTaskService() {
     } catch (error) {
       toast.error(`Error searching task id: ${taskId}`);
     }
-  }
+  }, [contractAddress])
 
-  async function getMultiTasks(
+  const getMultiTasks = useCallback(async (
     min: number,
     max: number,
     isUserProfile: boolean
-  ) {
-    /// Prepare the encoding of data and submit it to the contract
+  ) => {
+    // Prepare the encoding of data and submit it to the contract
     const payloadArray: Address[] = [];
-    let taskIds: readonly bigint[] = [];
-
-    if (!userAddress) {
-      throw new Error('User address not found');
-    }
+    let taskIds: bigint[] = [];
 
     if (isUserProfile) {
+      if (!userAddress) {
+        throw new Error('User address not found');
+      }
+
       taskIds = await readContract({
         address: contractAddress,
         abi: web3taskABI,
         functionName: 'getUserTasks',
         args: [userAddress],
-      });
+      }) as bigint[];
 
       if (taskIds && taskIds.length > 0) {
         for (var i = 0; i < taskIds.length; i++) {
           let id = Number(taskIds[i]);
           payloadArray.push(
             encodeFunctionData({
-              // @ts-ignore
               abi: web3taskABI,
-              name: 'getTask',
+              functionName: 'getTask',
               args: [BigInt(id)],
             })
           );
@@ -318,65 +330,61 @@ export function useTaskService() {
       }
     } else {
       for (var i = min; i <= max; i++) {
+        taskIds.push(BigInt(i))
         payloadArray.push(
           encodeFunctionData({
-            // @ts-ignore
             abi: web3taskABI,
-            name: 'getTask',
+            functionName: 'getTask',
             args: [BigInt(i)],
           })
         );
       }
     }
 
-    const response = await readContract({
+    const multiCallResponse = await readContract({
       address: contractAddress,
       abi: web3taskABI,
       functionName: 'multicallRead',
       args: [payloadArray],
     });
 
-    /// Decode the results
-    let decodedResults = [];
-    /// Get the sighash of the function
-    // let getTaskID = tasksManagerContract.interface.getSighash("getTask(uint256)");
-
-    // const getTaskInterfaceID = getFunctionSelector(
-    //   getAbiItem({
-    //     abi: web3taskABI,
-    //     name: 'getTask',
-    //   })
-    // );
-
-    /// Map the results to the function name and the decoded arguments
-    decodedResults = response.map((res: any) => {
-      try {
-        const decodedArgs = decodeFunctionResult({
-          abi: web3taskABI,
-          functionName: 'getTask',
-          data: res,
-        });
-
-        return {
-          name: getAbiItem({
+    // Map the results to the function name and the decoded arguments
+    const decodedResults = multiCallResponse.map((response, index) => {
+        try {
+          const decodedArgs = decodeFunctionResult({
             abi: web3taskABI,
-            name: 'getTask',
-          }).name,
-          args: decodedArgs,
-        };
-      } catch (error) {
-        console.log('Could not decode result', error);
-      }
+            functionName: 'getTask',
+            data: response,
+          });
+
+          const taskId = taskIds[index]
+  
+          return {
+            name: getAbiItem({
+              abi: web3taskABI,
+              name: 'getTask',
+            }).name,
+            args: {
+              taskId,
+              ...decodedArgs
+            },
+          };
+
+        } catch (error) {
+          return undefined
+        }
     });
 
-    return decodedResults;
-  }
+    const filteredResults = decodedResults.filter(isDefined)
 
-  async function setRole(
+    return filteredResults;
+  }, [contractAddress, userAddress])
+
+  const setRole = useCallback(async (
     roleId: bigint,
     authorizedAddress: Address,
     isAuthorized: boolean
-  ) {
+  ) => {
     try {
       return setRoleMutation.writeAsync({
         args: [roleId, authorizedAddress, isAuthorized],
@@ -386,13 +394,13 @@ export function useTaskService() {
         `Error setting role id ${roleId} to address ${authorizedAddress}`
       );
     }
-  }
+  }, [setRoleMutation])
 
-  async function setOperator(
+  const setOperator = useCallback(async (
     interfaceId: Address,
     roleId: bigint,
     isAuthorized: boolean
-  ) {
+  ) => {
     try {
       return setOperatorMutation.writeAsync({
         args: [interfaceId, roleId, isAuthorized],
@@ -402,9 +410,9 @@ export function useTaskService() {
         `Error setting operator to interface id ${interfaceId}, role id ${roleId}`
       );
     }
-  }
+  }, [setOperatorMutation])
 
-  async function setMinQuorum(quorum: bigint) {
+  const setMinQuorum = useCallback(async (quorum: bigint) => {
     try {
       return setMinQuorumMutation.writeAsync({
         args: [quorum],
@@ -412,9 +420,9 @@ export function useTaskService() {
     } catch (error) {
       toast.error(`Error setting quorum ${quorum}`);
     }
-  }
+  }, [setMinQuorumMutation])
 
-  async function deposit(roleId: bigint, amount: string) {
+  const deposit = useCallback(async (roleId: bigint, amount: string) => {
     try {
       return depositMutation.writeAsync({
         args: [roleId],
@@ -425,20 +433,9 @@ export function useTaskService() {
         `Error setting deposit for role id ${roleId} of amount ${amount}`
       );
     }
-  }
+  }, [depositMutation])
 
-  async function hasLeaderRole(address: Address) {
-    const hasRole = await readContract({
-      address: contractAddress,
-      abi: web3taskABI,
-      functionName: 'hasRole',
-      args: [BigInt(UserRole.Leader), address],
-    });
-
-    return hasRole;
-  }
-
-  async function hasMemberRole(address: Address) {
+  const hasMemberRole = useCallback(async (address: Address) => {
     const hasRole = await readContract({
       address: contractAddress,
       abi: web3taskABI,
@@ -447,7 +444,7 @@ export function useTaskService() {
     });
 
     return hasRole;
-  }
+  }, [contractAddress])
 
   return {
     createTask,

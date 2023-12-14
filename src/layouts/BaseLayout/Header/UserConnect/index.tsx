@@ -18,6 +18,7 @@ import {
 
 import { styled } from "@mui/material/styles";
 import { HiOutlineChevronDown, HiOutlineAnnotation } from "react-icons/hi";
+import { useAccount, useConnect } from "wagmi";
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -54,11 +55,16 @@ const UserBoxDescription = styled(Typography)(
 `
 );
 
-function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting, pendingConnector }) {
+function HeaderUserConnect() {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
 
-
+  const { isConnecting } = useAccount()
+  const {
+    connect,
+    connectors,
+    pendingConnector,
+  } = useConnect();
 
   const handleOpen = (): void => {
     setOpen(true);

@@ -83,7 +83,11 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
           break;
       }
     } catch (error) {
-      setError(error.message);
+      let errorMessage = 'Unexpected error'
+      if (error instanceof Error) {
+        errorMessage = error.message
+      }
+      setError(errorMessage);
       setOpenError(true);
     }
   };
@@ -93,23 +97,36 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
       await cancelTask(BigInt(taskId));
       toast.warning("Cancel Task process initiated with success!");
     } catch (error) {
-      setError(error.message);
+      let errorMessage = 'Unexpected error'
+      if (error instanceof Error) {
+        errorMessage = error.message
+      }
+      setError(errorMessage);
       setOpenError(true);
     }
   };
 
   useEffect(() => {
-    console.log("taskData", taskData);
-    if (taskData != null) {
-      getAction(taskData.status);
-      hasLeaderRole(userAddress()).then((result) => {
-        setIsLeader(result);
-        hasMemberRole(userAddress()).then((result) => {
-          setIsMember(result);
-        });
-      });
+    if (!taskData) {
+      return;
     }
-  }, []);
+
+    getAction(taskData.status);
+
+    const address = userAddress()
+
+    if (!address) {
+      return;
+    }
+
+    hasLeaderRole(address).then((result) => {
+      setIsLeader(result);
+    });
+
+    hasMemberRole(address).then((result) => {
+      setIsMember(result);
+    });
+  }, [hasLeaderRole, hasMemberRole, taskData, userAddress]);
 
   return (
     <Grid item xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"}>

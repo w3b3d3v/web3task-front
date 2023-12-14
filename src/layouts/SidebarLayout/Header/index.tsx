@@ -27,7 +27,7 @@ const HeaderWrapper = styled(Box)(
         padding: ${theme.spacing(0, 2)};
         right: 0;
         z-index: 6;
-        background-color: ${alpha(theme.header.background, 0.95)};
+        background-color: ${alpha(theme.header.background!, 0.95)};
         backdrop-filter: blur(3px);
         position: fixed;
         justify-content: space-between;
@@ -53,7 +53,7 @@ function Header() {
     if (!isConnected) {
       connect();
     }
-  }, [])
+  }, [isConnected])
 
   return (
     <HeaderWrapper
