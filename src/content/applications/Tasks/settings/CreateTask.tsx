@@ -1,171 +1,72 @@
-import * as yup from "yup";
+"use client";
+
+import * as yup from "yup"
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import dayjs, { isDayjs } from "dayjs";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, useTheme } from "@mui/material";
-import { Dayjs } from "dayjs";
-import { DatePicker, DatePickerProps } from "@mui/x-date-pickers";
-import { toast } from 'react-toastify';
+import { Box, InputAdornment } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+import { toast } from "react-toastify";
+import { Address, zeroAddress } from "viem";
 
-import Loader from "@/components/01-atoms/Loader";
 import CoverCreateTask from "@/components/02-molecules/CoverCreateTask";
 import { useTaskService } from "@/services/tasks-service";
 import { Task } from "@/models/task";
+import { createTaskSchema } from "@/lib/schemas/createTaskSchema";
 
-let newTask: Task = {
-  status: 0,
-  title: "",
-  description: "",
-  reward: BigInt(""),
-  endDate: BigInt(""),
-  authorizedRoles: [BigInt("")],
-  creatorRole: BigInt(""),
-  assignee: "0x0000000000000000000000000000000000000000",
-  metadata: "",
-};
+type FormData = yup.InferType<typeof createTaskSchema>;
 
-const schema = yup
-  .object({
-    title: yup.string().required("Campo obrigatório."),
-    creatorRole: yup
-      .string()
-      .required("Campo obrigatório.")
-      .test({
-        test(value, ctx) {
-          let role = Number(value);
-          if (isNaN(role))
-            return ctx.createError({ message: "Número inválido para a role." });
-          return true;
-        },
-      }),
-    valueReward: yup
-      .string()
-      .required("Campo obrigatório.")
-      .test({
-        test(value, ctx) {
-          let role = Number(value);
-          if (isNaN(role))
-            return ctx.createError({ message: "Valor inválido." });
-          return true;
-        },
-      }),
-    authorizedRoles: yup
-      .string()
-      .required("Campo obrigatório.")
-      .test({
-        test(value, ctx) {
-          let validation = true;
-          let roles = value.split(",");
-          roles.forEach((element) => {
-            let role = Number(element);
-            if (isNaN(role)) validation = false;
-          });
-          if (!validation)
-            return ctx.createError({
-              message: "Número inválido para as roles.",
-            });
-          return validation;
-        },
-      }),
-    // endDate: yup.string().required('Campo obrigatório.')
-  })
-  .required();
+interface CreateTaskProps {
+  task?: Task;
+}
 
-const CreateTask = ({ data }) => {
-  const theme = useTheme();
-  const { createTask } = useTaskService();
-  const [task, setTask] = useState<Task>();
-  const [valueReward, setValueReward] = useState<string>('');
-  const [authorizedRolesStr, setAuthorizedRolesStr] = useState<string>('');
-  const [expireDate, setExpireDate] = useState<DatePickerProps<Dayjs> | null>(
-    null
-  );
-  const [loading, setLoading] = useState<boolean>(true);
-  const [openError, setOpenError] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
+export const CreateTask = ({ task }: CreateTaskProps) => {
+  const form = useForm({
+    resolver: yupResolver(createTaskSchema),
+    defaultValues: {
+      authorizedRoles: task?.authorizedRoles.toString(),
+      creatorRole: task?.creatorRole.toString(),
+      title: task?.title,
+      reward: task?.reward.toString(),
+      assignee: task?.assignee,
+      description: task?.description,
+      endDate: task?.endDate ? dayjs.unix(Number(task.endDate)) : dayjs().add(1, 'day'),
+      metadata: task?.metadata,
+    },
   });
+  const { createTask } = useTaskService();
 
-  const logoImage =
-    "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
-
-  const handleChange = (event: { target: { value: any } }) => {
-    task.description = event.target.value;
-  };
-
-  const handleTitle = (event: { target: { value: any } }) => {
-    task.title = event.target.value.toString();
-  };
-
-  const handleAuthorizedRoles = (event: any) => {
-    setAuthorizedRolesStr(event.target.value);
-  };
-
-  const handleCreatorRole = (event: { target: { value: any } }) => {
-    task.creatorRole = event.target.value;
-  };
-
-  const handleAssignee = (event: { target: { value: any } }) => {
-    task.assignee =
-      event.target.value == ""
-        ? "0x0000000000000000000000000000000000000000"
-        : event.target.value;
-  };
-
-  const handleMetadata = (event: { target: { value: any } }) => {
-    task.metadata = event.target.value;
-  };
-
-  const handleDescription = (event: { target: { value: any } }) => {
-    task.description = event.target.value;
-  };
-
-  const handleReward = (event: { target: { value: any } }) => {
-    let reward = event.target.value;
-    setValueReward(reward);
-  };
-
-  const onSubmit = async (event: { preventDefault: () => void }) => {
+  const onSubmit = async (values: FormData) => {
     try {
-      toast.info(
-        "Create Task Start process initiated with success!"
-      );
-      let authorizedRoles: string[] = authorizedRolesStr.split(",");
-      const splittedRoles: readonly bigint[] = authorizedRoles.map((str) =>
-        BigInt(str)
-      );
-      task.authorizedRoles = splittedRoles;
-      task.reward = BigInt(valueReward);
-      let data = String(Math.floor(Date.now() / 1000) + 3600);
-      task.endDate = BigInt(data);
-      console.log("task.endDate: ", task.endDate);
+      toast.info("Create Task Start process initiated with success");
 
-      await createTask(task);
+      const endDate = isDayjs(values.endDate) ? values.endDate : dayjs(values.endDate as Date)
+
+      await toast.promise(createTask({
+        title: values.title,
+        description: values.description,
+        assignee: values.assignee ? values.assignee as Address : zeroAddress,
+        authorizedRoles: values.authorizedRoles.split(",").map(BigInt),
+        creatorRole: BigInt(values.creatorRole),
+        metadata: values.metadata,
+        reward: BigInt(values.reward),
+        status: 0,
+        endDate: BigInt(endDate.unix()),
+      }), {
+        pending: "Creating task...",
+        success: "Task created with success",
+      })
     } catch (error) {
-      console.log("Erro: ", error);
-      setOpenError(true);
+      let message = 'Unexpected error';
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      toast.error(`Error creating task! Error: ${message}`);
     }
   };
-
-  useEffect(() => {
-    if (loading && data != undefined) {
-      setTask(data);
-      console.log("data = ", data);
-      setLoading(false);
-    } else {
-      if (loading) {
-        setTask(newTask);
-        setLoading(false);
-      }
-    }
-  }, [data, loading, setLoading]);
 
   return (
     <Stack spacing={2} sx={{ width: "100%" }}>
@@ -179,110 +80,188 @@ const CreateTask = ({ data }) => {
         <Box width={"100%"}>
           <CoverCreateTask />
         </Box>
-        {loading ? (
-          <Loader />
-        ) : (
-          <Box marginTop={2} component="form" onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing={2} alignItems={"center"}>
-              <TextField
-                {...register("title")}
-                fullWidth
-                id="outlined-required"
-                label={"Title"}
-                onBlur={handleTitle}
-                placeholder={"Describe the activity or link to a document"}
-              />
-              <p>{errors.title?.message}</p>
 
-              <TextField
-                {...register("authorizedRoles")}
-                fullWidth
-                id="outlined-required"
-                label={"Authorized Roles (separate by `,`)"}
-                onBlur={handleAuthorizedRoles}
-                placeholder={"The authorized roles to perform the task"}
-              />
-              <p>{errors.authorizedRoles?.message}</p>
+        <Box
+          marginTop={2}
+          component="form"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <Stack spacing={2} alignItems={"center"}>
+            <Controller
+              control={form.control}
+              name="title"
+              render={({ field, fieldState }) => (
+                <TextField
+                  onChange={field.onChange}
+                  value={field.value}
+                  error={!!fieldState.error}
+                  helperText={
+                    fieldState.error ? fieldState.error.message : null
+                  }
+                  label="Title"
+                  placeholder="Describe the activity or link to a document"
+                  fullWidth
+                />
+              )}
+            />
 
-              <TextField
-                {...register("creatorRole")}
-                fullWidth
-                id="outlined-required"
-                label={"Creator Role"}
-                onBlur={handleCreatorRole}
-                placeholder={"Creator Role 5..10.."}
-              />
-              <p>{errors.creatorRole?.message}</p>
+            <Controller
+              control={form.control}
+              name="description"
+              render={({ field, fieldState }) => (
+                <TextField
+                  onChange={field.onChange}
+                  value={field.value}
+                  error={!!fieldState.error}
+                  helperText={
+                    fieldState.error ? fieldState.error.message : null
+                  }
+                  label="Description"
+                  placeholder="A full description about the activity."
+                  maxRows="18"
+                  multiline
+                  fullWidth
+                />
+              )}
+            />
 
-              <TextField
-                fullWidth
-                id="outlined-required"
-                label={
-                  "Assignee Address (leave blank to allow anyone to perform the task)"
-                }
-                onBlur={handleAssignee}
-                placeholder={"Assignee address"}
-              />
+            <Controller
+              control={form.control}
+              name="authorizedRoles"
+              render={({ field, fieldState }) => (
+                <TextField
+                  onChange={field.onChange}
+                  value={field.value}
+                  error={!!fieldState.error}
+                  helperText={
+                    fieldState.error ? fieldState.error.message : "Separate by `,`"
+                  }
+                  label="Authorized Roles"
+                  placeholder="The authorized roles to perform the task"
+                  fullWidth
+                />
+              )}
+            />
 
-              <TextField
-                fullWidth
-                id="outlined-required"
-                label={"Metadata (IPFS)"}
-                onBlur={handleMetadata}
-                placeholder={"https://ipfs.io/ipfs/QmY5D...7CEh"}
-              />
+            <Controller
+              control={form.control}
+              name="creatorRole"
+              render={({ field, fieldState }) => (
+                <TextField
+                  onChange={field.onChange}
+                  value={field.value}
+                  error={!!fieldState.error}
+                  helperText={
+                    fieldState.error ? fieldState.error.message : null
+                  }
+                  label="Creator Role"
+                  placeholder="Creator Role 5..10.."
+                  fullWidth
+                />
+              )}
+            />
 
-              <TextField
-                fullWidth
-                id="outlined-required"
-                label={"Description"}
-                onBlur={handleDescription}
-                placeholder={"A full description about the ativity."}
-                multiline
-                maxRows="18"
-                onChange={handleChange}
-              />
+            <Controller
+              control={form.control}
+              name="assignee"
+              render={({ field, fieldState }) => (
+                <TextField
+                  onChange={field.onChange}
+                  value={field.value}
+                  error={!!fieldState.error}
+                  helperText={
+                    fieldState.error
+                      ? fieldState.error.message
+                      : "Leave blank to allow anyone to perform the task"
+                  }
+                  label="Assignee Address"
+                  placeholder="Assignee address"
+                  fullWidth
+                />
+              )}
+            />
 
-              <Stack
-                spacing={2}
-                direction={"row"}
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Box>
-                  <img
-                    src={logoImage}
-                    width={"100px"}
-                    height={"100px"}
-                    alt="Pod3LabsRecompensaIcon"
-                  />
-                </Box>
-                <div>
-                  <TextField
-                    {...register("valueReward")}
-                    label={"Reward in USD"}
-                    onBlur={handleReward}
-                  />
-                  <p>{errors.valueReward?.message}</p>
-                </div>
-                <div>
-                  <DatePicker
-                    label={"Deliver Date"}
-                    onChange={(newValue: any) => setExpireDate(newValue)}
-                  />
-                  {/* <p>{errors.endDate?.message}</p> */}
-                </div>
-              </Stack>
+            <Controller
+              control={form.control}
+              name="metadata"
+              render={({ field, fieldState }) => (
+                <TextField
+                  onChange={field.onChange}
+                  value={field.value}
+                  error={!!fieldState.error}
+                  helperText={
+                    fieldState.error ? fieldState.error.message : null
+                  }
+                  label="Metadata (IPFS)"
+                  placeholder="https://ipfs.io/ipfs/QmY5D...7CEh"
+                  fullWidth
+                />
+              )}
+            />
 
-              <Button type="submit" variant="contained" color="primary">
-                Enviar
-              </Button>
+            <Stack
+              spacing={2}
+              direction={"row"}
+              alignItems="center"
+              justifyContent="center"
+            >
+                <Controller
+                  control={form.control}
+                  name="reward"
+                  render={({ field, fieldState }) => (
+                    <TextField
+                      onChange={field.onChange}
+                      value={field.value}
+                      error={!!fieldState.error}
+                      helperText={
+                        fieldState.error ? fieldState.error.message : null
+                      }
+                      label="Reward in USD"
+                      type="number"
+                      inputProps={{
+                        inputMode: "decimal"
+                      }}
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start">$</InputAdornment>
+                      }}
+                      fullWidth
+                    />
+                  )}
+                />
+
+                <Controller
+                  control={form.control}
+                  name="endDate"
+                  render={({ field, fieldState }) => (
+                    <DatePicker
+                      onChange={field.onChange}
+                      value={field.value || dayjs().add(1, 'day')}
+                      label="Deliver Date"
+                      format="DD/MM/YYYY"
+                      slotProps={{
+                        textField: {
+                          error: !!fieldState.error,
+                          helperText: fieldState.error
+                            ? fieldState.error.message
+                            : null,
+                          fullWidth: true,
+                        },
+                      }}
+                    />
+                  )}
+                />
             </Stack>
-          </Box>
-        )}
+
+            <LoadingButton
+              type="submit"
+              variant="outlined"
+              loading={form.formState.isSubmitting}
+            >
+              Create
+            </LoadingButton>
+          </Stack>
+        </Box>
       </Box>
     </Stack>
   );
 };
-
-export default CreateTask;
