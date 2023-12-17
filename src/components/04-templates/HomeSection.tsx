@@ -10,7 +10,7 @@ import { useSearchFilters } from "@/hooks/useSearchFilters";
 
 const TASKS_PER_PAGE = 20;
 
-const HomeTasks = () => {
+export const HomeSection = () => {
   const { handleMultiTask, multiTasksData, loading } = useTaskServiceHook();
   const theme = useTheme();
   const { filter: filterTasks } = useSearchFilters();
@@ -41,52 +41,48 @@ const HomeTasks = () => {
   const filteredMultiTasks = filterTasks(multiTasksData);
 
   return (
-    <>
-      <Box sx={{ width: "100%" }}>
-        <CoverHomeTasks />
+    <Box sx={{ width: "100%" }}>
+      <CoverHomeTasks />
 
-        <Box>
-          <Box height={40} bgcolor={"#8EFFC2"} />
+      <Box>
+        <Box height={40} bgcolor={"#8EFFC2"} />
 
-          <Grid
-            container
-            spacing={2}
-            marginTop={0}
-            style={{ width: "100%", overflowX: "hidden" }}
-          >
-            <Grid
-              item
-              xs={3}
-              bgcolor={
-                theme.palette.mode === "dark"
-                  ? theme.colors.alpha.black[100]
-                  : theme.colors.alpha.trueWhite[100]
-              }
-            >
-              <SearchFilters maxReward={maxReward} />
-            </Grid>
-
-            <Grid item xs={9} style={{ maxWidth: "100%" }}>
-              <CardMultiTasks
-                multiTasksData={filteredMultiTasks}
-                loading={loading}
-                page={currentPage}
-              />
-            </Grid>
-          </Grid>
-        </Box>
-
-        <Box
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          mt={10}
+        <Grid
+          container
+          spacing={2}
+          marginTop={0}
+          style={{ width: "100%", overflowX: "hidden" }}
         >
-          <Pagination />
-        </Box>
+          <Grid
+            item
+            xs={3}
+            bgcolor={
+              theme.palette.mode === "dark"
+                ? theme.colors.alpha.black[100]
+                : theme.colors.alpha.trueWhite[100]
+            }
+          >
+            <SearchFilters maxReward={maxReward} />
+          </Grid>
+
+          <Grid item xs={9} style={{ maxWidth: "100%" }}>
+            <CardMultiTasks
+              multiTasksData={filteredMultiTasks}
+              loading={loading}
+              page={currentPage}
+            />
+          </Grid>
+        </Grid>
       </Box>
-    </>
+
+      <Box
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+        mt={10}
+      >
+        <Pagination />
+      </Box>
+    </Box>
   );
 };
-
-export default HomeTasks;

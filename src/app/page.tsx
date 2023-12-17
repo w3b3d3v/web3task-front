@@ -1,11 +1,9 @@
-import { Button } from "@/components/01-atoms/ui/button";
+"use client";
 
-export default function Home() {
-  return (
-    <div className="flex justify-center">
-      <Button className="text-lg" size={"lg"} variant="secondary">
-        Button
-      </Button>
-    </div>
-  );
-}
+import { HomeSection } from "@/components/04-templates";
+
+const Home = () => {
+  return <HomeSection />;
+};
+
+export default Home;

@@ -1,13 +1,12 @@
 import { configureChains, createConfig } from "wagmi";
 import { polygon, polygonMumbai } from "wagmi/chains";
-import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { getDefaultWallets } from "@rainbow-me/rainbowkit";
 
 export enum SupportedNetworks {
   "Polygon" = 137,
   "Mumbai" = 80001,
-  "GoChain" = 31337
+  "Hardhat" = 31337,
 }
 
 export const ENV_DEFAULT_CHAIN_ID = process.env.NEXT_PUBLIC_USE_TESTNET
@@ -20,7 +19,7 @@ const apiKey = process.env.NEXT_PUBLIC_USE_TESTNET
 
 const { chains, publicClient } = configureChains(
   [polygon, polygonMumbai],
-  [alchemyProvider({ apiKey: apiKey ?? "" }), publicProvider()]
+  [publicProvider()],
 );
 
 const { connectors } = getDefaultWallets({
