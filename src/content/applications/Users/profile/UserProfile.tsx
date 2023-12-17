@@ -1,12 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { Helmet } from "react-helmet-async";
 import { useTaskServiceHook } from "@/hooks/TaskServiceHook";
 import { useEffect } from "react";
 import CardMultiTasks from "@/components/03-organisms/CardMultiTasks";
 import { useWeb3Utils } from "@/hooks/Web3UtilsHook";
 import usePagination from "@/hooks/usePagination";
 import CoverUserProfile from "@/components/02-molecules/CoverUserProfile";
+import React from "react";
 
 const BoxCover = styled(Box)(
   ({ theme }) => `
@@ -50,10 +50,7 @@ const UserProfile = () => {
   }, [currentPage, handleMultiTask]);
 
   return (
-    <>
-      <Helmet>
-        <title>Web3Task - Profile</title>
-      </Helmet>
+    <div>
       <Box>
         <BoxCover
           display={"flex"}
@@ -199,7 +196,7 @@ const UserProfile = () => {
           <Pagination />
         </Box>
       </Box>
-    </>
+    </div>
   );
 };
 

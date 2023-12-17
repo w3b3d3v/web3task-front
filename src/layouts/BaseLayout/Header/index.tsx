@@ -7,7 +7,7 @@ import {
   styled,
   useTheme,
 } from "@mui/material";
-import Logo from "@/components/02-molecules/LogoSign";
+import Logo from "@/components/01-atoms/LogoSign";
 import HeaderSearch from "./Search";
 import HeaderUserbox from "./Userbox";
 import HeaderUserConnect from "./UserConnect";

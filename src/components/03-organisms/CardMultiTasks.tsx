@@ -101,5 +101,3 @@ export const CardMultiTasks = ({ multiTasksData, loading, page }) => {
     </>
   );
 };
-
-export default CardMultiTasks;

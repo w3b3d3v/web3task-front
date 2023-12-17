@@ -1,19 +1,17 @@
-'use client'
+"use client";
 
 import { useTaskServiceHook } from "@/hooks/TaskServiceHook";
 import { useEffect } from "react";
 import { Box, Grid, useTheme } from "@mui/material";
-import CardMultiTasks from "@/components/03-organisms/CardMultiTasks";
 import CoverHomeTasks from "@/components/02-molecules/CoverHomeTasks";
 import usePagination from "@/hooks/usePagination";
-import SearchFilters from "@/components/03-organisms/SearchFiltersTasks";
+import { CardMultiTasks, SearchFilters } from "@/components/03-organisms";
 import { useSearchFilters } from "@/hooks/useSearchFilters";
 
 const TASKS_PER_PAGE = 20;
 
 const HomeTasks = () => {
-  const { handleMultiTask, multiTasksData, loading } =
-    useTaskServiceHook();
+  const { handleMultiTask, multiTasksData, loading } = useTaskServiceHook();
   const theme = useTheme();
   const { filter: filterTasks } = useSearchFilters();
   const { currentPage, Pagination } = usePagination();

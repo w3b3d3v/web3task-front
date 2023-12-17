@@ -9,18 +9,16 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { Helmet } from "react-helmet-async";
 import Loader from "@/components/01-atoms/Loader";
 import { useTaskServiceHook } from "@/hooks/TaskServiceHook";
 import { useEffect } from "react";
-import CardTasks from "@/components/03-organisms/CardTask";
+import { CardTask } from "@/components/03-organisms";
 
 const DetailsTask = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const { taskId } = useParams();
-  const { handleTask, taskData, loading, error } =
-    useTaskServiceHook();
+  const { handleTask, taskData, loading, error } = useTaskServiceHook();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,10 +30,6 @@ const DetailsTask = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Web3Task - Profile</title>
-      </Helmet>
-
       <Container
         sx={{
           display: "flex",
@@ -58,7 +52,7 @@ const DetailsTask = () => {
                   width={isSmallScreen ? "100%" : 709}
                   mt={isSmallScreen ? 2 : 0}
                 >
-                  <CardTasks
+                  <CardTask
                     taskId={taskId}
                     taskData={taskData}
                     loading={loading}

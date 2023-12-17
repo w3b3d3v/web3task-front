@@ -9,10 +9,10 @@ const LogoWrapper = styled(Link)(
         width: 200px;
         margin: 5 auto;
         font-weight: ${theme.typography.fontWeightBold};
-`
+`,
 );
 
-function Logo({ logoImage }) {
+export const Logo = ({ logoImage }) => {
   const theme = useTheme();
 
   return (
@@ -24,6 +24,4 @@ function Logo({ logoImage }) {
       />
     </LogoWrapper>
   );
-}
-
-export default Logo;
+};

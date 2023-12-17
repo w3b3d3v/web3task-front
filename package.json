@@ -29,7 +29,6 @@
     "react": "^18",
     "react-custom-scrollbars-2": "4.5.0",
     "react-dom": "^18",
-    "react-helmet-async": "1.3.0",
     "react-hook-form": "7.47.0",
     "react-icons": "^4.12.0",
     "react-number-format": "5.1.4",

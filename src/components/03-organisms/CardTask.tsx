@@ -14,7 +14,7 @@ import { HiOutlineClock, HiOutlineExternalLink } from "react-icons/hi";
 import { useTaskService } from "@/services/tasks-service";
 import { useWeb3Utils } from "@/hooks/Web3UtilsHook";
 import { useTheme } from "@mui/system";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 /**
  * CardTasks Component
@@ -75,17 +75,15 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
           break;
         case "In Review":
           await completeTask(BigInt(taskId));
-          toast.info(
-            "Complete Task process initiated with success!"
-          );
+          toast.info("Complete Task process initiated with success!");
           break;
         default:
           break;
       }
     } catch (error) {
-      let errorMessage = 'Unexpected error'
+      let errorMessage = "Unexpected error";
       if (error instanceof Error) {
-        errorMessage = error.message
+        errorMessage = error.message;
       }
       setError(errorMessage);
       setOpenError(true);
@@ -97,9 +95,9 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
       await cancelTask(BigInt(taskId));
       toast.warning("Cancel Task process initiated with success!");
     } catch (error) {
-      let errorMessage = 'Unexpected error'
+      let errorMessage = "Unexpected error";
       if (error instanceof Error) {
-        errorMessage = error.message
+        errorMessage = error.message;
       }
       setError(errorMessage);
       setOpenError(true);
@@ -113,7 +111,7 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
 
     getAction(taskData.status);
 
-    const address = userAddress()
+    const address = userAddress();
 
     if (!address) {
       return;
@@ -283,5 +281,3 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
     </Grid>
   );
 };
-
-export default CardTask;
