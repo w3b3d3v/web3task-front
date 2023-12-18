@@ -1,10 +1,10 @@
 import { FC, ReactNode, Suspense, lazy } from "react";
 import { Box, alpha, lighten, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
-import Header from "../../components/02-molecules/Header";
-import Footer from "@/components/02-molecules/Footer";
+import Header from "../../components/02-molecules/TheHeader";
+import Footer from "@/components/02-molecules/TheFooter";
 import { useAccount } from "wagmi";
-import HomeTasks from "@/content/applications/Tasks/HomeTasks";
+import { HomeSection } from "@/components/04-templates";
 
 interface BaseLayoutProps {
   children?: ReactNode;
@@ -31,14 +31,14 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
               theme.palette.mode === "dark"
                 ? `0 1px 0 ${alpha(
                     lighten(theme.colors.primary.main, 0.7),
-                    0.15
+                    0.15,
                   )}, 0px 2px 4px -3px rgba(0, 0, 0, 0.2), 0px 5px 12px -4px rgba(0, 0, 0, .1)`
                 : `0px 2px 4px -3px ${alpha(
                     theme.colors.alpha.black[100],
-                    0.1
+                    0.1,
                   )}, 0px 5px 12px -4px ${alpha(
                     theme.colors.alpha.black[100],
-                    0.05
+                    0.05,
                   )}`,
           },
         }}
@@ -67,7 +67,7 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
             }}
           >
             <Box display="block">
-              <HomeTasks />
+              <HomeSection />
             </Box>
           </Box>
         )}

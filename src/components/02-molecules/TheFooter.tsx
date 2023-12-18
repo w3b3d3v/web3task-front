@@ -6,7 +6,7 @@ import {
   Typography,
   styled,
   useTheme,
-} from '@mui/material';
+} from "@mui/material";
 import {
   BsGithub,
   BsYoutube,
@@ -16,19 +16,19 @@ import {
   BsInstagram,
   BsLinkedin,
   BsFacebook,
-} from 'react-icons/bs';
-import Logo from './LogoSign';
+} from "react-icons/bs";
+import { Logo } from "../01-atoms";
 
 const FooterWrapper = styled(Container)(
   ({ theme }) => `
         margin-top: ${theme.spacing(4)};
-`
+`,
 );
 
-function Footer() {
+export function TheFooter() {
   const theme = useTheme();
   const logoImage =
-    '/static/images/logo/logo-footer-' + theme.palette.mode + '.svg';
+    "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
 
   return (
     <FooterWrapper
@@ -37,9 +37,9 @@ function Footer() {
     >
       <Box
         pb={4}
-        display={{ xs: 'block', md: 'flex' }}
+        display={{ xs: "block", md: "flex" }}
         alignItems="center"
-        textAlign={{ xs: 'center', md: 'left' }}
+        textAlign={{ xs: "center", md: "left" }}
         justifyContent="space-between"
         height="400"
       >
@@ -47,25 +47,25 @@ function Footer() {
         <Box>
           <ListItem>
             <Link href="/sobre-nos" underline="none">
-              {'Sobre Nós'}
+              {"Sobre Nós"}
             </Link>
           </ListItem>
 
           <ListItem>
             <Link href="/comunidade" underline="none">
-              {'Comunidade'}
+              {"Comunidade"}
             </Link>
           </ListItem>
 
           <ListItem>
             <Link href="/postagens" underline="none">
-              {'Postagens'}
+              {"Postagens"}
             </Link>
           </ListItem>
 
           <ListItem>
             <Link href="/perguntas-frequentes" underline="none">
-              {'Perguntas Frequentes'}
+              {"Perguntas Frequentes"}
             </Link>
           </ListItem>
         </Box>
@@ -74,10 +74,10 @@ function Footer() {
           <Typography
             sx={{
               pt: { xs: 2, md: 0 },
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              mb: '1rem',
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              mb: "1rem",
             }}
             variant="subtitle1"
           >
@@ -100,7 +100,7 @@ function Footer() {
           </Box>
         </Box>
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Typography variant="subtitle1">
           &copy; 2023 Marketplace de Tarefas Web3Task
         </Typography>
@@ -108,5 +108,3 @@ function Footer() {
     </FooterWrapper>
   );
 }
-
-export default Footer;

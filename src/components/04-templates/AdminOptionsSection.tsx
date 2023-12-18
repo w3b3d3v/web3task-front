@@ -4,7 +4,7 @@ import { useState } from "react";
 import CoverAdminOptions from "@/components/02-molecules/CoverAdminOptions";
 import { useTaskServiceHook } from "@/hooks/TaskServiceHook";
 
-const AdminOptions = () => {
+export const AdminOptionsSection = () => {
   const { handleRole, handleOperator, handleQuorum, handleDeposit } =
     useTaskServiceHook();
 
@@ -31,7 +31,7 @@ const AdminOptions = () => {
 
   const handleInputChange = (
     action: string,
-    event: { target: { name: any; value: any } }
+    event: { target: { name: any; value: any } },
   ) => {
     switch (action) {
       case "role": {
@@ -70,7 +70,7 @@ const AdminOptions = () => {
 
   const handleSubmit = async (
     action: string,
-    event: { preventDefault: () => void }
+    event: { preventDefault: () => void },
   ) => {
     event.preventDefault();
 
@@ -80,7 +80,7 @@ const AdminOptions = () => {
           await handleRole(
             role.roleId,
             role.authorizedAddress,
-            role.isAuthorized
+            role.isAuthorized,
           );
         } catch (error) {
           console.error("Erro ao enviar o formulário:", error);
@@ -92,7 +92,7 @@ const AdminOptions = () => {
           await handleOperator(
             operator.interfaceId,
             operator.roleId,
-            operator.isAuthorized
+            operator.isAuthorized,
           );
         } catch (error) {
           console.error("Erro ao enviar o formulário:", error);
@@ -256,5 +256,3 @@ const AdminOptions = () => {
     </>
   );
 };
-
-export default AdminOptions;
