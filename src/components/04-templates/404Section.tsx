@@ -1,17 +1,16 @@
+"use client";
+
 import {
-  Box,
-  Card,
   Typography,
-  Container,
+  Card,
+  FormControl,
+  InputAdornment,
   Divider,
   Button,
-  FormControl,
   OutlinedInput,
-  InputAdornment,
 } from "@mui/material";
-import { Helmet } from "react-helmet-async";
+import { Container, Box, styled } from "@mui/system";
 import { HiOutlineSearch } from "react-icons/hi";
-import { styled } from "@mui/material/styles";
 
 const MainContent = styled(Box)(
   ({ theme }) => `
@@ -22,33 +21,30 @@ const MainContent = styled(Box)(
     flex-direction: column;
     align-items: center;
     justify-content: center;
-`
+`,
 );
 
 const OutlinedInputWrapper = styled(OutlinedInput)(
   ({ theme }) => `
     background-color: ${theme.colors.secondary[100]};
-`
+`,
 );
 
 const ButtonSearch = styled(Button)(
   ({ theme }) => `
     margin-right: -${theme.spacing(1)};
-`
+`,
 );
 
-function Status404() {
+export const Error404Section = () => {
   return (
-    <>
-      <Helmet>
-        <title>Status - 404</title>
-      </Helmet>
+    <div>
       <MainContent>
         <Container maxWidth="md">
           <Box textAlign="center">
             <img alt="404" height={180} src="/static/images/status/404.svg" />
             <Typography variant="h2" sx={{ my: 2 }}>
-              The page you were looking for doesn't exist.
+              The page you were looking for doesnt exist.
             </Typography>
             <Typography
               variant="h4"
@@ -56,8 +52,8 @@ function Status404() {
               fontWeight="normal"
               sx={{ mb: 4 }}
             >
-              It's on us, we moved the content to a different page. The search
-              below should help!
+              It&apos;s on us, we moved the content to a different page. The
+              search below should help!
             </Typography>
           </Box>
           <Container maxWidth="sm">
@@ -88,8 +84,6 @@ function Status404() {
           </Container>
         </Container>
       </MainContent>
-    </>
+    </div>
   );
-}
-
-export default Status404;
+};

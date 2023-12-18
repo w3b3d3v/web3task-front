@@ -8,7 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, useTheme } from "@mui/material";
 import { Dayjs } from "dayjs";
 import { DatePicker, DatePickerProps } from "@mui/x-date-pickers";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 import Loader from "@/components/01-atoms/Loader";
 import CoverCreateTask from "@/components/02-molecules/CoverCreateTask";
@@ -74,14 +74,14 @@ const schema = yup
   })
   .required();
 
-const CreateTask = ({ data }) => {
+export const CreateTaskSection = ({ data }) => {
   const theme = useTheme();
   const { createTask } = useTaskService();
   const [task, setTask] = useState<Task>();
-  const [valueReward, setValueReward] = useState<string>('');
-  const [authorizedRolesStr, setAuthorizedRolesStr] = useState<string>('');
+  const [valueReward, setValueReward] = useState<string>("");
+  const [authorizedRolesStr, setAuthorizedRolesStr] = useState<string>("");
   const [expireDate, setExpireDate] = useState<DatePickerProps<Dayjs> | null>(
-    null
+    null,
   );
   const [loading, setLoading] = useState<boolean>(true);
   const [openError, setOpenError] = useState(false);
@@ -134,12 +134,10 @@ const CreateTask = ({ data }) => {
 
   const onSubmit = async (event: { preventDefault: () => void }) => {
     try {
-      toast.info(
-        "Create Task Start process initiated with success!"
-      );
+      toast.info("Create Task Start process initiated with success!");
       let authorizedRoles: string[] = authorizedRolesStr.split(",");
       const splittedRoles: readonly bigint[] = authorizedRoles.map((str) =>
-        BigInt(str)
+        BigInt(str),
       );
       task.authorizedRoles = splittedRoles;
       task.reward = BigInt(valueReward);
@@ -284,5 +282,3 @@ const CreateTask = ({ data }) => {
     </Stack>
   );
 };
-
-export default CreateTask;

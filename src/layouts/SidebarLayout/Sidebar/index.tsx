@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 
 import SidebarMenu from "./SidebarMenu";
-import Logo from "@/components/02-molecules/LogoSign";
+import Logo from "@/components/01-atoms/LogoSign";
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
