@@ -25,7 +25,7 @@ const CardAddAction = styled(Card)(
             border-color: ${theme.colors.alpha.black[70]};
             cursor: pointer;
           }
-  `
+  `,
 );
 
 /**
@@ -42,7 +42,7 @@ const CardAddAction = styled(Card)(
 
 export const CardMultiTasks = ({ multiTasksData, loading, page }) => {
   const handleCardSelect = (taskId) => {
-    window.location.href = "/tasks/details-task/" + taskId;
+    window.location.href = "/tasks/details/" + taskId;
   };
 
   return (

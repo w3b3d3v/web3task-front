@@ -1,28 +1,28 @@
-'use client';
+"use client";
 
-import '@rainbow-me/rainbowkit/styles.css';
-import '@/app/globals.css';
-import 'react-toastify/dist/ReactToastify.css';
+import "@rainbow-me/rainbowkit/styles.css";
+import "@/app/globals.css";
+import "react-toastify/dist/ReactToastify.css";
 
 // import type { Metadata } from 'next'
-import { Inter } from 'next/font/google';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { CssBaseline } from '@mui/material';
-import { WagmiConfig } from 'wagmi';
+import { Inter } from "next/font/google";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { CssBaseline } from "@mui/material";
+import { WagmiConfig } from "wagmi";
 import {
   RainbowKitProvider,
   darkTheme,
   lightTheme,
-} from '@rainbow-me/rainbowkit';
-import { ToastContainer } from 'react-toastify';
+} from "@rainbow-me/rainbowkit";
+import { ToastContainer } from "react-toastify";
 
-import ThemeProviderWrapper from '@/theme/ThemeProvider';
-import { SidebarProvider } from '@/contexts/SidebarContext';
-import { SearchFiltersProvider } from '@/contexts/SearchFiltersContext';
-import { chains, wagmiConfig } from '@/lib/wagmi';
+import ThemeProviderWrapper from "@/theme/ThemeProvider";
+import { SidebarProvider } from "@/contexts/SidebarContext";
+import { SearchFiltersProvider } from "@/contexts/SearchFiltersContext";
+import { chains, wagmiConfig } from "@/lib/wagmi";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 // export const metadata: Metadata = {
 //   title: 'Create Next App',
@@ -42,13 +42,13 @@ export default function RootLayout({
             <RainbowKitProvider
               theme={{
                 lightMode: lightTheme({
-                  accentColor: 'black',
-                  borderRadius: 'small',
-                  overlayBlur: 'small',
+                  accentColor: "black",
+                  borderRadius: "small",
+                  overlayBlur: "small",
                 }),
                 darkMode: darkTheme({
-                  borderRadius: 'small',
-                  overlayBlur: 'small',
+                  borderRadius: "small",
+                  overlayBlur: "small",
                 }),
               }}
               chains={chains}
@@ -57,8 +57,8 @@ export default function RootLayout({
                 <SearchFiltersProvider>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <CssBaseline />
-                      {children}
-                      <ToastContainer position='bottom-left' autoClose={6000}  />
+                    {children}
+                    <ToastContainer position="bottom-left" autoClose={6000} />
                   </LocalizationProvider>
                 </SearchFiltersProvider>
               </SidebarProvider>

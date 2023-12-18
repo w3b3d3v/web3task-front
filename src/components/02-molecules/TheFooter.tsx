@@ -17,15 +17,15 @@ import {
   BsLinkedin,
   BsFacebook,
 } from "react-icons/bs";
-import Logo from "../01-atoms/LogoSign";
+import { Logo } from "../01-atoms";
 
 const FooterWrapper = styled(Container)(
   ({ theme }) => `
         margin-top: ${theme.spacing(4)};
-`
+`,
 );
 
-function Footer() {
+export function TheFooter() {
   const theme = useTheme();
   const logoImage =
     "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
@@ -108,5 +108,3 @@ function Footer() {
     </FooterWrapper>
   );
 }
-
-export default Footer;

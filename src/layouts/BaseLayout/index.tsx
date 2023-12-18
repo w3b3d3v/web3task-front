@@ -1,8 +1,8 @@
 import { FC, ReactNode, Suspense, lazy } from "react";
 import { Box, alpha, lighten, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
-import Header from "../../components/02-molecules/Header";
-import Footer from "@/components/02-molecules/Footer";
+import Header from "../../components/02-molecules/TheHeader";
+import Footer from "@/components/02-molecules/TheFooter";
 import { useAccount } from "wagmi";
 import { HomeSection } from "@/components/04-templates";
 
