@@ -42,7 +42,7 @@ const CardAddAction = styled(Card)(
 
 export const CardMultiTasks = ({ multiTasksData, loading, page }) => {
   const handleCardSelect = (taskId) => {
-    window.location.href = "/tasks/details/" + taskId;
+    window.location.href = "/details/" + taskId;
   };
 
   return (
