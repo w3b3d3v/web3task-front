@@ -79,41 +79,33 @@ export function useTaskService() {
   }, [contractAddress])
 
   const createTask = useCallback(async (task: Task) => {
-    try {
-      const isLeader = !!userAddress && (await hasLeaderRole(userAddress));
+    const isLeader = !!userAddress && (await hasLeaderRole(userAddress));
 
-      if (!isLeader) {
-        throw new Error('User does not have the leader role!');
-      }
-
-      const createTaskInterfaceID = getFunctionSelector(
-        getAbiItem({
-          abi: web3taskABI,
-          name: 'createTask',
-        })
-      );
-
-      const isOperator = await readContract({
-        address: contractAddress,
-        abi: web3taskABI,
-        functionName: 'isOperator',
-        args: [createTaskInterfaceID, BigInt(UserRole.Leader)],
-      });
-
-      if (!isOperator) {
-        throw new Error('User unauthorized to perform createTask!');
-      }
-
-      await createTaskMutation.writeAsync({
-        args: [task],
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error('Unexpected error');
-      }
+    if (!isLeader) {
+      throw new Error('User does not have the leader role!');
     }
+
+    const createTaskInterfaceID = getFunctionSelector(
+      getAbiItem({
+        abi: web3taskABI,
+        name: 'createTask',
+      })
+    );
+
+    const isOperator = await readContract({
+      address: contractAddress,
+      abi: web3taskABI,
+      functionName: 'isOperator',
+      args: [createTaskInterfaceID, BigInt(UserRole.Leader)],
+    });
+
+    if (!isOperator) {
+      throw new Error('User unauthorized to perform createTask!');
+    }
+
+    await createTaskMutation.writeAsync({
+      args: [task],
+    });
   }, [contractAddress, createTaskMutation, hasLeaderRole, userAddress])
 
   const startTask = useCallback(async (id: bigint) => {
