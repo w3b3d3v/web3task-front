@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams } from "next/navigation";
 import {
   Box,
   Card,
@@ -22,11 +22,11 @@ export const DetailsTaskSection = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await handleTask(BigInt(taskId!));
+      await handleTask(BigInt(taskId as string));
     };
 
     fetchData();
-  }, [handleTask, taskId]);
+  }, [taskId]);
 
   return (
     <Container
