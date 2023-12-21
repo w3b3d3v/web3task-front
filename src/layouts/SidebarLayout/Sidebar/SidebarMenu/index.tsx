@@ -8,10 +8,10 @@ import {
   Button,
   ListItem,
 } from "@mui/material";
-import { NavLink as RouterLink } from "react-router-dom";
 import { SidebarContext } from "@/contexts/SidebarContext";
 import { LuPencilRuler } from "react-icons/lu";
 import { MdBrightness5, MdLogoDev } from "react-icons/md";
+import Link from "next/link";
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -167,9 +167,9 @@ function SidebarMenu() {
               <ListItem component="div">
                 <Button
                   disableRipple
-                  component={RouterLink}
+                  component={Link}
                   onClick={closeSidebar}
-                  to="/home-side/overview"
+                  href="/home-side/overview"
                   startIcon={<LuPencilRuler />}
                 >
                   {'menu.item1.label'}
@@ -191,9 +191,9 @@ function SidebarMenu() {
               <ListItem component="div">
                 <Button
                   disableRipple
-                  component={RouterLink}
+                  component={Link}
                   onClick={closeSidebar}
-                  to="/home-side/overview"
+                  href="/home-side/overview"
                   startIcon={<MdBrightness5 />}
                 >
                   {'menu.item3.label'}
@@ -202,9 +202,9 @@ function SidebarMenu() {
               <ListItem component="div">
                 <Button
                   disableRipple
-                  component={RouterLink}
+                  component={Link}
                   onClick={closeSidebar}
-                  to="/home-side/overview"
+                  href="/home-side/overview"
                   startIcon={<MdLogoDev />}
                 >
                   {'menu.item4.label'}

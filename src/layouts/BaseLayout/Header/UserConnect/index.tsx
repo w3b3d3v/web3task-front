@@ -1,7 +1,4 @@
-import { useRef, useState, useEffect } from "react";
-
-import { NavLink } from "react-router-dom";
-
+import { useRef, useState } from "react";
 import {
   Avatar,
   Box,
@@ -10,15 +7,16 @@ import {
   Hidden,
   lighten,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   Popover,
   Typography,
 } from "@mui/material";
-
 import { styled } from "@mui/material/styles";
 import { HiOutlineChevronDown, HiOutlineAnnotation } from "react-icons/hi";
 import { useAccount, useConnect } from "wagmi";
+import Link from "next/link";
+
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -103,9 +101,9 @@ function HeaderUserConnect() {
           {
             connectors
             .map((connector) => (
-              <ListItem button to="/" key={connector.id} onClick={() => connect({connector})} component={NavLink}>
+              <ListItemButton href="/" key={connector.id} onClick={() => connect({connector})} component={Link}>
                 <ListItemText primary={connector.name || (isConnecting && connector.id === pendingConnector?.id && ' (connecting)')} />
-              </ListItem>
+              </ListItemButton>
             ))
           }
         </List>

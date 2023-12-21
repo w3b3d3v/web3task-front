@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -8,17 +7,18 @@ import {
   Hidden,
   lighten,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   Popover,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { HiOutlineChevronDown, HiOutlineLockOpen } from "react-icons/hi";
+import { useAccount, useDisconnect } from "wagmi";
+import Link from "next/link";
 import { User } from "@/models/user";
 import { useWeb3Utils } from "@/hooks/Web3UtilsHook";
 import { useTaskService } from "@/services/tasks-service";
-import { useAccount, useDisconnect } from "wagmi";
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -183,20 +183,20 @@ function HeaderUserbox() {
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
-          <ListItem button to="/users/profile" component={NavLink}>
+          <ListItemButton href="/users/profile" component={Link}>
             <ListItemText primary="Perfil" />
-          </ListItem>
+          </ListItemButton>
           {
             isLeader &&
-            <ListItem button to="/tasks/create-task" component={NavLink}>
+            <ListItemButton href="/tasks/create-task" component={Link}>
               <ListItemText primary="Criar Tarefa" />
-            </ListItem>
+            </ListItemButton>
           }
           {
             isLeader &&
-            <ListItem button to="/settings" component={NavLink}>
+            <ListItemButton href="/settings" component={Link}>
               <ListItemText primary="Configurações" />
-            </ListItem>
+            </ListItemButton>
           }
         </List>
         <Divider />

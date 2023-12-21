@@ -1,15 +1,14 @@
 import {
   Box,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   Menu,
   MenuItem,
 } from "@mui/material";
 import { useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-import { HiOutlineChevronDown } from "react-icons/hi";
+import Link from "next/link";
 
 const ListWrapper = styled(Box)(
   ({ theme }) => `
@@ -84,22 +83,20 @@ function HeaderMenu() {
         }}
       >
         <List disablePadding component={Box} display="flex">
-          <ListItem
+          <ListItemButton
             classes={{ root: "MuiListItem-indicators" }}
-            button
-            component={NavLink}
-            to="/home-side/overview"
+            component={Link}
+            href="/home-side/overview"
           >
             <ListItemText
               primaryTypographyProps={{ noWrap: true }}
               primary={'menu.item1.label'}
             />
-          </ListItem>
-          <ListItem
+          </ListItemButton>
+          <ListItemButton
             classes={{ root: "MuiListItem-indicators" }}
-            button
-            component={NavLink} 
-            to="/home-side/overview"
+            component={Link} 
+            href="/home-side/overview"
           >
             <ListItemText
               primaryTypographyProps={{ noWrap: true }}
@@ -109,10 +106,9 @@ function HeaderMenu() {
                 </Box>
               }
             />
-          </ListItem>
-          <ListItem
+          </ListItemButton>
+          <ListItemButton
             classes={{ root: "MuiListItem-indicators" }}
-            button
             ref={ref}
             onClick={handleOpen}
           >
@@ -126,14 +122,14 @@ function HeaderMenu() {
                 </Box>
               }
             />
-          </ListItem>
+          </ListItemButton>
         </List>
       </ListWrapper>
       <Menu anchorEl={ref.current} onClose={handleClose} open={isOpen}>
-        <MenuItem sx={{ px: 3 }} component={NavLink} to="/">
+        <MenuItem sx={{ px: 3 }} component={Link} href="/">
           {'menu.item3.subItens.subItem1.label'}
         </MenuItem>
-        <MenuItem sx={{ px: 3 }} component={NavLink} to="/home-side/overview">
+        <MenuItem sx={{ px: 3 }} component={Link} href="/home-side/overview">
           {'menu.item3.subItens.subItem2.label'}
         </MenuItem>
       </Menu>

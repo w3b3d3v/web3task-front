@@ -1,5 +1,5 @@
 import { styled, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const LogoWrapper = styled(Link)(
   ({ theme }) => `
