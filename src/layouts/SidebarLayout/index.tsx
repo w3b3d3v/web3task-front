@@ -1,15 +1,14 @@
 import { FC, ReactNode } from "react";
 import { Box, alpha, lighten, useTheme } from "@mui/material";
-import { Outlet } from "react-router-dom";
 
-import Sidebar from "./Sidebar";
-import Header from "./Header";
-import Footer from "@/components/02-molecules/TheFooter";
+import Sidebar from "@/layouts/SidebarLayout/Sidebar";
+import Header from "@/layouts/SidebarLayout/Header";
+import { TheFooter } from "@/components/02-molecules/TheFooter";
 interface SidebarLayoutProps {
   children?: ReactNode;
 }
 
-const SidebarLayout: FC<SidebarLayoutProps> = () => {
+const SidebarLayout: FC<SidebarLayoutProps> = ({ children }) => {
   const theme = useTheme();
 
   return (
@@ -56,9 +55,9 @@ const SidebarLayout: FC<SidebarLayoutProps> = () => {
           }}
         >
           <Box display="block">
-            <Outlet />
+            {children}
           </Box>
-          <Footer />
+          <TheFooter />
         </Box>
       </Box>
     </>

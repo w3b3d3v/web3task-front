@@ -1,16 +1,12 @@
 import { useRef, useState } from "react";
-
-import { NavLink } from "react-router-dom";
-
 import {
   Avatar,
   Box,
   Button,
   Divider,
   Hidden,
-  lighten,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   Popover,
   Typography,
@@ -18,6 +14,7 @@ import {
 import { HiOutlineInbox, HiOutlineChevronDown, HiOutlineUserCircle, HiOutlineLockOpen } from "react-icons/hi";
 import { MdOutlineAccountTree } from "react-icons/md";
 import { styled } from "@mui/material/styles";
+import Link from "next/link";
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -112,23 +109,22 @@ function HeaderUserbox() {
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
-          <ListItem button to="/management/profile/details" component={NavLink}>
+          <ListItemButton href="/management/profile/details" component={Link}>
             <HiOutlineUserCircle fontSize="small" />
             <ListItemText primary="My Profile" />
-          </ListItem>
-          <ListItem button to="/dashboards/messenger" component={NavLink}>
+          </ListItemButton>
+          <ListItemButton href="/dashboards/messenger" component={Link}>
             <HiOutlineInbox fontSize="small" />
             <ListItemText primary="Messenger" />
-          </ListItem>
-          <ListItem
+          </ListItemButton>
+          <ListItemButton
             color="primary"
-            button
-            to="/management/profile/settings"
-            component={NavLink}
+            href="/management/profile/settings"
+            component={Link}
           >
             <MdOutlineAccountTree fontSize="small" />
             <ListItemText primary="Account Settings" />
-          </ListItem>
+          </ListItemButton>
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>

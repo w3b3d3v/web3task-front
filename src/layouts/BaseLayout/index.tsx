@@ -1,18 +1,17 @@
-import { FC, ReactNode, Suspense, lazy } from "react";
+import { FC, ReactNode } from "react";
 import { Box, alpha, lighten, useTheme } from "@mui/material";
-import { Outlet } from "react-router-dom";
-import Header from "../../components/02-molecules/TheHeader";
-import Footer from "@/components/02-molecules/TheFooter";
 import { useAccount } from "wagmi";
+import { TheHeader } from "@/components/02-molecules/TheHeader";
+import { TheFooter } from "@/components/02-molecules/TheFooter";
 import { HomeSection } from "@/components/04-templates";
 
 interface BaseLayoutProps {
   children?: ReactNode;
 }
 
-const BaseLayout: FC<BaseLayoutProps> = () => {
+const BaseLayout: FC<BaseLayoutProps> = ({ children }) => {
   const theme = useTheme();
-  const { data: accountData } = useAccount();
+  const { address } = useAccount();
 
   return (
     <>
@@ -43,8 +42,8 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
           },
         }}
       >
-        <Header data={accountData} />
-        {accountData ? (
+        <TheHeader data={address} />
+        {address ? (
           <Box
             sx={{
               position: "relative",
@@ -54,7 +53,7 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
             }}
           >
             <Box display="block">
-              <Outlet />
+              {children}
             </Box>
           </Box>
         ) : (
@@ -71,7 +70,7 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
             </Box>
           </Box>
         )}
-        <Footer />
+        <TheFooter />
       </Box>
     </>
   );
