@@ -34,7 +34,7 @@ function SearchFilters({ maxReward = 0 }: SearchFiltersProps) {
 
   return (
     <Box display="flex" flexDirection="column">
-      <Box display="inline-flex" alignItems="center" justifyContent={'left'} ml={4}>
+      <Box display="inline-flex" alignItems="left" justifyContent={'left'} gap={1} ml={2}>
         <TuneIcon color='primary' />
         <Typography fontSize={20}>Filter</Typography>
       </Box>

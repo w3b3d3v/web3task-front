@@ -18,69 +18,30 @@ export function useTaskService() {
 	// Leader
 	async function createTask(task: Task) {
 		let functionName = "createTask";
-
 		try {
-			// Check if the user is a valid operator of the function
-			const isLeader = await hasLeaderRole(userAddress());
-			const isOperator = await tasksManagerContract.isOperator(
-				await _getSighash(functionName),
-				UserRole.Leader
-			);
-
-			// Throw error if the user is not a valid operator
-			if (!isOperator || !isLeader) {
-				_unauthorizeUserError(functionName);
-			}
-
-			// Create the task
 			await tasksManagerContract.createTask(task);
 		} catch (error) {
-			_throwError(error);
+			_unauthorizeUserError(functionName);
 		}
 	}
 
-	// Leader or Member
-	async function startTask(id: bigint) {
+	async function startTask(id: bigint, authorizedRoles: [Number], assignee: string) {
 		let functionName = "startTask";
-		let roleId: any = 0;
-
 		try {
-			/**
-			 * @dev We first check for the member hole, if it
-			 * is not present, we check for the leader role.
-			 *
-			 * Assuming members will start tasks but leaders
-			 * can become relayers and start tasks as well.
-			 */
-			if (await hasMemberRole(userAddress())) {
-				roleId = UserRole.Member;
-			} else if (await hasLeaderRole(userAddress())) {
-				roleId = UserRole.Leader;
-			}
-
-			/**
-			 * @dev Check if the user is a valid operator of the function.
-			 *
-			 * In case the user has none of the roles, {isOperator} will
-			 * take `0` as argument and return 0, which is false.
-			 *
-			 * NOTE! There are no roles with Id 0. So this is a safe
-			 * way to check if the user has any of the roles.
-			 */
-			const isOperator = await tasksManagerContract.isOperator(
-				await _getSighash(functionName),
-				roleId
+			const hasRole = await tasksManagerContract.hasRole(
+				authorizedRoles,
+				userAddress()
 			);
 
-			// Throw error if the user is not a valid operator
-			if (!isOperator) {
+			const isAssignee = (assignee == userAddress())
+
+			if (!hasRole || !isAssignee) {
 				_unauthorizeUserError(functionName);
 			} else {
-				// Start the task
-				await tasksManagerContract.startTask(id, roleId);
+				await tasksManagerContract.startTask(id, authorizedRoles);
 			}
 		} catch (error) {
-			_throwError(error);
+			_unauthorizeUserError(functionName);
 		}
 	}
 
@@ -95,48 +56,22 @@ export function useTaskService() {
 	 * the due date or completion. This will create a history of reviews that can
 	 * be used to track the progress of the task and raise a dispute if needed.
 	 */
-	async function reviewTask(id: bigint, metadata: string) {
+	async function reviewTask(id: bigint, metadata: string, authorizedRoles: [Number], assignee: string) {
 		let functionName = "reviewTask";
-		let roleId: any;
 
 		try {
-			/**
-			 * @dev We check if the user is a member or a leader
-			 * and set the role accordingly. Otherwise, we throw
-			 * an error.
-			 */
-			if (await hasMemberRole(userAddress())) {
-				roleId = UserRole.Member;
-			}
-			if (await hasLeaderRole(userAddress())) {
-				roleId = UserRole.Leader;
-			}
-
-			// Check if the user is a valid operator of the function
 			const isOperator = await tasksManagerContract.isOperator(
 				await _getSighash(functionName),
-				roleId
+				authorizedRoles
 			);
 
-			/**
-			 * @dev The following check will make sure that the requirements are meet:
-			 *
-			 * - `id` must have a valid matching task id.
-			 * - `task.endDate` must be greater than `block.timestamp`.
-			 * - `userAddress` must be `task.assignee` or the `task.creator` must match `roleId`.
-			 */
-			const task = await _validateTask(id);
-			if (
-				!isOperator ||
-				(task.assignee != userAddress() && Number(task.creatorRole) != roleId)
-			) {
-				await _unauthorizeUserError(functionName);
+			if (!isOperator) {
+				_unauthorizeUserError(functionName);
 			} else {
-				// Review the task
-				await tasksManagerContract.reviewTask(id, roleId, metadata);
+				await tasksManagerContract.reviewTask(id, authorizedRoles, metadata);
 			}
 		} catch (error) {
-			_throwError(error);
+			_unauthorizeUserError(functionName);
 		}
 	}
 
@@ -144,14 +79,11 @@ export function useTaskService() {
 	 * @dev Only Leaders can operate this function, but the
 	 * task creator role are the one able to complete the task.
 	 */
-	async function completeTask(id: bigint) {
+	async function completeTask(id: bigint, authorizedRoles: [Number]) {
 		let functionName = "completeTask";
 		// Check if the user is a valid operator of the function and has the leader role
-		const hasRole = await hasLeaderRole(userAddress());
-		const isOperator = await tasksManagerContract.isOperator(
-			await _getSighash(functionName),
-			UserRole.Leader
-		);
+		// const hasRole = await hasLeaderRole(userAddress());
+
 
 		/**
 		 * @dev The following check will make sure that the requirements are meet:
@@ -162,32 +94,35 @@ export function useTaskService() {
 		 * - `userAddress` cannot vote twice.
 		 */
 		const task = await _validateTask(id);
+
+		const isOperator = await tasksManagerContract.isOperator(
+			await _getSighash(functionName),
+			authorizedRoles
+		);
+
+		const hasRole = await tasksManagerContract.hasRole(
+			authorizedRoles,
+			userAddress()
+		);
+
 		const voted = await hasVoted(id, userAddress());
 		if (
 			!isOperator ||
 			!hasRole ||
-			Number(task.creatorRole) != UserRole.Leader ||
 			voted
 		) {
 			await _unauthorizeUserError(functionName);
 		} else {
 			// Complete the task
-			await tasksManagerContract.completeTask(id, UserRole.Leader);
+			await tasksManagerContract.completeTask(id, authorizedRoles);
 		}
 	}
 	/**
 	 * @dev Only Leaders can operate this function, but the
 	 * task creator role are the one able to cancel the task.
 	 */
-	async function cancelTask(id: bigint) {
+	async function cancelTask(id: bigint, authorizedRole: Number) {
 		let functionName = "cancelTask";
-
-		// Check if the user is a valid operator of the function and has the leader role
-		const hasRole = await hasLeaderRole(userAddress());
-		const isOperator = await tasksManagerContract.isOperator(
-			await _getSighash(functionName),
-			UserRole.Leader
-		);
 
 		/**
 		 * @dev The following check will make sure that the requirements are meet:
@@ -196,15 +131,24 @@ export function useTaskService() {
 		 * - `task.endDate` must be greater than `block.timestamp`.
 		 * - `task.creator` must match `roleId`.
 		 */
-		const task = await _validateTask(id);
+
+		const isOperator = await tasksManagerContract.isOperator(
+			await _getSighash(functionName),
+			authorizedRole
+		);
+
+		const hasRole = await tasksManagerContract.hasRole(
+			authorizedRole,
+			userAddress()
+		);
+
 		if (
 			!isOperator ||
-			!hasRole ||
-			Number(task.creatorRole) != UserRole.Leader
+			!hasRole
 		) {
 			await _unauthorizeUserError(functionName);
 		}
-		await tasksManagerContract.cancelTask(id, UserRole.Leader);
+		await tasksManagerContract.cancelTask(id, authorizedRole);
 	}
 
 	async function getTask(taskId: any) {
@@ -219,7 +163,7 @@ export function useTaskService() {
 			return await tasksManagerContract.getTaskId();
 		} catch (error) {
 			handleSnackbar(
-				"Error when looking for the amount of tasks. Please connect to the website.",
+				"Connect wallet to see the amount of tasks available.",
 				"error"
 			);
 		}
@@ -322,6 +266,16 @@ export function useTaskService() {
 		}
 	}
 
+	async function setRoleName(roleId: any, roleName: any) {
+		console.log(roleId);
+		console.log(roleName);
+		try {
+			return await tasksManagerContract.setRoleName(roleId, roleName);
+		} catch (error) {
+			handleSnackbar("Error setting RoleName1", "error");
+		}
+	}
+
 	async function setMinQuorum(quorum: any) {
 		try {
 			return await tasksManagerContract.setMinQuorum(quorum);
@@ -345,6 +299,14 @@ export function useTaskService() {
 			return await tasksManagerContract.getScore(address);
 		} catch (error) {
 			handleSnackbar("Error getting Score", "error");
+		}
+	}
+
+	async function getRoleName(roleId: any) {
+		try {
+			return await tasksManagerContract.getRoleName(roleId);
+		} catch (error) {
+			handleSnackbar("Error getting RoleName", "error");
 		}
 	}
 
@@ -413,7 +375,7 @@ export function useTaskService() {
 			// Return the task for external handling
 			return task;
 		} catch (error) {
-			_throwError(error);
+			_unauthorizeUserError("Validate Task");
 		}
 	}
 
@@ -421,15 +383,6 @@ export function useTaskService() {
 		const errDesc: string =
 			"User unauthorized to perform " + functionName + "!";
 		handleSnackbar(errDesc, "error");
-		throw new Error(errDesc);
-	}
-
-	async function _throwError(err: any) {
-		handleSnackbar(
-			"Something went wrong... Please contact support asap!",
-			"error"
-		);
-		throw new Error(err);
 	}
 
 	return {
@@ -443,6 +396,7 @@ export function useTaskService() {
 		countUserTasks,
 		countTasks,
 		setRole,
+		setRoleName,
 		setOperator,
 		hasLeaderRole,
 		hasMemberRole,
@@ -453,5 +407,6 @@ export function useTaskService() {
 		getMinQuorum,
 		hasVoted,
 		getReviews,
+		getRoleName
 	};
 }
