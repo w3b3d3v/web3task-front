@@ -284,8 +284,20 @@ export const CardTask = ({ taskId, taskData, loading }: any) => {
                                             startIcon={<AccessTime />}
                                             variant="contained"
                                             component="span"
+                                            style={{
+                                                backgroundColor: 
+                                                taskData.status === "Completed" 
+                                                ? "green" 
+                                                : taskData.status === "Canceled" 
+                                                ? "red" 
+                                                : "initial",
+                                                color: "white",
+                                                fontWeight: "bold",
+                                                borderRadius: "12px",
+                                                padding: "6px 16px",
+                                            }}
                                         >
-                                            End Date: {taskData.endDate}
+                                            {taskData.status === "Completed" || taskData.status === "Canceled" ? "Ended" : `End Date: ${taskData.endDate}`}
                                         </Button>
                                     </Box>
                                 </CardContent>
