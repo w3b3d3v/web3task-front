@@ -1,5 +1,5 @@
 import { FC, ReactNode, Suspense, lazy } from "react";
-import { Box, alpha, lighten, useTheme } from "@mui/material";
+import { Box, Divider, alpha, lighten, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import SuspenseLoader from "src/components/SuspenseLoader";
@@ -54,7 +54,7 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
       >
         <Box sx={{ width: "100%" }}>
           <Header data={accountData} />
-        </Box>        
+        </Box>
         {accountData ? (
           <Box
             sx={{
@@ -85,6 +85,7 @@ const BaseLayout: FC<BaseLayoutProps> = () => {
           </Box>
         )
         }
+        <Divider />
         <Footer />
       </Box>
     </>

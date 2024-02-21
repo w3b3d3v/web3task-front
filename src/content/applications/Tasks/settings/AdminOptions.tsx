@@ -1,20 +1,28 @@
-import { Button, Card, CardContent, Stack, TextField, Typography } from '@mui/material';
+import { Button, Stack, TextField, Typography, InputLabel, MenuItem, FormControl, Select } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import { useTaskService } from 'src/services/tasks-service';
 import { useTaskServiceHook } from '../../../../hooks/TaskServiceHook';
-import CoverAdminOptions from 'src/components/Cover/CoverAdminOptions';
+import { useWeb3Utils } from "src/hooks/Web3UtilsHook";
 import { Helmet } from 'react-helmet-async';
 
 const AdminOptions = () => {
 
     const taskService = useTaskService();
-    const { handleRole, handleOperator, handleQuorum, handleDeposit } = useTaskServiceHook(taskService);
+    const { handleRole, handleOperator, handleQuorum, handleDeposit, handleRoleName } = useTaskServiceHook(taskService);
+    const { setCurrentRole, getUserRole, userAddress } = useWeb3Utils();
 
     const [role, setRole] = useState({
         roleId: "",
         authorizedAddress: "",
         isAuthorized: false
+    });
+
+    const [currentRoleField, setCurrentRoleField] = useState(0);
+
+    const [roleName, setRoleName] = useState({
+        id: "",
+        name: ""
     });
 
     const [operator, setOperator] = useState({
@@ -62,6 +70,18 @@ const AdminOptions = () => {
                 }));
                 break;
             }
+            case "roleName": {
+                setRoleName((prevOperator) => ({
+                    ...prevOperator,
+                    [event.target.name]: event.target.value
+                }));
+                break;
+            }
+            case "currentRole": {
+                const novoNumero = parseInt(event.target.value, 10);
+                setCurrentRoleField(novoNumero);
+                break
+            }
             default: {
                 console.log('defaulted handleInputChange');
             }
@@ -75,7 +95,6 @@ const AdminOptions = () => {
             case "setRole": {
                 try {
                     await handleRole(role.roleId, role.authorizedAddress, role.isAuthorized);
-
                 } catch (error) {
                     console.error('Error when filling the form:', error);
                 }
@@ -105,6 +124,19 @@ const AdminOptions = () => {
                 }
                 break;
             }
+            case "setRoleName": {
+                try {
+                    await handleRoleName(roleName.id, roleName.name)
+                } catch (error) {
+                    console.error('Error when filling the form:', error);
+                }
+                break;
+            }
+            case "setCurrentRoleField": {
+                const userData = { role: currentRoleField.toString() };
+                localStorage.setItem(userAddress(), JSON.stringify(userData));
+                break;
+            }
             default: {
                 break;
             }
@@ -116,9 +148,8 @@ const AdminOptions = () => {
             <Helmet>
                 <title>Web3Task - Adm Settings</title>
             </Helmet>
-            <Box>
-                <CoverAdminOptions />
-                <Box display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'}>
+            <Box mt={5}>
+                <Box display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'} mb={5}>
                     <Stack>
                         <Box m={2}>
                             <Typography sx={{ alignItems: 'left' }} fontWeight={'bold'} fontSize={'24px'} mb={2}>Deposit</Typography>
@@ -134,40 +165,44 @@ const AdminOptions = () => {
                             <Button variant='contained' onClick={(event) => (handleSubmit('setRole', event))} >Enviar</Button>
                         </Box>
                         <Box m={2}>
+                            <Typography sx={{ alignItems: 'left' }} fontWeight={'bold'} fontSize={'24px'} mb={2}>setRoleName</Typography>
+                            <TextField label={'Role ID'} sx={{ mr: 2 }} onChange={(event) => (handleInputChange('roleName', event))} name='id' />
+                            <TextField label={'Role Name'} sx={{ mr: 2 }} onChange={(event) => (handleInputChange('roleName', event))} name='name' />
+                            <Button variant='contained' onClick={(event) => (handleSubmit('setRoleName', event))}>Enviar</Button>
+                        </Box>
+                        <Box m={2}>
                             <Typography sx={{ alignItems: 'left' }} fontWeight={'bold'} fontSize={'24px'} mb={2}>setOperator</Typography>
-                            <TextField label={'InterfaceId'} sx={{ mr: 2 }} onChange={(event) => (handleInputChange('operator', event))} name='interfaceId' />
+                            <FormControl sx={{ mr: 2, minWidth: 120 }}>
+                                <InputLabel id="demo-simple-select-label">InterfaceId</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={operator.interfaceId}
+                                    label="InterfaceId"
+                                    onChange={(event) => (handleInputChange('operator', event))}
+                                    name='interfaceId'
+                                >
+                                    <MenuItem value="0xe610a2dd">CreateTask</MenuItem>
+                                    <MenuItem value="0x1397e04a">CancelTask</MenuItem>
+                                    <MenuItem value="0xf3ae70f0">StartTask</MenuItem>
+                                    <MenuItem value="0xc66e9543">ReviewTask</MenuItem>
+                                    <MenuItem value="0x108c8ae4">CompleteTask</MenuItem>
+                                </Select>
+                            </FormControl>
                             <TextField label={'Role ID'} sx={{ mr: 2 }} onChange={(event) => (handleInputChange('operator', event))} name='roleId' />
                             <TextField label={'Bool'} sx={{ mr: 2 }} onChange={(event) => (handleInputChange('operator', event))} name='isAuthorized' />
                             <Button variant='contained' onClick={(event) => (handleSubmit('setOperator', event))}>Enviar</Button>
-                        </Box>
-                        <Box>
-                            <Card sx={{ width: 250 }}>
-                                <CardContent>
-                                    <Typography variant='h4'>
-                                        Interface ID
-                                    </Typography>
-                                    <Typography>
-                                        createTask - 0xe610a2dd
-                                    </Typography>
-                                    <Typography>
-                                        CancelTask - 0x1397e04a
-                                    </Typography>
-                                    <Typography>
-                                        startTask - 0xf3ae70f0
-                                    </Typography>
-                                    <Typography>
-                                        reviewTask - 0xc66e9543
-                                    </Typography>
-                                    <Typography>
-                                        CompleteTask - 0xc66e9543
-                                    </Typography>
-                                </CardContent>
-                            </Card>
                         </Box>
                         <Box m={2}>
                             <Typography sx={{ alignItems: 'left' }} fontWeight={'bold'} fontSize={'24px'} mb={2}>setQuorum</Typography>
                             <TextField label={'Value'} sx={{ mr: 2 }} onChange={(event) => (handleInputChange('quorum', event))} name='value' />
                             <Button variant='contained' onClick={(event) => (handleSubmit('setQuorum', event))}>Enviar</Button>
+                        </Box>
+
+                        <Box m={2}>
+                            <Typography sx={{ alignItems: 'left' }} fontWeight={'bold'} fontSize={'24px'} mb={2}>Opering at role</Typography>
+                            <TextField label={'Role ID'} sx={{ mr: 2 }} onChange={(event) => (handleInputChange('currentRole', event))} name='value' />
+                            <Button variant='contained' onClick={(event) => (handleSubmit('setCurrentRoleField', event))}>Enviar</Button>
                         </Box>
                     </Stack>
                 </Box>

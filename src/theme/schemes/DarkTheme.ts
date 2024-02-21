@@ -323,12 +323,11 @@ export const DarkTheme = createTheme({
     },
   },
   components: {
-
     MuiAccordion: {
       styleOverrides: {
         root: {
           boxShadow: "none",
-          background: 'transparent',
+          background: "transparent",
 
           "&.Mui-expanded": {
             margin: 0,
@@ -362,9 +361,9 @@ export const DarkTheme = createTheme({
         },
         root: {
           ".MuiAutocomplete-inputRoot.MuiOutlinedInput-root .MuiAutocomplete-endAdornment":
-          {
-            right: 14,
-          },
+            {
+              right: 14,
+            },
         },
         clearIndicator: {
           background: colors.error.lighter,
@@ -1069,16 +1068,16 @@ export const DarkTheme = createTheme({
       },
     },
 
-    MuiTreeView: {
-      styleOverrides: {
-        root: {
-          "& .MuiTreeItem-content:hover": {
-            color: colors.alpha.white[100],
-            backgroundColor: "grey"
-          },
-        }
-      }
-    },
+    // MuiTreeView: {
+    //   styleOverrides: {
+    //     root: {
+    //       "& .MuiTreeItem-content:hover": {
+    //         color: colors.alpha.white[100],
+    //         backgroundColor: "grey"
+    //       },
+    //     }
+    //   }
+    // },
 
     MuiTimelineConnector: {
       styleOverrides: {
@@ -1195,11 +1194,10 @@ export const DarkTheme = createTheme({
           lineHeight: 1.7,
         },
         root: {
-          fontFamily: 'Public Sans'
+          fontFamily: "Public Sans",
         },
       },
     },
-
   },
   shape: {
     borderRadius: 10,

@@ -60,11 +60,9 @@ const UserBoxDescription = styled(Typography)(
 `
 );
 
-function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting, pendingConnector }) {
+function HeaderUserConnect({ connectors, activeConnector, connect, isConnecting, pendingConnector }) {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
-
-
 
   const handleOpen = (): void => {
     setOpen(true);
@@ -79,10 +77,10 @@ function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen} sx={{ ml: 1 }}>
         <Hidden mdDown>
           <UserBoxText>
-            <UserBoxLabel variant="body1">Connect</UserBoxLabel>
+            <UserBoxLabel variant="body1">Connect wallet</UserBoxLabel>
           </UserBoxText>
         </Hidden>
-        <ExpandMoreTwoToneIcon sx={{ mr: 3 }} />        
+        <ExpandMoreTwoToneIcon sx={{ mr: 3 }} />
       </UserBoxButton>
       <Popover
         sx={{ mr: 1 }}
@@ -97,26 +95,26 @@ function HeaderUserConnect({ connectors,  activeConnector, connect, isConnecting
           vertical: 'top',
           horizontal: 'right'
         }}
-      >        
+      >
         <List sx={{ p: 1 }} component="nav">
           {
             connectors
-            .map((connector) => (
-              <ListItem button to="/" key={connector.id} onClick={() => connect({connector})} component={NavLink}>
-                <ListItemText primary={connector.name || (isConnecting && connector.id === pendingConnector?.id && ' (connecting)')} />
-              </ListItem>
-            ))
+              .map((connector) => (
+                <ListItem button to="/" key={connector.id} onClick={() => connect({ connector })} component={NavLink}>
+                  <ListItemText primary={connector.name || (isConnecting && connector.id === pendingConnector?.id && ' (connecting)')} />
+                </ListItem>
+              ))
           }
         </List>
- 
+
         {/* <Hidden smDown> */}
-          <Divider />
-          <Box sx={{ mr: 1 }}>
-            <Button color="primary" >
-              <MessageIcon />
-              Contact us to add new network.
-            </Button>
-          </Box>
+        <Divider />
+        <Box sx={{ mr: 1 }}>
+          <Button color="primary" >
+            <MessageIcon />
+            Contact us to add new network.
+          </Button>
+        </Box>
         {/* </Hidden> */}
       </Popover>
     </>

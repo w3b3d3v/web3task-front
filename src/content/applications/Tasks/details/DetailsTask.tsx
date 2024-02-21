@@ -9,18 +9,18 @@ import CardTasks from "../../../../components/Task/CardTask";
 
 const DetailsTask = () => {
     const theme = useTheme();
-    const  smDown  = useMediaQuery(theme.breakpoints.down('sm'));
+    const smDown = useMediaQuery(theme.breakpoints.down('sm'));
     const taskService = useTaskService();
     const { taskId } = useParams();
     const { handleTask, handleReview, taskData, taskReview, loading, error } = useTaskServiceHook(taskService);
 
     const fetchData = async () => {
         await handleTask(Number(taskId));
-        await handleReview(Number(taskId));        
+        await handleReview(Number(taskId));
     };
 
     useEffect(() => {
-        fetchData();        
+        fetchData();
     }, []);
 
     return (
@@ -33,11 +33,10 @@ const DetailsTask = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
+                paddingBottom: '40px'
             }}>
                 <Box sx={{ width: 709, height: '100%', mt: 6 }} >
-
                     <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={'max-content'} >
-
                         {
                             loading ? <SuspenseLoader />
                                 :
@@ -59,13 +58,13 @@ const DetailsTask = () => {
                                                     </CardContent>
                                                 </Card>
 
-                                                <Card sx={{ width: smDown ? '100%' : 434, height: 119, justifyContent: smDown ? 'center' : 'left', ml: smDown ? 10 : 0}}>
+                                                <Card sx={{ width: smDown ? '100%' : 434, height: 119, justifyContent: smDown ? 'center' : 'left', ml: smDown ? 10 : 0 }}>
                                                     <CardContent style={{ maxHeight: '200px', overflowY: 'auto' }}>
                                                         <Typography gutterBottom variant="h4" textAlign={'left'} component="div">
                                                             Reviews
                                                         </Typography>
                                                         <Divider />
-                                                        <Box 
+                                                        <Box
                                                             component="div"
                                                             sx={{
                                                                 whiteSpace: 'nowrap',
@@ -82,11 +81,11 @@ const DetailsTask = () => {
                                                             <Typography variant="h6" textAlign={'left'} mt={1} height={119} component="div">
                                                                 {taskReview ? (taskReview.map((review: any, index: React.Key) => {
                                                                     return (
-                                                                        
-                                                                            <Typography variant="h6" textAlign={'left'} key={'review'+index} mt={1} component="div">
-                                                                                {review}
-                                                                            </Typography>
-                                                                        
+
+                                                                        <Typography variant="h6" textAlign={'left'} key={'review' + index} mt={1} component="div">
+                                                                            {review}
+                                                                        </Typography>
+
                                                                     )
                                                                 })) : 'No reviews provided for this task.'}
                                                             </Typography>
@@ -113,11 +112,9 @@ const DetailsTask = () => {
                                     </>
                                 )
                         }
-                    </Box >
-
-                </Box>
+                    </Box>
+                </Box >
             </Container>
-
         </>
     )
 }

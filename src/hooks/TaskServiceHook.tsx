@@ -13,6 +13,7 @@ interface TaskService {
     getTask: (taskId: number) => Promise<Task>;
     getMultiTasks: (start: number, end: number, isUserProfile: boolean) => Promise<Task[]>;
     setRole: (roleId: any, authorizedAddress: any, isAuthorized: boolean) => Promise<any>
+    setRoleName: (roleId: any, roleName: any) => Promise<any>
     setOperator: (interfaceId: any, roleId: any, isAuthorized: boolean) => Promise<any>
     setMinQuorum: (quorum: any) => Promise<any>
     deposit: (roleId: any, amount: any) => Promise<any>
@@ -80,18 +81,18 @@ export const useTaskServiceHook = (task: TaskService) => {
      * @returns - A promise that resolves when data is fetched.
      */
     const handleCountTasks = async () => {
-    
+
         try {
             setLoading(true);
             setError(null);
 
             const countTasks: any = await task.countTasks();
             setCountTasks(countTasks);
-            
+
 
         } catch (error) {
             setError('Error searching total of tasks.');
-            handleSnackbar('Error searching total of tasks: '+error, 'error')
+            handleSnackbar('Error searching total of tasks: ' + error, 'error')
         }
         return countTasks;
     }
@@ -106,7 +107,7 @@ export const useTaskServiceHook = (task: TaskService) => {
      * @returns - A promise that resolves when data is fetched.
      */
     const handleCountUserTasks = async () => {
-    
+
         try {
             setLoading(true);
             setError(null);
@@ -115,7 +116,7 @@ export const useTaskServiceHook = (task: TaskService) => {
             setCountUserTasks(countTasks);
         } catch (error) {
             setError('Error searching total of tasks.');
-            handleSnackbar('Error searching total of tasks: '+error, 'error')
+            handleSnackbar('Error searching total of tasks: ' + error, 'error')
         }
         return countTasks;
     }
@@ -151,12 +152,6 @@ export const useTaskServiceHook = (task: TaskService) => {
                 metadata: result.metadata
             }
 
-            const shortenedAddressOrName = shortenAddressFromAddress(nft.assignee);
-            nft.assignee = shortenedAddressOrName;
-            //const d = new Date(Number(nft.endDate));
-            //nft.endDate = d.toDateString();
-
-
             const timeInSeconds = Math.floor(Number(nft.endDate) * 1000);
             const date = new Date(timeInSeconds);
             const dateFormatted = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
@@ -183,7 +178,7 @@ export const useTaskServiceHook = (task: TaskService) => {
      */
 
     const handleMultiTask = async (start: number, end: number, isUserProfile: boolean) => {
-       
+
         const result: any = await task.getMultiTasks(start, end, isUserProfile);
 
         let multiTask = [];
@@ -236,6 +231,15 @@ export const useTaskServiceHook = (task: TaskService) => {
             handleSnackbar('Error Set Operator!', 'error')
         }
 
+    };
+
+    const handleRoleName = async (roleId: any, roleName: any) => {
+        try {
+            handleSnackbar('Set RoleName process initiated with success!', 'info')
+            return await task.setRoleName(roleId, roleName);
+        } catch (error) {
+            handleSnackbar('Error Set RoleName!', 'error')
+        }
     };
 
     const handleQuorum = async (quorum: any) => {
@@ -292,5 +296,6 @@ export const useTaskServiceHook = (task: TaskService) => {
         handleDeposit,
         handleUserScore,
         handleReview,
+        handleRoleName
     };
 };
