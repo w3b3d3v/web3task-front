@@ -1,6 +1,6 @@
 # Web3Task-Front
 
-This project is the front end of the [web3task-contracts](https://github.com/w3b3d3v/web3task-contracts) protocol.
+This project is the front end of the [web3task-contracts](https://github.com/w3b3d3v/web3task-contracts) protocol
 
 web3task aims to solve the problem of monetized contributions by splitting the work and requirements, just like GitHub problems, where the company creates the problems and offers a bounty for users to solve them according to the company's terms.
 
